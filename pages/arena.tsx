@@ -1,12 +1,12 @@
 import type { NextPage } from "next"
 import { useBoss } from "hooks/useBoss"
 import { useContractEvent } from "hooks/useContractEvent"
-import type { BigNumber } from "ethers"
-import { useWeb3 } from "@3rdweb/hooks"
+import type { BigNumber, Contract } from "ethers"
 import { useHasPokemon } from "hooks/useHasPokemon"
 import { useContract } from "hooks/useContract"
 import { BattleCard } from "components/PokemonCards/BattleCard"
 import { useState } from "react"
+import { MyEpicGame } from "hardhat/typechain"
 import Popup from "reactjs-popup"
 import { LevelUp } from "components/LevelUp"
 import toast from "react-hot-toast"
@@ -21,7 +21,6 @@ interface IAtributtes {
 const Arena: NextPage = () => {
   const { gameContract } = useContract()
   const { boss, setBoss, runAttackAction, attackState } = useBoss()
-  const { address } = useWeb3()
   const { pokemonSelected, setPokemonSelected } = useHasPokemon()
   const [isLevelUp, setIsLevelUp] = useState<boolean>(false)
   const [attributes, setAtributes] = useState<IAtributtes>()
@@ -32,11 +31,11 @@ const Arena: NextPage = () => {
 
     console.log(`AttackComplete: Boss Hp: ${bossHp} Player Hp: ${playerHp}`)
 
-    setBoss((prevState) => {
+    setBoss((prevState: any) => {
       return { ...prevState, hp: bossHp }
     })
 
-    setPokemonSelected((prevState) => {
+    setPokemonSelected((prevState: any) => {
       return { ...prevState, hp: playerHp }
     })
   }
@@ -56,7 +55,7 @@ const Arena: NextPage = () => {
     })
     setIsLevelUp(true)
 
-    setPokemonSelected((prevState) => {
+    setPokemonSelected((prevState: any) => {
       return {
         ...prevState,
         level: level,
@@ -79,25 +78,25 @@ const Arena: NextPage = () => {
     toast.error("You are Lost")
   }
 
-  const attackCompleteEvent = useContractEvent<MyEpicGame>({
+  useContractEvent<MyEpicGame | Contract>({
     contract: gameContract,
     eventName: "AttackComplete",
     listener: onAttackComplete
   })
 
-  const levelUpEvent = useContractEvent<MyEpicGame>({
+  useContractEvent<MyEpicGame | Contract>({
     contract: gameContract,
     eventName: "LevelUp",
     listener: onLevelUp
   })
 
-  const playerWinEvent = useContractEvent<MyEpicGame>({
+  useContractEvent<MyEpicGame | Contract>({
     contract: gameContract,
     eventName: "PlayerWin",
     listener: onPlayerWin
   })
 
-  const playerLoseEvent = useContractEvent<MyEpicGame>({
+  useContractEvent<MyEpicGame | Contract>({
     contract: gameContract,
     eventName: "PlayerLose",
     listener: onPlayerLose

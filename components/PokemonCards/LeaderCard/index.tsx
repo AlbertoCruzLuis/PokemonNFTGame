@@ -12,17 +12,17 @@ type LeaderCardProps = {
 export const LeaderCard: FC<LeaderCardProps> = ({ position, imageURI, address, name, level, xp }) => {
   return (
     <div className="flex gap-2">
-      <span>1</span>
+      <span>{position}</span>
       <div className="flex">
-        <span>Foto</span>
+        <span>{imageURI}</span>
         <div className="flex flex-col gap-2">
-          <span>Address</span>
-          <span>Name</span>
+          <span>{address}</span>
+          <span>{name}</span>
         </div>
       </div>
       <div className="flex flex-col gap-2">
-        <span>Level</span>
-        <span>XP</span>
+        <span>{level}</span>
+        <span>{xp}</span>
       </div>
     </div>
   )

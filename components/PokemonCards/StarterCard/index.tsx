@@ -9,10 +9,10 @@ const imageLoader = ({ src, width, quality }: ImageLoaderProps) => {
 }
 
 type StarterCardProps = {
-  id: number
-  name: string,
-  types: string[],
-  stats: Stat[]
+  id: number | undefined
+  name: string | undefined,
+  types: string[] | undefined,
+  stats: Stat[] | undefined
   sprites: any
 }
 

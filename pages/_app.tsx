@@ -5,7 +5,7 @@ import { ThirdwebWeb3Provider } from "@3rdweb/hooks"
 import { Toaster } from "react-hot-toast"
 import { RINKEBY_CHAIN_ID } from "config"
 import NextNProgress from "nextjs-progressbar"
-import { QueryClient, QueryClientProvider, useQuery } from "react-query"
+import { QueryClient, QueryClientProvider } from "react-query"
 
 const queryClient = new QueryClient({
   defaultOptions: {

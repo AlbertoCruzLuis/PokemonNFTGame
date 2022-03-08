@@ -1,5 +1,5 @@
-import { FC } from 'react'
-import { CustomLink } from '../../CustomLink'
+import { FC } from "react"
+import { CustomLink } from "../../CustomLink"
 
 type NavItemProps = {
   name: string,
@@ -9,9 +9,9 @@ type NavItemProps = {
   disableStyle?: string
 }
 
-export const NavItem: FC<NavItemProps> = ({ name, url, isActive, activeStyle = 'border-b-2', disableStyle = '' }) => {
+export const NavItem: FC<NavItemProps> = ({ name, url, isActive, activeStyle = "border-b-2", disableStyle = "" }) => {
   const divStyle = isActive ? `${activeStyle} border-solid border-white` : `${disableStyle}`
-  const linkStyle = isActive ? 'text-white' : 'text-gray-400'
+  const linkStyle = isActive ? "text-white" : "text-gray-400"
 
   return (
     <div className={divStyle}>

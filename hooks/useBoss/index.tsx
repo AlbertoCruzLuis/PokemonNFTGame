@@ -14,9 +14,11 @@ export const useBoss = () => {
   const [attackState, setAttackState] = useState("")
 
   const getBoss = async () => {
-    const bossTxn = await gameContract.getBigBoss()
-    console.log("Boss:", bossTxn)
-    setBoss(transformCharacterData(bossTxn))
+    if (gameContract) {
+      const bossTxn = await gameContract.getBigBoss()
+      console.log("Boss:", bossTxn)
+      setBoss(transformCharacterData(bossTxn))
+    }
   }
 
   const runAttackAction = async () => {

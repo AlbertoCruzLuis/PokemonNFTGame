@@ -2,7 +2,7 @@ import { useContract } from "hooks/useContract"
 import { ICharacterData, transformCharacterData } from "lib/getNftMetadata"
 import { useEffect, useState } from "react"
 
-export const usePokemonListNFT = (address: string) => {
+export const usePokemonListNFT = (address: string | undefined) => {
   const { gameContract } = useContract()
   const [pokemons, setPokemons] = useState<ICharacterData[]>()
 
@@ -12,7 +12,7 @@ export const usePokemonListNFT = (address: string) => {
 
       const charactersTxn = await gameContract.getCharacters(address)
 
-      const pokemonList = charactersTxn.map((characterData) =>
+      const pokemonList = charactersTxn.map((characterData: any) =>
         transformCharacterData(characterData)
       )
 

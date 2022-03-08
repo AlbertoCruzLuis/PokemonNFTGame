@@ -5,17 +5,22 @@ import { transformCharacterData } from "lib/getNftMetadata"
 import toast from "react-hot-toast"
 import { useContractEvent } from "hooks/useContractEvent"
 import { MyEpicGame } from "hardhat/typechain"
-import { useState } from "react"
+import { FC, useState } from "react"
 import Popup from "reactjs-popup"
 import { BiLoaderAlt } from "react-icons/bi"
 import { v4 as uuidv4 } from "uuid"
+import type { Contract } from "ethers"
 
-export const SelectPokemon = ({ setPokemonSelected }) => {
+interface ISelectPokemon {
+  setPokemonSelected: any
+}
+
+export const SelectPokemon: FC<ISelectPokemon> = ({ setPokemonSelected }) => {
   const pokemonStarter = ["bulbasaur", "charmander", "squirtle"]
   const [isLoading, setIsLoading] = useState(false)
   const { gameContract } = useContract()
 
-  const mintCharacterNFTAction = async (characterId: number) => {
+  const mintCharacterNFTAction = async (characterId: number | undefined) => {
     try {
       if (gameContract) {
         setIsLoading(true)
@@ -30,7 +35,7 @@ export const SelectPokemon = ({ setPokemonSelected }) => {
     }
   }
 
-  const onCharacterMint = async (sender: string, tokenId: number, characterIndex: number) => {
+  const getCharacterMint = async () => {
     if (gameContract) {
       const characterNFT = await gameContract.checkIfUserHasNFT()
       const pokemonNFT = transformCharacterData(characterNFT)
@@ -38,7 +43,11 @@ export const SelectPokemon = ({ setPokemonSelected }) => {
     }
   }
 
-  const gameContractEvent = useContractEvent<MyEpicGame>({
+  const onCharacterMint = (sender: string, tokenId: number, characterIndex: number) => {
+    getCharacterMint()
+  }
+
+  const gameContractEvent = useContractEvent<MyEpicGame | Contract>({
     contract: gameContract,
     eventName: "CharacterNFTMinted",
     listener: onCharacterMint

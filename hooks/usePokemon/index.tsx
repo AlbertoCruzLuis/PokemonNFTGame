@@ -12,9 +12,9 @@ export type Stat = {
 }
 
 export type Pokemon = {
-  id: number,
-  types: string[],
-  stats: Stat[],
+  id: number | undefined,
+  types: string[] | undefined,
+  stats: Stat[] | undefined,
   sprites: any,
   isLoading: boolean,
   isSuccess: boolean
@@ -30,13 +30,13 @@ export const usePokemon = ({ name }: PokemonName): Pokemon => {
   useEffect(() => {
     if (isSuccess) {
       setId(data.id)
-      setStats(data.stats.map((stat) => (
+      setStats(data.stats.map((stat: any) => (
         {
           name: stat.stat.name,
           value: stat.base_stat
         }
       )))
-      setTypes(data.types.map((type) => type.type.name))
+      setTypes(data.types.map((type: any) => type.type.name))
       setSprites(data.sprites)
     }
   }, [data])

@@ -1,7 +1,7 @@
-import { FC, useEffect, useRef, useState } from "react"
+import { FC, useEffect, useState } from "react"
 import Image from "next/image"
 import type { ImageLoaderProps } from "next/image"
-import { Line, ProgressProps } from "rc-progress"
+import { Line } from "rc-progress"
 
 const imageLoader = ({ src, width, quality }: ImageLoaderProps) => {
   return `https://raw.githubusercontent.com/PokeAPI/${src}?w=${width}&q=${quality || 75}`

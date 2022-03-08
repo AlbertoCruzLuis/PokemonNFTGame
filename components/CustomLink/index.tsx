@@ -3,6 +3,7 @@ import { FC } from "react"
 
 interface ICustomLinkProps {
   href: string,
+  className?: string,
   rest?: any
 }
 

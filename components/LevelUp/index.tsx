@@ -1,5 +1,4 @@
 import { FC } from "react"
-import Confetti from "react-confetti"
 import { v4 as uuidv4 } from "uuid"
 
 interface IAtributtes {
@@ -10,19 +9,19 @@ interface IAtributtes {
 }
 
 type LevelUpProps = {
-  attributes: IAtributtes
+  attributes: IAtributtes | undefined
 }
 
 export const LevelUp: FC<LevelUpProps> = ({ attributes }) => {
   const stats = [
-    { name: "HP", value: attributes.maxHp },
-    { name: "Attack", value: attributes.attackDamage }
+    { name: "HP", value: attributes?.maxHp },
+    { name: "Attack", value: attributes?.attackDamage }
   ]
   return (
     <div className="flex flex-col p-4 rounded-md max-w-max">
       <div className="flex flex-col items-center justify-center gap-4">
         <div className="flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-r from-blue-700 via-blue-800 to-gray-900">
-          <span className="text-5xl font-bold text-sky-200">{attributes.level}</span>
+          <span className="text-5xl font-bold text-sky-200">{attributes?.level}</span>
         </div>
         <span className="text-3xl font-bold text-white">LEVEL UP!</span>
         <div className="flex gap-2">

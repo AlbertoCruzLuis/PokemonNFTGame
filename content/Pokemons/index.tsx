@@ -2,7 +2,6 @@ import { usePokemonListNFT } from "hooks/usePokemonListNFT"
 import { BattleCard } from "components/PokemonCards/BattleCard"
 import { v4 as uuidv4 } from "uuid"
 import { useWeb3 } from "@3rdweb/hooks"
-import { LeaderBoard } from "components/LeaderBoard"
 
 export const Pokemons = () => {
   const { address } = useWeb3()
