@@ -1,0 +1,3 @@
+hardhat/*
+!hardhat/typechain
+!hardhat/artifacts
