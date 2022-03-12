@@ -1,21 +1,21 @@
-export interface ICharacterData {
+export interface IPokemonData {
   name: string,
   imageURI: string,
   hp: number,
   maxHp: number,
-  attackDamage: number,
+  attack: number,
   level: number,
   experience: number
 }
 
-export const transformCharacterData = (characterData: any): ICharacterData => {
+export const transformPokemonData = (pokemonData: any): IPokemonData => {
   return {
-    name: characterData.name,
-    imageURI: characterData.imageURI,
-    hp: characterData.stats.hp.toNumber(),
-    maxHp: characterData.stats.maxHp.toNumber(),
-    attackDamage: characterData.stats.attackDamage.toNumber(),
-    level: characterData.level.toNumber(),
-    experience: characterData.experience.toNumber()
+    name: pokemonData.info.name,
+    imageURI: pokemonData.info.imageURI,
+    hp: pokemonData.stats.hp.toNumber(),
+    maxHp: pokemonData.stats.maxHp.toNumber(),
+    attack: pokemonData.stats.attack.toNumber(),
+    level: pokemonData.level.toNumber(),
+    experience: pokemonData.experience.toNumber()
   }
 }

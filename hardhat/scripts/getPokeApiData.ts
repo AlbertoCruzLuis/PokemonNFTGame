@@ -21,7 +21,7 @@ export const getPokemonData = async (limit: number) => {
   const characterIndexes: number[] = []
   const characterImageURIs: string[] = []
   const characterHp: number[] = []
-  const characterAttackDmg: number[] = []
+  const characterAttack: number[] = []
 
   for (let index = 1; index <= limit; index++) {
     const pokemon = await fetchPokemon(index)
@@ -29,7 +29,7 @@ export const getPokemonData = async (limit: number) => {
     characterIndexes.push(pokemon.id)
     characterImageURIs.push(pokemon.sprites.other.home.front_default)
     characterHp.push(pokemon.stats[STATS.hp].base_stat)
-    characterAttackDmg.push(pokemon.stats[STATS.attack].base_stat)
+    characterAttack.push(pokemon.stats[STATS.attack].base_stat)
   }
 
   return {
@@ -37,7 +37,7 @@ export const getPokemonData = async (limit: number) => {
     characterIndexes,
     characterImageURIs,
     characterHp,
-    characterAttackDmg,
+    characterAttack,
   }
 }
 

@@ -19,25 +19,29 @@ import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
 import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
-interface MyEpicGameInterface extends ethers.utils.Interface {
+interface PokemonGameInterface extends ethers.utils.Interface {
   functions: {
     "approve(address,uint256)": FunctionFragment;
-    "attackBoss()": FunctionFragment;
+    "attackBoss(uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
-    "bigBoss()": FunctionFragment;
-    "charactersOfAddress(address,uint256)": FunctionFragment;
-    "checkIfUserHasNFT()": FunctionFragment;
-    "getAllDefaultCharacters()": FunctionFragment;
+    "boss()": FunctionFragment;
+    "getAllPokemons()": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
-    "getBigBoss()": FunctionFragment;
-    "getCharacters(address)": FunctionFragment;
-    "getListNftHolders()": FunctionFragment;
+    "getBoss()": FunctionFragment;
+    "getPokemon(uint256)": FunctionFragment;
+    "getPokemonByIndexOf(uint256,address)": FunctionFragment;
+    "getPokemonNft(uint256)": FunctionFragment;
+    "getPokemonReadable(address)": FunctionFragment;
+    "getPokemonSelected(address,uint256)": FunctionFragment;
+    "getPokemonsOf(address)": FunctionFragment;
+    "getTotalPokemons()": FunctionFragment;
+    "getTotalPokemonsMinted()": FunctionFragment;
+    "hasNft()": FunctionFragment;
+    "holders(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
-    "listNftHolders(uint256)": FunctionFragment;
-    "mintCharacterNFT(uint256)": FunctionFragment;
+    "mint(uint256)": FunctionFragment;
     "name()": FunctionFragment;
-    "nftHolderAttributes(uint256)": FunctionFragment;
-    "nftHolders(address)": FunctionFragment;
+    "nftsOfHolder(address,uint256)": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
@@ -53,56 +57,66 @@ interface MyEpicGameInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "attackBoss",
-    values?: undefined
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
-  encodeFunctionData(functionFragment: "bigBoss", values?: undefined): string;
+  encodeFunctionData(functionFragment: "boss", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "charactersOfAddress",
-    values: [string, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "checkIfUserHasNFT",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getAllDefaultCharacters",
+    functionFragment: "getAllPokemons",
     values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "getApproved",
     values: [BigNumberish]
   ): string;
+  encodeFunctionData(functionFragment: "getBoss", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "getBigBoss",
-    values?: undefined
+    functionFragment: "getPokemon",
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "getCharacters",
+    functionFragment: "getPokemonByIndexOf",
+    values: [BigNumberish, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getPokemonNft",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getPokemonReadable",
     values: [string]
   ): string;
   encodeFunctionData(
-    functionFragment: "getListNftHolders",
+    functionFragment: "getPokemonSelected",
+    values: [string, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getPokemonsOf",
+    values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getTotalPokemons",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getTotalPokemonsMinted",
+    values?: undefined
+  ): string;
+  encodeFunctionData(functionFragment: "hasNft", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "holders",
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "isApprovedForAll",
     values: [string, string]
   ): string;
-  encodeFunctionData(
-    functionFragment: "listNftHolders",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "mintCharacterNFT",
-    values: [BigNumberish]
-  ): string;
+  encodeFunctionData(functionFragment: "mint", values: [BigNumberish]): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "nftHolderAttributes",
-    values: [BigNumberish]
+    functionFragment: "nftsOfHolder",
+    values: [string, BigNumberish]
   ): string;
-  encodeFunctionData(functionFragment: "nftHolders", values: [string]): string;
   encodeFunctionData(
     functionFragment: "ownerOf",
     values: [BigNumberish]
@@ -132,50 +146,57 @@ interface MyEpicGameInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "attackBoss", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "bigBoss", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "boss", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "charactersOfAddress",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "checkIfUserHasNFT",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getAllDefaultCharacters",
+    functionFragment: "getAllPokemons",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "getApproved",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "getBigBoss", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "getBoss", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "getPokemon", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "getCharacters",
+    functionFragment: "getPokemonByIndexOf",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getListNftHolders",
+    functionFragment: "getPokemonNft",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "getPokemonReadable",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getPokemonSelected",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getPokemonsOf",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getTotalPokemons",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getTotalPokemonsMinted",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "hasNft", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "holders", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "isApprovedForAll",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "listNftHolders",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "mintCharacterNFT",
-    data: BytesLike
-  ): Result;
+  decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "nftHolderAttributes",
+    functionFragment: "nftsOfHolder",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "nftHolders", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "safeTransferFrom",
@@ -200,20 +221,18 @@ interface MyEpicGameInterface extends ethers.utils.Interface {
     "Approval(address,address,uint256)": EventFragment;
     "ApprovalForAll(address,address,bool)": EventFragment;
     "AttackComplete(uint256,uint256)": EventFragment;
-    "CharacterNFTMinted(address,uint256,uint256)": EventFragment;
+    "BattleComplete(uint8)": EventFragment;
     "LevelUp(uint256,tuple)": EventFragment;
-    "PlayerLose()": EventFragment;
-    "PlayerWin()": EventFragment;
+    "PokemonNFTMinted(address,uint256,uint256)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "AttackComplete"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "CharacterNFTMinted"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "BattleComplete"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "LevelUp"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "PlayerLose"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "PlayerWin"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "PokemonNFTMinted"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
 }
 
@@ -234,16 +253,10 @@ export type ApprovalForAllEvent = TypedEvent<
 >;
 
 export type AttackCompleteEvent = TypedEvent<
-  [BigNumber, BigNumber] & { newBossHp: BigNumber; newPlayerHp: BigNumber }
+  [BigNumber, BigNumber] & { newBossHp: BigNumber; newPokemonHp: BigNumber }
 >;
 
-export type CharacterNFTMintedEvent = TypedEvent<
-  [string, BigNumber, BigNumber] & {
-    sender: string;
-    tokenId: BigNumber;
-    characterIndex: BigNumber;
-  }
->;
+export type BattleCompleteEvent = TypedEvent<[number] & { status: number }>;
 
 export type LevelUpEvent = TypedEvent<
   [
@@ -251,27 +264,31 @@ export type LevelUpEvent = TypedEvent<
     [BigNumber, BigNumber, BigNumber] & {
       hp: BigNumber;
       maxHp: BigNumber;
-      attackDamage: BigNumber;
+      attack: BigNumber;
     }
   ] & {
     level: BigNumber;
     stats: [BigNumber, BigNumber, BigNumber] & {
       hp: BigNumber;
       maxHp: BigNumber;
-      attackDamage: BigNumber;
+      attack: BigNumber;
     };
   }
 >;
 
-export type PlayerLoseEvent = TypedEvent<[] & {}>;
-
-export type PlayerWinEvent = TypedEvent<[] & {}>;
+export type PokemonNFTMintedEvent = TypedEvent<
+  [string, BigNumber, BigNumber] & {
+    sender: string;
+    tokenId: BigNumber;
+    pokemonId: BigNumber;
+  }
+>;
 
 export type TransferEvent = TypedEvent<
   [string, string, BigNumber] & { from: string; to: string; tokenId: BigNumber }
 >;
 
-export class MyEpicGame extends BaseContract {
+export class PokemonGame extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
@@ -312,7 +329,7 @@ export class MyEpicGame extends BaseContract {
     toBlock?: string | number | undefined
   ): Promise<Array<TypedEvent<EventArgsArray & EventArgsObject>>>;
 
-  interface: MyEpicGameInterface;
+  interface: PokemonGameInterface;
 
   functions: {
     approve(
@@ -322,162 +339,65 @@ export class MyEpicGame extends BaseContract {
     ): Promise<ContractTransaction>;
 
     attackBoss(
+      pokemonIndex: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     balanceOf(owner: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    bigBoss(
-      overrides?: CallOverrides
-    ): Promise<
-      [
-        string,
-        string,
-        [BigNumber, BigNumber, BigNumber] & {
-          hp: BigNumber;
-          maxHp: BigNumber;
-          attackDamage: BigNumber;
-        },
-        BigNumber,
-        BigNumber,
-        BigNumber
-      ] & {
-        name: string;
-        imageURI: string;
-        stats: [BigNumber, BigNumber, BigNumber] & {
-          hp: BigNumber;
-          maxHp: BigNumber;
-          attackDamage: BigNumber;
-        };
-        level: BigNumber;
-        experience: BigNumber;
-        totalExperience: BigNumber;
-      }
-    >;
+    boss(overrides?: CallOverrides): Promise<[string]>;
 
-    charactersOfAddress(
-      arg0: string,
-      arg1: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<
-      [
-        BigNumber,
-        string,
-        string,
-        [BigNumber, BigNumber, BigNumber] & {
-          hp: BigNumber;
-          maxHp: BigNumber;
-          attackDamage: BigNumber;
-        },
-        BigNumber,
-        BigNumber,
-        BigNumber
-      ] & {
-        characterIndex: BigNumber;
-        name: string;
-        imageURI: string;
-        stats: [BigNumber, BigNumber, BigNumber] & {
-          hp: BigNumber;
-          maxHp: BigNumber;
-          attackDamage: BigNumber;
-        };
-        level: BigNumber;
-        experience: BigNumber;
-        totalExperience: BigNumber;
-      }
-    >;
-
-    checkIfUserHasNFT(
-      overrides?: CallOverrides
-    ): Promise<
-      [
-        [
-          BigNumber,
-          string,
-          string,
-          [BigNumber, BigNumber, BigNumber] & {
-            hp: BigNumber;
-            maxHp: BigNumber;
-            attackDamage: BigNumber;
-          },
-          BigNumber,
-          BigNumber,
-          BigNumber
-        ] & {
-          characterIndex: BigNumber;
-          name: string;
-          imageURI: string;
-          stats: [BigNumber, BigNumber, BigNumber] & {
-            hp: BigNumber;
-            maxHp: BigNumber;
-            attackDamage: BigNumber;
-          };
-          level: BigNumber;
-          experience: BigNumber;
-          totalExperience: BigNumber;
-        }
-      ]
-    >;
-
-    getAllDefaultCharacters(
-      overrides?: CallOverrides
-    ): Promise<
-      [
-        ([
-          BigNumber,
-          string,
-          string,
-          [BigNumber, BigNumber, BigNumber] & {
-            hp: BigNumber;
-            maxHp: BigNumber;
-            attackDamage: BigNumber;
-          },
-          BigNumber,
-          BigNumber,
-          BigNumber
-        ] & {
-          characterIndex: BigNumber;
-          name: string;
-          imageURI: string;
-          stats: [BigNumber, BigNumber, BigNumber] & {
-            hp: BigNumber;
-            maxHp: BigNumber;
-            attackDamage: BigNumber;
-          };
-          level: BigNumber;
-          experience: BigNumber;
-          totalExperience: BigNumber;
-        })[]
-      ]
-    >;
+    getAllPokemons(overrides?: CallOverrides): Promise<[string[]]>;
 
     getApproved(
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[string]>;
 
-    getBigBoss(
+    getBoss(overrides?: CallOverrides): Promise<[string]>;
+
+    getPokemon(id: BigNumberish, overrides?: CallOverrides): Promise<[string]>;
+
+    getPokemonByIndexOf(
+      pokemonIndex: BigNumberish,
+      sender: string,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
+    getPokemonNft(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
+    getPokemonReadable(
+      pokemonData: string,
       overrides?: CallOverrides
     ): Promise<
       [
         [
-          string,
-          string,
+          [BigNumber, string, string] & {
+            id: BigNumber;
+            name: string;
+            imageURI: string;
+          },
           [BigNumber, BigNumber, BigNumber] & {
             hp: BigNumber;
             maxHp: BigNumber;
-            attackDamage: BigNumber;
+            attack: BigNumber;
           },
           BigNumber,
           BigNumber,
           BigNumber
         ] & {
-          name: string;
-          imageURI: string;
+          info: [BigNumber, string, string] & {
+            id: BigNumber;
+            name: string;
+            imageURI: string;
+          };
           stats: [BigNumber, BigNumber, BigNumber] & {
             hp: BigNumber;
             maxHp: BigNumber;
-            attackDamage: BigNumber;
+            attack: BigNumber;
           };
           level: BigNumber;
           experience: BigNumber;
@@ -486,31 +406,73 @@ export class MyEpicGame extends BaseContract {
       ]
     >;
 
-    getCharacters(
+    getPokemonSelected(
       sender: string,
+      pokemonIndex: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
       [
-        ([
-          BigNumber,
-          string,
-          string,
+        [
+          [BigNumber, string, string] & {
+            id: BigNumber;
+            name: string;
+            imageURI: string;
+          },
           [BigNumber, BigNumber, BigNumber] & {
             hp: BigNumber;
             maxHp: BigNumber;
-            attackDamage: BigNumber;
+            attack: BigNumber;
           },
           BigNumber,
           BigNumber,
           BigNumber
         ] & {
-          characterIndex: BigNumber;
-          name: string;
-          imageURI: string;
+          info: [BigNumber, string, string] & {
+            id: BigNumber;
+            name: string;
+            imageURI: string;
+          };
           stats: [BigNumber, BigNumber, BigNumber] & {
             hp: BigNumber;
             maxHp: BigNumber;
-            attackDamage: BigNumber;
+            attack: BigNumber;
+          };
+          level: BigNumber;
+          experience: BigNumber;
+          totalExperience: BigNumber;
+        }
+      ]
+    >;
+
+    getPokemonsOf(
+      sender: string,
+      overrides?: CallOverrides
+    ): Promise<
+      [
+        ([
+          [BigNumber, string, string] & {
+            id: BigNumber;
+            name: string;
+            imageURI: string;
+          },
+          [BigNumber, BigNumber, BigNumber] & {
+            hp: BigNumber;
+            maxHp: BigNumber;
+            attack: BigNumber;
+          },
+          BigNumber,
+          BigNumber,
+          BigNumber
+        ] & {
+          info: [BigNumber, string, string] & {
+            id: BigNumber;
+            name: string;
+            imageURI: string;
+          };
+          stats: [BigNumber, BigNumber, BigNumber] & {
+            hp: BigNumber;
+            maxHp: BigNumber;
+            attack: BigNumber;
           };
           level: BigNumber;
           experience: BigNumber;
@@ -519,7 +481,47 @@ export class MyEpicGame extends BaseContract {
       ]
     >;
 
-    getListNftHolders(overrides?: CallOverrides): Promise<[string[]]>;
+    getTotalPokemons(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    getTotalPokemonsMinted(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    hasNft(
+      overrides?: CallOverrides
+    ): Promise<
+      [
+        [
+          [BigNumber, string, string] & {
+            id: BigNumber;
+            name: string;
+            imageURI: string;
+          },
+          [BigNumber, BigNumber, BigNumber] & {
+            hp: BigNumber;
+            maxHp: BigNumber;
+            attack: BigNumber;
+          },
+          BigNumber,
+          BigNumber,
+          BigNumber
+        ] & {
+          info: [BigNumber, string, string] & {
+            id: BigNumber;
+            name: string;
+            imageURI: string;
+          };
+          stats: [BigNumber, BigNumber, BigNumber] & {
+            hp: BigNumber;
+            maxHp: BigNumber;
+            attack: BigNumber;
+          };
+          level: BigNumber;
+          experience: BigNumber;
+          totalExperience: BigNumber;
+        }
+      ]
+    >;
+
+    holders(arg0: BigNumberish, overrides?: CallOverrides): Promise<[string]>;
 
     isApprovedForAll(
       owner: string,
@@ -527,50 +529,18 @@ export class MyEpicGame extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
-    listNftHolders(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[string]>;
-
-    mintCharacterNFT(
-      _characterIndex: BigNumberish,
+    mint(
+      _pokemonId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     name(overrides?: CallOverrides): Promise<[string]>;
 
-    nftHolderAttributes(
-      arg0: BigNumberish,
+    nftsOfHolder(
+      arg0: string,
+      arg1: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<
-      [
-        BigNumber,
-        string,
-        string,
-        [BigNumber, BigNumber, BigNumber] & {
-          hp: BigNumber;
-          maxHp: BigNumber;
-          attackDamage: BigNumber;
-        },
-        BigNumber,
-        BigNumber,
-        BigNumber
-      ] & {
-        characterIndex: BigNumber;
-        name: string;
-        imageURI: string;
-        stats: [BigNumber, BigNumber, BigNumber] & {
-          hp: BigNumber;
-          maxHp: BigNumber;
-          attackDamage: BigNumber;
-        };
-        level: BigNumber;
-        experience: BigNumber;
-        totalExperience: BigNumber;
-      }
-    >;
-
-    nftHolders(arg0: string, overrides?: CallOverrides): Promise<[BigNumber]>;
+    ): Promise<[BigNumber]>;
 
     ownerOf(
       tokenId: BigNumberish,
@@ -625,157 +595,64 @@ export class MyEpicGame extends BaseContract {
   ): Promise<ContractTransaction>;
 
   attackBoss(
+    pokemonIndex: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-  bigBoss(
-    overrides?: CallOverrides
-  ): Promise<
-    [
-      string,
-      string,
-      [BigNumber, BigNumber, BigNumber] & {
-        hp: BigNumber;
-        maxHp: BigNumber;
-        attackDamage: BigNumber;
-      },
-      BigNumber,
-      BigNumber,
-      BigNumber
-    ] & {
-      name: string;
-      imageURI: string;
-      stats: [BigNumber, BigNumber, BigNumber] & {
-        hp: BigNumber;
-        maxHp: BigNumber;
-        attackDamage: BigNumber;
-      };
-      level: BigNumber;
-      experience: BigNumber;
-      totalExperience: BigNumber;
-    }
-  >;
+  boss(overrides?: CallOverrides): Promise<string>;
 
-  charactersOfAddress(
-    arg0: string,
-    arg1: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<
-    [
-      BigNumber,
-      string,
-      string,
-      [BigNumber, BigNumber, BigNumber] & {
-        hp: BigNumber;
-        maxHp: BigNumber;
-        attackDamage: BigNumber;
-      },
-      BigNumber,
-      BigNumber,
-      BigNumber
-    ] & {
-      characterIndex: BigNumber;
-      name: string;
-      imageURI: string;
-      stats: [BigNumber, BigNumber, BigNumber] & {
-        hp: BigNumber;
-        maxHp: BigNumber;
-        attackDamage: BigNumber;
-      };
-      level: BigNumber;
-      experience: BigNumber;
-      totalExperience: BigNumber;
-    }
-  >;
-
-  checkIfUserHasNFT(
-    overrides?: CallOverrides
-  ): Promise<
-    [
-      BigNumber,
-      string,
-      string,
-      [BigNumber, BigNumber, BigNumber] & {
-        hp: BigNumber;
-        maxHp: BigNumber;
-        attackDamage: BigNumber;
-      },
-      BigNumber,
-      BigNumber,
-      BigNumber
-    ] & {
-      characterIndex: BigNumber;
-      name: string;
-      imageURI: string;
-      stats: [BigNumber, BigNumber, BigNumber] & {
-        hp: BigNumber;
-        maxHp: BigNumber;
-        attackDamage: BigNumber;
-      };
-      level: BigNumber;
-      experience: BigNumber;
-      totalExperience: BigNumber;
-    }
-  >;
-
-  getAllDefaultCharacters(
-    overrides?: CallOverrides
-  ): Promise<
-    ([
-      BigNumber,
-      string,
-      string,
-      [BigNumber, BigNumber, BigNumber] & {
-        hp: BigNumber;
-        maxHp: BigNumber;
-        attackDamage: BigNumber;
-      },
-      BigNumber,
-      BigNumber,
-      BigNumber
-    ] & {
-      characterIndex: BigNumber;
-      name: string;
-      imageURI: string;
-      stats: [BigNumber, BigNumber, BigNumber] & {
-        hp: BigNumber;
-        maxHp: BigNumber;
-        attackDamage: BigNumber;
-      };
-      level: BigNumber;
-      experience: BigNumber;
-      totalExperience: BigNumber;
-    })[]
-  >;
+  getAllPokemons(overrides?: CallOverrides): Promise<string[]>;
 
   getApproved(
     tokenId: BigNumberish,
     overrides?: CallOverrides
   ): Promise<string>;
 
-  getBigBoss(
+  getBoss(overrides?: CallOverrides): Promise<string>;
+
+  getPokemon(id: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
+  getPokemonByIndexOf(
+    pokemonIndex: BigNumberish,
+    sender: string,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
+  getPokemonNft(
+    tokenId: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
+  getPokemonReadable(
+    pokemonData: string,
     overrides?: CallOverrides
   ): Promise<
     [
-      string,
-      string,
+      [BigNumber, string, string] & {
+        id: BigNumber;
+        name: string;
+        imageURI: string;
+      },
       [BigNumber, BigNumber, BigNumber] & {
         hp: BigNumber;
         maxHp: BigNumber;
-        attackDamage: BigNumber;
+        attack: BigNumber;
       },
       BigNumber,
       BigNumber,
       BigNumber
     ] & {
-      name: string;
-      imageURI: string;
+      info: [BigNumber, string, string] & {
+        id: BigNumber;
+        name: string;
+        imageURI: string;
+      };
       stats: [BigNumber, BigNumber, BigNumber] & {
         hp: BigNumber;
         maxHp: BigNumber;
-        attackDamage: BigNumber;
+        attack: BigNumber;
       };
       level: BigNumber;
       experience: BigNumber;
@@ -783,30 +660,70 @@ export class MyEpicGame extends BaseContract {
     }
   >;
 
-  getCharacters(
+  getPokemonSelected(
     sender: string,
+    pokemonIndex: BigNumberish,
     overrides?: CallOverrides
   ): Promise<
-    ([
-      BigNumber,
-      string,
-      string,
+    [
+      [BigNumber, string, string] & {
+        id: BigNumber;
+        name: string;
+        imageURI: string;
+      },
       [BigNumber, BigNumber, BigNumber] & {
         hp: BigNumber;
         maxHp: BigNumber;
-        attackDamage: BigNumber;
+        attack: BigNumber;
       },
       BigNumber,
       BigNumber,
       BigNumber
     ] & {
-      characterIndex: BigNumber;
-      name: string;
-      imageURI: string;
+      info: [BigNumber, string, string] & {
+        id: BigNumber;
+        name: string;
+        imageURI: string;
+      };
       stats: [BigNumber, BigNumber, BigNumber] & {
         hp: BigNumber;
         maxHp: BigNumber;
-        attackDamage: BigNumber;
+        attack: BigNumber;
+      };
+      level: BigNumber;
+      experience: BigNumber;
+      totalExperience: BigNumber;
+    }
+  >;
+
+  getPokemonsOf(
+    sender: string,
+    overrides?: CallOverrides
+  ): Promise<
+    ([
+      [BigNumber, string, string] & {
+        id: BigNumber;
+        name: string;
+        imageURI: string;
+      },
+      [BigNumber, BigNumber, BigNumber] & {
+        hp: BigNumber;
+        maxHp: BigNumber;
+        attack: BigNumber;
+      },
+      BigNumber,
+      BigNumber,
+      BigNumber
+    ] & {
+      info: [BigNumber, string, string] & {
+        id: BigNumber;
+        name: string;
+        imageURI: string;
+      };
+      stats: [BigNumber, BigNumber, BigNumber] & {
+        hp: BigNumber;
+        maxHp: BigNumber;
+        attack: BigNumber;
       };
       level: BigNumber;
       experience: BigNumber;
@@ -814,7 +731,45 @@ export class MyEpicGame extends BaseContract {
     })[]
   >;
 
-  getListNftHolders(overrides?: CallOverrides): Promise<string[]>;
+  getTotalPokemons(overrides?: CallOverrides): Promise<BigNumber>;
+
+  getTotalPokemonsMinted(overrides?: CallOverrides): Promise<BigNumber>;
+
+  hasNft(
+    overrides?: CallOverrides
+  ): Promise<
+    [
+      [BigNumber, string, string] & {
+        id: BigNumber;
+        name: string;
+        imageURI: string;
+      },
+      [BigNumber, BigNumber, BigNumber] & {
+        hp: BigNumber;
+        maxHp: BigNumber;
+        attack: BigNumber;
+      },
+      BigNumber,
+      BigNumber,
+      BigNumber
+    ] & {
+      info: [BigNumber, string, string] & {
+        id: BigNumber;
+        name: string;
+        imageURI: string;
+      };
+      stats: [BigNumber, BigNumber, BigNumber] & {
+        hp: BigNumber;
+        maxHp: BigNumber;
+        attack: BigNumber;
+      };
+      level: BigNumber;
+      experience: BigNumber;
+      totalExperience: BigNumber;
+    }
+  >;
+
+  holders(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
   isApprovedForAll(
     owner: string,
@@ -822,50 +777,18 @@ export class MyEpicGame extends BaseContract {
     overrides?: CallOverrides
   ): Promise<boolean>;
 
-  listNftHolders(
-    arg0: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<string>;
-
-  mintCharacterNFT(
-    _characterIndex: BigNumberish,
+  mint(
+    _pokemonId: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   name(overrides?: CallOverrides): Promise<string>;
 
-  nftHolderAttributes(
-    arg0: BigNumberish,
+  nftsOfHolder(
+    arg0: string,
+    arg1: BigNumberish,
     overrides?: CallOverrides
-  ): Promise<
-    [
-      BigNumber,
-      string,
-      string,
-      [BigNumber, BigNumber, BigNumber] & {
-        hp: BigNumber;
-        maxHp: BigNumber;
-        attackDamage: BigNumber;
-      },
-      BigNumber,
-      BigNumber,
-      BigNumber
-    ] & {
-      characterIndex: BigNumber;
-      name: string;
-      imageURI: string;
-      stats: [BigNumber, BigNumber, BigNumber] & {
-        hp: BigNumber;
-        maxHp: BigNumber;
-        attackDamage: BigNumber;
-      };
-      level: BigNumber;
-      experience: BigNumber;
-      totalExperience: BigNumber;
-    }
-  >;
-
-  nftHolders(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+  ): Promise<BigNumber>;
 
   ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
@@ -913,156 +836,65 @@ export class MyEpicGame extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    attackBoss(overrides?: CallOverrides): Promise<void>;
+    attackBoss(
+      pokemonIndex: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    bigBoss(
-      overrides?: CallOverrides
-    ): Promise<
-      [
-        string,
-        string,
-        [BigNumber, BigNumber, BigNumber] & {
-          hp: BigNumber;
-          maxHp: BigNumber;
-          attackDamage: BigNumber;
-        },
-        BigNumber,
-        BigNumber,
-        BigNumber
-      ] & {
-        name: string;
-        imageURI: string;
-        stats: [BigNumber, BigNumber, BigNumber] & {
-          hp: BigNumber;
-          maxHp: BigNumber;
-          attackDamage: BigNumber;
-        };
-        level: BigNumber;
-        experience: BigNumber;
-        totalExperience: BigNumber;
-      }
-    >;
+    boss(overrides?: CallOverrides): Promise<string>;
 
-    charactersOfAddress(
-      arg0: string,
-      arg1: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<
-      [
-        BigNumber,
-        string,
-        string,
-        [BigNumber, BigNumber, BigNumber] & {
-          hp: BigNumber;
-          maxHp: BigNumber;
-          attackDamage: BigNumber;
-        },
-        BigNumber,
-        BigNumber,
-        BigNumber
-      ] & {
-        characterIndex: BigNumber;
-        name: string;
-        imageURI: string;
-        stats: [BigNumber, BigNumber, BigNumber] & {
-          hp: BigNumber;
-          maxHp: BigNumber;
-          attackDamage: BigNumber;
-        };
-        level: BigNumber;
-        experience: BigNumber;
-        totalExperience: BigNumber;
-      }
-    >;
-
-    checkIfUserHasNFT(
-      overrides?: CallOverrides
-    ): Promise<
-      [
-        BigNumber,
-        string,
-        string,
-        [BigNumber, BigNumber, BigNumber] & {
-          hp: BigNumber;
-          maxHp: BigNumber;
-          attackDamage: BigNumber;
-        },
-        BigNumber,
-        BigNumber,
-        BigNumber
-      ] & {
-        characterIndex: BigNumber;
-        name: string;
-        imageURI: string;
-        stats: [BigNumber, BigNumber, BigNumber] & {
-          hp: BigNumber;
-          maxHp: BigNumber;
-          attackDamage: BigNumber;
-        };
-        level: BigNumber;
-        experience: BigNumber;
-        totalExperience: BigNumber;
-      }
-    >;
-
-    getAllDefaultCharacters(
-      overrides?: CallOverrides
-    ): Promise<
-      ([
-        BigNumber,
-        string,
-        string,
-        [BigNumber, BigNumber, BigNumber] & {
-          hp: BigNumber;
-          maxHp: BigNumber;
-          attackDamage: BigNumber;
-        },
-        BigNumber,
-        BigNumber,
-        BigNumber
-      ] & {
-        characterIndex: BigNumber;
-        name: string;
-        imageURI: string;
-        stats: [BigNumber, BigNumber, BigNumber] & {
-          hp: BigNumber;
-          maxHp: BigNumber;
-          attackDamage: BigNumber;
-        };
-        level: BigNumber;
-        experience: BigNumber;
-        totalExperience: BigNumber;
-      })[]
-    >;
+    getAllPokemons(overrides?: CallOverrides): Promise<string[]>;
 
     getApproved(
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<string>;
 
-    getBigBoss(
+    getBoss(overrides?: CallOverrides): Promise<string>;
+
+    getPokemon(id: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
+    getPokemonByIndexOf(
+      pokemonIndex: BigNumberish,
+      sender: string,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    getPokemonNft(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    getPokemonReadable(
+      pokemonData: string,
       overrides?: CallOverrides
     ): Promise<
       [
-        string,
-        string,
+        [BigNumber, string, string] & {
+          id: BigNumber;
+          name: string;
+          imageURI: string;
+        },
         [BigNumber, BigNumber, BigNumber] & {
           hp: BigNumber;
           maxHp: BigNumber;
-          attackDamage: BigNumber;
+          attack: BigNumber;
         },
         BigNumber,
         BigNumber,
         BigNumber
       ] & {
-        name: string;
-        imageURI: string;
+        info: [BigNumber, string, string] & {
+          id: BigNumber;
+          name: string;
+          imageURI: string;
+        };
         stats: [BigNumber, BigNumber, BigNumber] & {
           hp: BigNumber;
           maxHp: BigNumber;
-          attackDamage: BigNumber;
+          attack: BigNumber;
         };
         level: BigNumber;
         experience: BigNumber;
@@ -1070,30 +902,70 @@ export class MyEpicGame extends BaseContract {
       }
     >;
 
-    getCharacters(
+    getPokemonSelected(
       sender: string,
+      pokemonIndex: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      ([
-        BigNumber,
-        string,
-        string,
+      [
+        [BigNumber, string, string] & {
+          id: BigNumber;
+          name: string;
+          imageURI: string;
+        },
         [BigNumber, BigNumber, BigNumber] & {
           hp: BigNumber;
           maxHp: BigNumber;
-          attackDamage: BigNumber;
+          attack: BigNumber;
         },
         BigNumber,
         BigNumber,
         BigNumber
       ] & {
-        characterIndex: BigNumber;
-        name: string;
-        imageURI: string;
+        info: [BigNumber, string, string] & {
+          id: BigNumber;
+          name: string;
+          imageURI: string;
+        };
         stats: [BigNumber, BigNumber, BigNumber] & {
           hp: BigNumber;
           maxHp: BigNumber;
-          attackDamage: BigNumber;
+          attack: BigNumber;
+        };
+        level: BigNumber;
+        experience: BigNumber;
+        totalExperience: BigNumber;
+      }
+    >;
+
+    getPokemonsOf(
+      sender: string,
+      overrides?: CallOverrides
+    ): Promise<
+      ([
+        [BigNumber, string, string] & {
+          id: BigNumber;
+          name: string;
+          imageURI: string;
+        },
+        [BigNumber, BigNumber, BigNumber] & {
+          hp: BigNumber;
+          maxHp: BigNumber;
+          attack: BigNumber;
+        },
+        BigNumber,
+        BigNumber,
+        BigNumber
+      ] & {
+        info: [BigNumber, string, string] & {
+          id: BigNumber;
+          name: string;
+          imageURI: string;
+        };
+        stats: [BigNumber, BigNumber, BigNumber] & {
+          hp: BigNumber;
+          maxHp: BigNumber;
+          attack: BigNumber;
         };
         level: BigNumber;
         experience: BigNumber;
@@ -1101,7 +973,45 @@ export class MyEpicGame extends BaseContract {
       })[]
     >;
 
-    getListNftHolders(overrides?: CallOverrides): Promise<string[]>;
+    getTotalPokemons(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getTotalPokemonsMinted(overrides?: CallOverrides): Promise<BigNumber>;
+
+    hasNft(
+      overrides?: CallOverrides
+    ): Promise<
+      [
+        [BigNumber, string, string] & {
+          id: BigNumber;
+          name: string;
+          imageURI: string;
+        },
+        [BigNumber, BigNumber, BigNumber] & {
+          hp: BigNumber;
+          maxHp: BigNumber;
+          attack: BigNumber;
+        },
+        BigNumber,
+        BigNumber,
+        BigNumber
+      ] & {
+        info: [BigNumber, string, string] & {
+          id: BigNumber;
+          name: string;
+          imageURI: string;
+        };
+        stats: [BigNumber, BigNumber, BigNumber] & {
+          hp: BigNumber;
+          maxHp: BigNumber;
+          attack: BigNumber;
+        };
+        level: BigNumber;
+        experience: BigNumber;
+        totalExperience: BigNumber;
+      }
+    >;
+
+    holders(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
     isApprovedForAll(
       owner: string,
@@ -1109,50 +1019,15 @@ export class MyEpicGame extends BaseContract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    listNftHolders(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<string>;
-
-    mintCharacterNFT(
-      _characterIndex: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
+    mint(_pokemonId: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
     name(overrides?: CallOverrides): Promise<string>;
 
-    nftHolderAttributes(
-      arg0: BigNumberish,
+    nftsOfHolder(
+      arg0: string,
+      arg1: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<
-      [
-        BigNumber,
-        string,
-        string,
-        [BigNumber, BigNumber, BigNumber] & {
-          hp: BigNumber;
-          maxHp: BigNumber;
-          attackDamage: BigNumber;
-        },
-        BigNumber,
-        BigNumber,
-        BigNumber
-      ] & {
-        characterIndex: BigNumber;
-        name: string;
-        imageURI: string;
-        stats: [BigNumber, BigNumber, BigNumber] & {
-          hp: BigNumber;
-          maxHp: BigNumber;
-          attackDamage: BigNumber;
-        };
-        level: BigNumber;
-        experience: BigNumber;
-        totalExperience: BigNumber;
-      }
-    >;
-
-    nftHolders(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+    ): Promise<BigNumber>;
 
     ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
@@ -1236,37 +1111,27 @@ export class MyEpicGame extends BaseContract {
 
     "AttackComplete(uint256,uint256)"(
       newBossHp?: null,
-      newPlayerHp?: null
+      newPokemonHp?: null
     ): TypedEventFilter<
       [BigNumber, BigNumber],
-      { newBossHp: BigNumber; newPlayerHp: BigNumber }
+      { newBossHp: BigNumber; newPokemonHp: BigNumber }
     >;
 
     AttackComplete(
       newBossHp?: null,
-      newPlayerHp?: null
+      newPokemonHp?: null
     ): TypedEventFilter<
       [BigNumber, BigNumber],
-      { newBossHp: BigNumber; newPlayerHp: BigNumber }
+      { newBossHp: BigNumber; newPokemonHp: BigNumber }
     >;
 
-    "CharacterNFTMinted(address,uint256,uint256)"(
-      sender?: null,
-      tokenId?: null,
-      characterIndex?: null
-    ): TypedEventFilter<
-      [string, BigNumber, BigNumber],
-      { sender: string; tokenId: BigNumber; characterIndex: BigNumber }
-    >;
+    "BattleComplete(uint8)"(
+      status?: null
+    ): TypedEventFilter<[number], { status: number }>;
 
-    CharacterNFTMinted(
-      sender?: null,
-      tokenId?: null,
-      characterIndex?: null
-    ): TypedEventFilter<
-      [string, BigNumber, BigNumber],
-      { sender: string; tokenId: BigNumber; characterIndex: BigNumber }
-    >;
+    BattleComplete(
+      status?: null
+    ): TypedEventFilter<[number], { status: number }>;
 
     "LevelUp(uint256,tuple)"(
       level?: null,
@@ -1277,7 +1142,7 @@ export class MyEpicGame extends BaseContract {
         [BigNumber, BigNumber, BigNumber] & {
           hp: BigNumber;
           maxHp: BigNumber;
-          attackDamage: BigNumber;
+          attack: BigNumber;
         }
       ],
       {
@@ -1285,7 +1150,7 @@ export class MyEpicGame extends BaseContract {
         stats: [BigNumber, BigNumber, BigNumber] & {
           hp: BigNumber;
           maxHp: BigNumber;
-          attackDamage: BigNumber;
+          attack: BigNumber;
         };
       }
     >;
@@ -1299,7 +1164,7 @@ export class MyEpicGame extends BaseContract {
         [BigNumber, BigNumber, BigNumber] & {
           hp: BigNumber;
           maxHp: BigNumber;
-          attackDamage: BigNumber;
+          attack: BigNumber;
         }
       ],
       {
@@ -1307,18 +1172,28 @@ export class MyEpicGame extends BaseContract {
         stats: [BigNumber, BigNumber, BigNumber] & {
           hp: BigNumber;
           maxHp: BigNumber;
-          attackDamage: BigNumber;
+          attack: BigNumber;
         };
       }
     >;
 
-    "PlayerLose()"(): TypedEventFilter<[], {}>;
+    "PokemonNFTMinted(address,uint256,uint256)"(
+      sender?: null,
+      tokenId?: null,
+      pokemonId?: null
+    ): TypedEventFilter<
+      [string, BigNumber, BigNumber],
+      { sender: string; tokenId: BigNumber; pokemonId: BigNumber }
+    >;
 
-    PlayerLose(): TypedEventFilter<[], {}>;
-
-    "PlayerWin()"(): TypedEventFilter<[], {}>;
-
-    PlayerWin(): TypedEventFilter<[], {}>;
+    PokemonNFTMinted(
+      sender?: null,
+      tokenId?: null,
+      pokemonId?: null
+    ): TypedEventFilter<
+      [string, BigNumber, BigNumber],
+      { sender: string; tokenId: BigNumber; pokemonId: BigNumber }
+    >;
 
     "Transfer(address,address,uint256)"(
       from?: string | null,
@@ -1347,36 +1222,59 @@ export class MyEpicGame extends BaseContract {
     ): Promise<BigNumber>;
 
     attackBoss(
+      pokemonIndex: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    bigBoss(overrides?: CallOverrides): Promise<BigNumber>;
+    boss(overrides?: CallOverrides): Promise<BigNumber>;
 
-    charactersOfAddress(
-      arg0: string,
-      arg1: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    checkIfUserHasNFT(overrides?: CallOverrides): Promise<BigNumber>;
-
-    getAllDefaultCharacters(overrides?: CallOverrides): Promise<BigNumber>;
+    getAllPokemons(overrides?: CallOverrides): Promise<BigNumber>;
 
     getApproved(
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    getBigBoss(overrides?: CallOverrides): Promise<BigNumber>;
+    getBoss(overrides?: CallOverrides): Promise<BigNumber>;
 
-    getCharacters(
+    getPokemon(id: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+    getPokemonByIndexOf(
+      pokemonIndex: BigNumberish,
       sender: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    getListNftHolders(overrides?: CallOverrides): Promise<BigNumber>;
+    getPokemonNft(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getPokemonReadable(
+      pokemonData: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getPokemonSelected(
+      sender: string,
+      pokemonIndex: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getPokemonsOf(
+      sender: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getTotalPokemons(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getTotalPokemonsMinted(overrides?: CallOverrides): Promise<BigNumber>;
+
+    hasNft(overrides?: CallOverrides): Promise<BigNumber>;
+
+    holders(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     isApprovedForAll(
       owner: string,
@@ -1384,24 +1282,18 @@ export class MyEpicGame extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    listNftHolders(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    mintCharacterNFT(
-      _characterIndex: BigNumberish,
+    mint(
+      _pokemonId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     name(overrides?: CallOverrides): Promise<BigNumber>;
 
-    nftHolderAttributes(
-      arg0: BigNumberish,
+    nftsOfHolder(
+      arg0: string,
+      arg1: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
-
-    nftHolders(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     ownerOf(
       tokenId: BigNumberish,
@@ -1457,6 +1349,7 @@ export class MyEpicGame extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     attackBoss(
+      pokemonIndex: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1465,33 +1358,61 @@ export class MyEpicGame extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    bigBoss(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    boss(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    charactersOfAddress(
-      arg0: string,
-      arg1: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    checkIfUserHasNFT(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    getAllDefaultCharacters(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    getAllPokemons(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getApproved(
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getBigBoss(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    getBoss(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    getCharacters(
+    getPokemon(
+      id: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getPokemonByIndexOf(
+      pokemonIndex: BigNumberish,
       sender: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getListNftHolders(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    getPokemonNft(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getPokemonReadable(
+      pokemonData: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getPokemonSelected(
+      sender: string,
+      pokemonIndex: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getPokemonsOf(
+      sender: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getTotalPokemons(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getTotalPokemonsMinted(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    hasNft(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    holders(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     isApprovedForAll(
       owner: string,
@@ -1499,25 +1420,16 @@ export class MyEpicGame extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    listNftHolders(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    mintCharacterNFT(
-      _characterIndex: BigNumberish,
+    mint(
+      _pokemonId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    nftHolderAttributes(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    nftHolders(
+    nftsOfHolder(
       arg0: string,
+      arg1: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

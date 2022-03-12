@@ -5,6 +5,7 @@
 // Runtime Environment's members available in the global scope.
 import { ethers } from 'hardhat'
 import { getPokemonData } from "./getPokeApiData"
+import { pokemons } from "../data/pokemon"
 
 async function main () {
   // Hardhat always runs the compile task when running scripts with its command
@@ -14,25 +15,26 @@ async function main () {
   // manually to make sure everything is compiled
   // await hre.run('compile');
 
-  const limit = 7
-  const pokemonList = await getPokemonData(limit)
+  const limit = 150
+  // const pokemonList = await getPokemonData(limit)
+  const pokemonList = pokemons
+
+  // Pokemon: Mewtwo - Level: 10
+  const [bossId, bossLevel] = [150, 10]
 
   // We get the contract to deploy
-  const gameContractFactory = await ethers.getContractFactory('MyEpicGame')
+  const gameContractFactory = await ethers.getContractFactory('PokemonGame')
   const gameContract = await gameContractFactory.deploy(
-    pokemonList.characterNames,
     pokemonList.characterIndexes,
+    pokemonList.characterNames,
     pokemonList.characterImageURIs,
     pokemonList.characterHp,
-    pokemonList.characterAttackDmg,
-    "Dialga", // Boss name
-    "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/483.png", // Boss image
-    200, // Boss hp
-    30, // Boss attack damage
+    pokemonList.characterAttack,
+    [bossId, bossLevel]
   )
 
   await gameContract.deployed()
-  console.log('MyEpicGame deployed to:', gameContract.address)
+  console.log('PokemonGame deployed to:', gameContract.address)
 }
 
 // We recommend this pattern to be able to use async/await everywhere

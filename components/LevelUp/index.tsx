@@ -5,7 +5,7 @@ interface IAtributtes {
   level: number,
   hp: number,
   maxHp: number,
-  attackDamage: number
+  attack: number
 }
 
 type LevelUpProps = {
@@ -15,7 +15,7 @@ type LevelUpProps = {
 export const LevelUp: FC<LevelUpProps> = ({ attributes }) => {
   const stats = [
     { name: "HP", value: attributes?.maxHp },
-    { name: "Attack", value: attributes?.attackDamage }
+    { name: "Attack", value: attributes?.attack }
   ]
   return (
     <div className="flex flex-col p-4 rounded-md max-w-max">

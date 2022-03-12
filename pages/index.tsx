@@ -53,7 +53,7 @@ const Home: NextPage = () => {
             <div className='absolute -left-12 w-96'>
               <Image
                 loader={imageLoader}
-                src="sprites/master/sprites/pokemon/other/home/483.png"
+                src="sprites/master/sprites/pokemon/other/home/150.png"
                 width={400}
                 height={400}
                 quality={100} />

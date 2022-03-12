@@ -37,9 +37,13 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IERC165__factory>;
     getContractFactory(
-      name: "MyEpicGame",
+      name: "PokemonData",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.MyEpicGame__factory>;
+    ): Promise<Contracts.PokemonData__factory>;
+    getContractFactory(
+      name: "PokemonGame",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.PokemonGame__factory>;
 
     getContractAt(
       name: "ERC721",
@@ -72,10 +76,15 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.IERC165>;
     getContractAt(
-      name: "MyEpicGame",
+      name: "PokemonData",
       address: string,
       signer?: ethers.Signer
-    ): Promise<Contracts.MyEpicGame>;
+    ): Promise<Contracts.PokemonData>;
+    getContractAt(
+      name: "PokemonGame",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.PokemonGame>;
 
     // default types
     getContractFactory(

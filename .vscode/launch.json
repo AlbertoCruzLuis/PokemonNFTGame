@@ -1,0 +1,10 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+      {
+          "type": "solidityMeadow",
+          "request": "launch",
+          "name": "Debug Solidity (via unit test run)"
+      }
+  ]
+}

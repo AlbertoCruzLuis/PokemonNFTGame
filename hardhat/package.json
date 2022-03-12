@@ -2,7 +2,12 @@
   "name": "hardhat-project",
   "scripts": {
     "compile": "hardhat compile",
+    "coverage": "hardhat coverage",
+    "node": "hardhat node",
+    "typechain": "hardhat typechain",
+    "test": "hardhat test",
     "deploy": "hardhat run scripts/deploy.ts --network localhost",
+    "createPoke": "hardhat run scripts/createPokemonData.ts",
     "deploy:rinkeby": "hardhat run scripts/deploy.ts --network rinkeby"
   },
   "devDependencies": {

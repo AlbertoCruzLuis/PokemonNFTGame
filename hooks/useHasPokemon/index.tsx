@@ -1,25 +1,25 @@
 import { useContract } from "hooks/useContract"
-import { ICharacterData, transformCharacterData } from "lib/getNftMetadata"
+import { IPokemonData, transformPokemonData } from "lib/getNftMetadata"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 
 interface IuseHasPokemon {
-  pokemonSelected: ICharacterData | null,
-  setPokemonSelected: Dispatch<SetStateAction<ICharacterData | null>>
+  pokemonSelected: IPokemonData | null,
+  setPokemonSelected: Dispatch<SetStateAction<IPokemonData | null>>
 }
 
 export const useHasPokemon = (): IuseHasPokemon => {
   const { gameContract } = useContract()
-  const [pokemonSelected, setPokemonSelected] = useState<ICharacterData | null>(null)
+  const [pokemonSelected, setPokemonSelected] = useState<IPokemonData | null>(null)
 
   const hasPokemon = async () => {
     if (!gameContract) return
 
-    const txn = await gameContract.checkIfUserHasNFT()
+    const pokemonNft = await gameContract.hasNft()
 
-    if (!txn.name) return
+    if (!pokemonNft.info.id.toNumber()) return
 
     console.log("User has character NFT")
-    setPokemonSelected(transformCharacterData(txn))
+    setPokemonSelected(transformPokemonData(pokemonNft))
   }
 
   useEffect(() => {

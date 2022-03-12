@@ -1,5 +1,5 @@
 import { useContract } from "hooks/useContract"
-import { ICharacterData, transformCharacterData } from "lib/getNftMetadata"
+import { IPokemonData, transformPokemonData } from "lib/getNftMetadata"
 import { useEffect, useState } from "react"
 
 enum ATTACK_STATE {
@@ -10,23 +10,23 @@ enum ATTACK_STATE {
 
 export const useBoss = () => {
   const { gameContract } = useContract()
-  const [boss, setBoss] = useState<ICharacterData>()
+  const [boss, setBoss] = useState<IPokemonData>()
   const [attackState, setAttackState] = useState("")
 
   const getBoss = async () => {
     if (gameContract) {
-      const bossTxn = await gameContract.getBigBoss()
-      console.log("Boss:", bossTxn)
-      setBoss(transformCharacterData(bossTxn))
+      const bossRaw = await gameContract.getBoss()
+      const boss = await gameContract.getPokemonReadable(bossRaw)
+      setBoss(transformPokemonData(boss))
     }
   }
 
-  const runAttackAction = async () => {
+  const runAttackAction = async (pokemonIndex: number) => {
     try {
       if (gameContract) {
         setAttackState(ATTACK_STATE.attacking)
         console.log("Attacking boss...")
-        const attackTxn = await gameContract.attackBoss()
+        const attackTxn = await gameContract.attackBoss(pokemonIndex)
         await attackTxn.wait()
         console.log("attackTxn:", attackTxn)
         setAttackState(ATTACK_STATE.hit)

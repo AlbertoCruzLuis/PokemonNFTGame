@@ -1,10 +1,10 @@
 import { StarterCard } from "components/PokemonCards/StarterCard"
 import { usePokemon } from "hooks/usePokemon"
 import { useContract } from "hooks/useContract"
-import { transformCharacterData } from "lib/getNftMetadata"
+import { transformPokemonData } from "lib/getNftMetadata"
 import toast from "react-hot-toast"
 import { useContractEvent } from "hooks/useContractEvent"
-import { MyEpicGame } from "hardhat/typechain"
+import { PokemonGame } from "hardhat/typechain"
 import { FC, useState } from "react"
 import Popup from "reactjs-popup"
 import { BiLoaderAlt } from "react-icons/bi"
@@ -20,11 +20,11 @@ export const SelectPokemon: FC<ISelectPokemon> = ({ setPokemonSelected }) => {
   const [isLoading, setIsLoading] = useState(false)
   const { gameContract } = useContract()
 
-  const mintCharacterNFTAction = async (characterId: number | undefined) => {
+  const mintCharacterNFTAction = async (pokemonId: number | undefined) => {
     try {
       if (gameContract) {
         setIsLoading(true)
-        const mintTxn = await gameContract.mintCharacterNFT(characterId)
+        const mintTxn = await gameContract.mint(pokemonId)
         await mintTxn.wait()
         toast.success("pokemon minted")
         setIsLoading(false)
@@ -35,22 +35,22 @@ export const SelectPokemon: FC<ISelectPokemon> = ({ setPokemonSelected }) => {
     }
   }
 
-  const getCharacterMint = async () => {
+  const getPokemonMint = async () => {
     if (gameContract) {
-      const characterNFT = await gameContract.checkIfUserHasNFT()
-      const pokemonNFT = transformCharacterData(characterNFT)
+      const characterNFT = await gameContract.hasNft()
+      const pokemonNFT = transformPokemonData(characterNFT)
       setPokemonSelected(pokemonNFT)
     }
   }
 
-  const onCharacterMint = (sender: string, tokenId: number, characterIndex: number) => {
-    getCharacterMint()
+  const onPokemonMint = (sender: string, tokenId: number, pokemonId: number) => {
+    getPokemonMint()
   }
 
-  const gameContractEvent = useContractEvent<MyEpicGame | Contract>({
+  useContractEvent<PokemonGame | Contract>({
     contract: gameContract,
-    eventName: "CharacterNFTMinted",
-    listener: onCharacterMint
+    eventName: "PokemonNFTMinted",
+    listener: onPokemonMint
   })
 
   return (
