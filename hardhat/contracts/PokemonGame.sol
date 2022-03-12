@@ -182,8 +182,8 @@ contract PokemonGame is ERC721 {
     }
 
     function attack(PokemonData pokemonOne, PokemonData pokemonTwo, BattleStatus status, bool isUpExperience) internal {
-        if (pokemonOne.getHp() <= 0) return;
-        if (pokemonTwo.getHp() <= 0) return;
+        require (pokemonOne.getHp() > 0, "Error. PokemonOne don't have Hp");
+        require (pokemonTwo.getHp() > 0, "Error. PokemonTwo don't have Hp");
 
         if (pokemonTwo.getHp() <= pokemonOne.getAttack()) {
             pokemonTwo.changeHp(0);

@@ -4,6 +4,7 @@ import { ethers } from 'hardhat'
 import { before } from 'mocha'
 import { PokemonGame } from '../typechain'
 import { getPokemonData } from "../scripts/getPokeApiData"
+import { pokemons } from "../data/pokemon"
 
 describe('PokemonGame - Deploy', function () {
   let gameContract: PokemonGame
@@ -13,7 +14,8 @@ describe('PokemonGame - Deploy', function () {
 
   it("Should deploy contract", async function () {
     const limit = 150
-    const pokemonList = await getPokemonData(limit)
+    //const pokemonList = await getPokemonData(limit)
+    const pokemonList = pokemons
 
     bossId = 150
     bossLevel = 10

@@ -6,6 +6,8 @@
     "node": "hardhat node",
     "typechain": "hardhat typechain",
     "test": "hardhat test",
+    "test:battle": "hardhat test --grep Battle",
+    "test:deploy": "hardhat test --grep Deploy",
     "deploy": "hardhat run scripts/deploy.ts --network localhost",
     "createPoke": "hardhat run scripts/createPokemonData.ts",
     "deploy:rinkeby": "hardhat run scripts/deploy.ts --network rinkeby"
