@@ -34,7 +34,8 @@ contract PokemonGame is ERC721 {
 
     address[] public holders;
 
-    PokemonData public boss;
+    // BossId => PokemonData
+    mapping(uint256 => PokemonData) public bosses;
 
     enum BattleStatus { WIN, LOSE }
 
@@ -49,7 +50,8 @@ contract PokemonGame is ERC721 {
         string[] memory pokemonImageURIs,
         uint[] memory pokemonHp,
         uint[] memory pokemonAttack,
-        uint[] memory bossData
+        uint[] memory bossesIds,
+        uint[] memory bossesLevel
     )
         ERC721("Pokemon", "PKM")
     {
@@ -69,9 +71,10 @@ contract PokemonGame is ERC721 {
 
         _totalPokemons = pokemonIndexes.length;
 
-        uint256 boss_id = bossData[0];
-        uint256 boss_level = bossData[1];
-        createBoss(boss_id, boss_level);
+        // Create All Bosses
+        for(uint i = 0; i < bossesIds.length; i++) {
+            createBoss(bossesIds[i], bossesLevel[i]);
+        }
 
         // I increment _tokenIds here so that my first NFT has an ID of 1.
         _tokenIds.increment();
@@ -128,12 +131,13 @@ contract PokemonGame is ERC721 {
     }
 
     function createBoss(uint256 pokemonId, uint256 level) internal {
-        boss = getPokemon(pokemonId);
+        PokemonData boss = getPokemon(pokemonId);
         boss.changeLevel(level);
         boss.changeMaxHp(boss.getMaxHp() + level);
         boss.changeAttack(boss.getAttack() + level);
         boss.changeHp(boss.getMaxHp());
         boss.changeTotalExperience(getTotalExperienceByLevel(level));
+        bosses[pokemonId] = boss;
     }
 
     function getTotalExperienceByLevel(uint256 level) internal pure returns (uint256) {
@@ -165,20 +169,20 @@ contract PokemonGame is ERC721 {
         }
     }
 
-    function attackBoss(uint256 pokemonIndex) public {
+    function attackBoss(uint256 pokemonIndex, uint256 bossId) public {
         PokemonData player = getPokemonByIndexOf(pokemonIndex, msg.sender);
 
         // Allow player to attack boss.
         bool isUpExperience = true;
-        attack(player, boss, BattleStatus.WIN, isUpExperience);
+        attack(player, bosses[bossId], BattleStatus.WIN, isUpExperience);
 
         // Allow boss to attack player.
         isUpExperience = false;
-        attack(boss, player, BattleStatus.LOSE, isUpExperience);
+        attack(bosses[bossId], player, BattleStatus.LOSE, isUpExperience);
 
         checkLevelUp(player);
 
-        emit AttackComplete(boss.getHp(), player.getHp());
+        emit AttackComplete(bosses[bossId].getHp(), player.getHp());
     }
 
     function attack(PokemonData pokemonOne, PokemonData pokemonTwo, BattleStatus status, bool isUpExperience) internal {
@@ -192,7 +196,7 @@ contract PokemonGame is ERC721 {
             pokemonTwo.changeHp(pokemonTwo.getHp() - pokemonOne.getAttack());
         }
         if(isUpExperience) {
-            pokemonOne.changeExperience(pokemonOne.getExperience() + (8 * pokemonTwo.getLevel()));
+            pokemonOne.changeExperience(pokemonOne.getExperience() + (6 * pokemonTwo.getLevel()));
         }
     }
 
@@ -238,8 +242,8 @@ contract PokemonGame is ERC721 {
         return pokemonSelected;
     }
 
-    function getBoss() public view returns (PokemonData) {
-        return boss;
+    function getBoss(uint256 id) public view returns (PokemonData) {
+        return bosses[id];
     }
 
     function getPokemon(uint256 id) public view returns (PokemonData) {

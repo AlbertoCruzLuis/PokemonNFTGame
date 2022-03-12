@@ -23,9 +23,13 @@ enum BattleStatus {
   LOST
 }
 
+const bosses = {
+  mewtwo: 150
+}
+
 const Arena: NextPage = () => {
   const { gameContract } = useContract()
-  const { boss, setBoss, runAttackAction, attackState } = useBoss()
+  const { boss, setBoss, runAttackAction, attackState } = useBoss(bosses.mewtwo)
   const { pokemonSelected, setPokemonSelected } = useHasPokemon()
   const [isLevelUp, setIsLevelUp] = useState<boolean>(false)
   const [attributes, setAtributes] = useState<IAtributtes>()
@@ -120,7 +124,7 @@ const Arena: NextPage = () => {
         level={boss.level}
         experience={boss.experience} />}
 
-      <button className="flex items-center gap-2 p-2 px-8 border-2 border-yellow-400 border-solid bg-gradient-to-t from-black to-yellow-500 max-w-max" onClick={() => runAttackAction(0)}>
+      <button className="flex items-center gap-2 p-2 px-8 border-2 border-yellow-400 border-solid bg-gradient-to-t from-black to-yellow-500 max-w-max" onClick={() => runAttackAction(0, bosses.mewtwo)}>
         <span className="font-semibold text-white">Attack</span>
       </button>
       <Popup open={isLevelUp} overlayStyle={{ backgroundColor: "rgba(0,0,0,0.5)" }}>

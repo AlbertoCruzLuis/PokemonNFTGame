@@ -9,16 +9,17 @@ import { pokemons } from "../data/pokemon"
 describe('PokemonGame - Deploy', function () {
   let gameContract: PokemonGame
   let deployer: Signer
-  let bossId: number
-  let bossLevel: number
+  let bossesIds: number[]
+  let bossesLevels: number[]
+  let mewtwoId = 150;
 
   it("Should deploy contract", async function () {
-    const limit = 150
+    // const limit = 150
     //const pokemonList = await getPokemonData(limit)
     const pokemonList = pokemons
 
-    bossId = 150
-    bossLevel = 10
+    bossesIds = [mewtwoId]
+    bossesLevels = [10]
 
     // We get the contract to deploy
     const gameContractFactory = await ethers.getContractFactory('PokemonGame')
@@ -29,7 +30,8 @@ describe('PokemonGame - Deploy', function () {
       pokemonList.characterImageURIs,
       pokemonList.characterHp,
       pokemonList.characterAttack,
-      [bossId, bossLevel]
+      bossesIds,
+      bossesLevels
     )
 
     await gameContract.deployed()

@@ -9,14 +9,15 @@ import { getPokemonData } from "../scripts/getPokeApiData"
 describe('PokemonGame', function () {
   let gameContract: PokemonGame
   let deployer: Signer
-  let bossId: number
-  let bossLevel: number
+  let bossesIds: number[]
+  let bossesLevels: number[]
+  let mewtwoId = 150
   before(async function () {
     const limit = 7
     const pokemonList = await getPokemonData(limit)
 
-    bossId = 7
-    bossLevel = 10
+    bossesIds = [7]
+    bossesLevels = [10]
 
     // We get the contract to deploy
     const gameContractFactory = await ethers.getContractFactory('PokemonGame')
@@ -27,7 +28,8 @@ describe('PokemonGame', function () {
       pokemonList.characterImageURIs,
       pokemonList.characterHp,
       pokemonList.characterAttack,
-      [bossId, bossLevel]
+      bossesIds,
+      bossesLevels
     )
 
     await gameContract.deployed()
@@ -73,7 +75,7 @@ describe('PokemonGame', function () {
   })
 
   it("Should return total experience of boss", async function () {
-    const bossRaw = await gameContract.getBoss()
+    const bossRaw = await gameContract.getBoss(mewtwoId)
     const boss = await gameContract.getPokemonReadable(bossRaw)
     expect(boss.totalExperience).to.equal(392)
   })
