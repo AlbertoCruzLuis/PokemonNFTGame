@@ -1,12 +1,8 @@
 import { Stat } from "hooks/usePokemon"
 import Image from "next/image"
-import type { ImageLoaderProps } from "next/image"
 import { FC } from "react"
 import { v4 as uuidv4 } from "uuid"
-
-const imageLoader = ({ src, width, quality }: ImageLoaderProps) => {
-  return `https://raw.githubusercontent.com/PokeAPI/${src}?w=${width}&q=${quality || 75}`
-}
+import { imageLoader } from "lib/imageLoader"
 
 type StarterCardProps = {
   id: number | undefined

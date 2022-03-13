@@ -12,7 +12,9 @@ type PageLayoutProps = {
 
 export const PageLayout: FC<PageLayoutProps> = ({ children }) => {
   const routes = [
-    { name: "Home", url: "/" }
+    { name: "Home", url: "/" },
+    { name: "Dashboard", url: "/dashboard" },
+    { name: "Shop", url: "/shop" }
   ]
 
   return (

@@ -20,3 +20,8 @@ export const fetchPokemon = (name: string) => {
     return await response.json()
   }
 }
+
+export const fetchURL = async (url: string) => {
+  const response = await fetch(url)
+  return await response.json()
+}
