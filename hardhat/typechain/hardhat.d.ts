@@ -93,6 +93,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IERC165__factory>;
     getContractFactory(
+      name: "IMetallic",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IMetallic__factory>;
+    getContractFactory(
       name: "IPokemonGame",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IPokemonGame__factory>;
@@ -221,6 +225,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.IERC165>;
+    getContractAt(
+      name: "IMetallic",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IMetallic>;
     getContractAt(
       name: "IPokemonGame",
       address: string,

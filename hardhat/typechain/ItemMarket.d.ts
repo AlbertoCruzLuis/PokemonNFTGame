@@ -22,7 +22,7 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface ItemMarketInterface extends ethers.utils.Interface {
   functions: {
-    "buyItem(address,uint256,uint256)": FunctionFragment;
+    "buyItem(address,address,uint256,uint256)": FunctionFragment;
     "getAllItems()": FunctionFragment;
     "getTotalItems()": FunctionFragment;
     "inventory(uint16)": FunctionFragment;
@@ -35,7 +35,7 @@ interface ItemMarketInterface extends ethers.utils.Interface {
 
   encodeFunctionData(
     functionFragment: "buyItem",
-    values: [string, BigNumberish, BigNumberish]
+    values: [string, string, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "getAllItems",
@@ -181,6 +181,7 @@ export class ItemMarket extends BaseContract {
 
   functions: {
     buyItem(
+      _metallicAddress: string,
       _tokenAddress: string,
       _id: BigNumberish,
       _amount: BigNumberish,
@@ -254,6 +255,7 @@ export class ItemMarket extends BaseContract {
   };
 
   buyItem(
+    _metallicAddress: string,
     _tokenAddress: string,
     _id: BigNumberish,
     _amount: BigNumberish,
@@ -325,6 +327,7 @@ export class ItemMarket extends BaseContract {
 
   callStatic: {
     buyItem(
+      _metallicAddress: string,
       _tokenAddress: string,
       _id: BigNumberish,
       _amount: BigNumberish,
@@ -491,6 +494,7 @@ export class ItemMarket extends BaseContract {
 
   estimateGas: {
     buyItem(
+      _metallicAddress: string,
       _tokenAddress: string,
       _id: BigNumberish,
       _amount: BigNumberish,
@@ -547,6 +551,7 @@ export class ItemMarket extends BaseContract {
 
   populateTransaction: {
     buyItem(
+      _metallicAddress: string,
       _tokenAddress: string,
       _id: BigNumberish,
       _amount: BigNumberish,

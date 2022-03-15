@@ -9,7 +9,7 @@ import "@openzeppelin/contracts/security/Pausable.sol";
 
 contract Metallic is ERC20, ERC20Burnable, ERC20Snapshot, Ownable, Pausable {
     constructor() ERC20("Metallic", "MTL") {
-        _mint(msg.sender, 21000000 * 10 ** decimals());
+        _mint(msg.sender, 420000000 * 10 ** decimals());
     }
 
     function snapshot() public onlyOwner {

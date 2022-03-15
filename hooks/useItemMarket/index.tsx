@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react"
 import { IItemData, transformItemData } from "lib/getNftMetadata"
 
-import { ITEM_ADDRESS, ITEM_MARKET_ADDRESS } from "config"
+import { ITEM_ADDRESS, ITEM_MARKET_ADDRESS, METALLIC_ADDRESS } from "config"
 import ItemContract from "hardhat/artifacts/contracts/Item.sol/Item.json"
 import { Item } from "hardhat/typechain/Item"
 import ItemMarketContract from "hardhat/artifacts/contracts/ItemMarket.sol/ItemMarket.json"
 import { ItemMarket } from "hardhat/typechain/ItemMarket"
+import MetallicContract from "hardhat/artifacts/contracts/Metallic.sol/Metallic.json"
+import { Metallic } from "hardhat/typechain/Metallic"
 import { useContract } from "hooks/useContract"
 import { Contract, ethers } from "ethers"
 import { useContractEvent } from "hooks/useContractEvent"
@@ -18,13 +20,18 @@ export interface IbuyItem {
 }
 
 export const useItemMarket = () => {
-  const { contract: itemContract } = useContract<Item>({
+  const { contract: itemContract } = useContract<Item & Contract>({
     contractAddress: ITEM_ADDRESS,
     contractJson: ItemContract
   })
-  const { contract: itemMarketContract } = useContract<ItemMarket>({
+  const { contract: itemMarketContract } = useContract<ItemMarket & Contract>({
     contractAddress: ITEM_MARKET_ADDRESS,
     contractJson: ItemMarketContract
+  })
+
+  const { contract: metallicContract } = useContract<Metallic & Contract>({
+    contractAddress: METALLIC_ADDRESS,
+    contractJson: MetallicContract
   })
   const [items, setItems] = useState<IItemData[]>()
 
@@ -51,8 +58,9 @@ export const useItemMarket = () => {
 
   const buyItem = async ({ itemId, amount, costItem }: IbuyItem) => {
     const priceItem = ethers.utils.parseUnits(String(costItem), "ether")
-    if (!itemContract || !itemMarketContract) return
-    await itemMarketContract.buyItem(itemContract.address, itemId, amount, { value: priceItem })
+    if (!itemContract || !itemMarketContract || !metallicContract) return
+    await metallicContract.approve(itemMarketContract.address, priceItem)
+    await itemMarketContract.buyItem(METALLIC_ADDRESS, itemContract.address, itemId, amount)
   }
 
   const onBuyItem = (

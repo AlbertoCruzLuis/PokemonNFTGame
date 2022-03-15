@@ -2,18 +2,34 @@ import { expect } from 'chai'
 import { before } from 'mocha'
 import { Signer } from 'ethers'
 import { ethers } from 'hardhat'
-import { ItemMarket, Item } from '../../typechain'
+import { Metallic, ItemMarket, Item } from '../../typechain'
 import { items } from "../../data/items"
+import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers'
 
 describe('ItemMarket', function () {
+  let metallicContract: Metallic
   let itemMarketContract: ItemMarket
   let itemContract: Item
-  let deployer: Signer
+  let owner: SignerWithAddress
+  let userOne: SignerWithAddress
 
   before(async function () {
+    const [ownerAddr, addr1] = await ethers.getSigners();
+    owner = ownerAddr
+    userOne = addr1
+
+    // --- Deploy Metallic ----
+    const metallicContractFactory = await ethers.getContractFactory('Metallic')
+    metallicContract = await metallicContractFactory.deploy()
+
+    await metallicContract.deployed()
+    console.log('Metallic deployed to:', metallicContract.address)
+
+    const metallicAmount = ethers.utils.parseUnits("200000", 'ether')
+    await metallicContract.transfer(addr1.address, metallicAmount);
+    console.log(await metallicContract.balanceOf(userOne.address))
     // --- Deploy ItemMarket ---
     const itemMarketContractFactory = await ethers.getContractFactory('ItemMarket')
-    deployer = itemMarketContractFactory.signer
     itemMarketContract = await itemMarketContractFactory.deploy()
 
     await itemMarketContract.deployed()
@@ -43,21 +59,19 @@ describe('ItemMarket', function () {
       await itemContract.setApprovalForAll(itemMarketContract.address, true);
       await itemMarketContract.listItem(itemContract.address, itemId, 5, itemCost)
     }
+
+    // Aprove Metallic coin
+    await metallicContract.connect(userOne).approve(itemMarketContract.address, metallicAmount)
   })
 
   it("Should get items of User wallet when buy items", async function () {
-    const [owner, addr1, addr2] = await ethers.getSigners();
-
     const itemsIds = [26, 17, 43];
     const amounts = [2, 1, 3];
     for (let index = 0; index < itemsIds.length; index++) {
-      const itemRaw = await itemContract.getItem(itemsIds[index])
-      const item = await itemContract.getItemReadable(itemRaw)
-      const costItem = ethers.utils.parseUnits(String(item.cost.toNumber() * amounts[index]), 'ether')
-      await itemMarketContract.connect(addr1).buyItem(itemContract.address, itemsIds[index], amounts[index], { value: costItem })
+      await itemMarketContract.connect(userOne).buyItem(metallicContract.address, itemContract.address, itemsIds[index], amounts[index])
     }
 
-    const itemsRaw = await itemContract.getItemsOf(addr1.address)
+    const itemsRaw = await itemContract.getItemsOf(userOne.address)
     itemsRaw.map(item => {
       console.log("Id: ", item.info.id.toNumber(), "Amount: ", item.amount.toNumber());
       // expect(item.amount.toNumber()).to.equal(2)
@@ -65,22 +79,17 @@ describe('ItemMarket', function () {
   })
 
   it("Should buy an Item in market", async function () {
-    const [owner, addr1, addr2] = await ethers.getSigners();
-    console.log(owner.address, addr1.address, addr2.address);
     const itemId = 17;
     const amount = 2;
-    const itemRaw = await itemContract.getItem(itemId)
-    const item = await itemContract.getItemReadable(itemRaw)
-    const costItem = ethers.utils.parseUnits(String(item.cost.toNumber() * amount), 'ether')
 
-    let deployerBalance = await deployer.getBalance()
-    let addr1Balance = await addr1.getBalance()
+    let deployerBalance = await metallicContract.balanceOf(owner.address)
+    let addr1Balance = await metallicContract.balanceOf(userOne.address)
     console.log("Before: ", ethers.utils.formatEther(deployerBalance))
     console.log("Before: ", ethers.utils.formatEther(addr1Balance))
 
-    await itemMarketContract.connect(addr1).buyItem(itemContract.address, itemId, amount, { value: costItem })
-    deployerBalance = await deployer.getBalance()
-    addr1Balance = await addr1.getBalance()
+    await itemMarketContract.connect(userOne).buyItem(metallicContract.address, itemContract.address, itemId, amount)
+    deployerBalance = await metallicContract.balanceOf(owner.address)
+    addr1Balance = await metallicContract.balanceOf(userOne.address)
     console.log("After: ", ethers.utils.formatEther(deployerBalance))
     console.log("After: ", ethers.utils.formatEther(addr1Balance))
   })
