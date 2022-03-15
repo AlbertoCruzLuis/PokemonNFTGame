@@ -12,7 +12,7 @@ import { Contract } from "ethers"
 
 export const useHealingListNFT = () => {
   const { address } = useWeb3()
-  const { contract: itemContract } = useContract<Item>({
+  const { contract: itemContract } = useContract<Contract>({
     contractAddress: ITEM_ADDRESS,
     contractJson: ItemContract
   })
@@ -60,7 +60,7 @@ export const useHealingListNFT = () => {
     }
   }
 
-  useContractEvent<Item & Contract>({
+  useContractEvent<Contract>({
     contract: itemContract,
     eventName: "UseItem",
     listener: onUseItem

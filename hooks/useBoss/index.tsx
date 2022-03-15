@@ -5,6 +5,7 @@ import { POKEMON_GAME_ADDRESS } from "config"
 import PokemonGameContract from "hardhat/artifacts/contracts/PokemonGame.sol/PokemonGame.json"
 import { PokemonGame } from "hardhat/typechain/PokemonGame"
 import { useContract } from "hooks/useContract"
+import { Contract } from "ethers"
 
 enum ATTACK_STATE {
   attacking = "attacking",
@@ -13,7 +14,7 @@ enum ATTACK_STATE {
 }
 
 export const useBoss = (id: number) => {
-  const { contract: gameContract } = useContract<PokemonGame>({
+  const { contract: gameContract } = useContract<Contract>({
     contractAddress: POKEMON_GAME_ADDRESS,
     contractJson: PokemonGameContract
   })

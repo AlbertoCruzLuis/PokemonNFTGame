@@ -1,7 +1,6 @@
 import { useWeb3 } from "@3rdweb/hooks"
 import { useEffect, useState } from "react"
-import { ethers } from "ethers"
-import type { Contract } from "ethers"
+import { ethers, Contract } from "ethers"
 
 interface IuseContract {
   contractAddress: string | undefined,

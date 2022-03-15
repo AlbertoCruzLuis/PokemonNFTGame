@@ -31,7 +31,7 @@ const bosses = {
 }
 
 const Arena: NextPage = () => {
-  const { contract: gameContract } = useContract<PokemonGame>({
+  const { contract: gameContract } = useContract<PokemonGame & Contract>({
     contractAddress: POKEMON_GAME_ADDRESS,
     contractJson: PokemonGameContract
   })
@@ -92,19 +92,19 @@ const Arena: NextPage = () => {
     }
   }
 
-  useContractEvent<PokemonGame | Contract>({
+  useContractEvent<Contract>({
     contract: gameContract,
     eventName: "AttackComplete",
     listener: onAttackComplete
   })
 
-  useContractEvent<PokemonGame | Contract>({
+  useContractEvent<Contract>({
     contract: gameContract,
     eventName: "LevelUp",
     listener: onLevelUp
   })
 
-  useContractEvent<PokemonGame | Contract>({
+  useContractEvent<Contract>({
     contract: gameContract,
     eventName: "BattleComplete",
     listener: onBattleComplete

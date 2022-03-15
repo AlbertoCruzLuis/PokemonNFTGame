@@ -21,7 +21,7 @@ interface ISelectPokemon {
 export const SelectPokemon: FC<ISelectPokemon> = ({ setPokemonSelected }) => {
   const pokemonStarter = ["bulbasaur", "charmander", "squirtle"]
   const [isLoading, setIsLoading] = useState(false)
-  const { contract: gameContract } = useContract<PokemonGame>({
+  const { contract: gameContract } = useContract<PokemonGame & Contract>({
     contractAddress: POKEMON_GAME_ADDRESS,
     contractJson: PokemonGameContract
   })
@@ -53,7 +53,7 @@ export const SelectPokemon: FC<ISelectPokemon> = ({ setPokemonSelected }) => {
     getPokemonMint()
   }
 
-  useContractEvent<PokemonGame | Contract>({
+  useContractEvent<Contract>({
     contract: gameContract,
     eventName: "PokemonNFTMinted",
     listener: onPokemonMint

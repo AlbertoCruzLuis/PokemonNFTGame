@@ -75,7 +75,7 @@ export const useItemMarket = () => {
     toast.success(`You are Buy ${amount} items`)
   }
 
-  useContractEvent<ItemMarket & Contract>({
+  useContractEvent<Contract>({
     contract: itemMarketContract,
     eventName: "BuyItem",
     listener: onBuyItem
