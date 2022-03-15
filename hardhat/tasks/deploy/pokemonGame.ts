@@ -21,5 +21,5 @@ task("deploy:pokemonGame", "Deploy contract of Pokemon Game", async (taskArgs, h
 
   await pokemonGame.deployed();
 
-  console.log("Metallic deployed to:", pokemonGame.address);
+  console.log("PokemonGame deployed to:", pokemonGame.address);
 });

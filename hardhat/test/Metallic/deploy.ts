@@ -1,8 +1,7 @@
 import { expect } from 'chai'
 import { Signer } from 'ethers'
 import { ethers } from 'hardhat'
-import { before } from 'mocha'
-import { Metallic } from '../typechain'
+import { Metallic } from '../../typechain'
 
 describe('Metallic - Deploy', function () {
   let metallicContract: Metallic

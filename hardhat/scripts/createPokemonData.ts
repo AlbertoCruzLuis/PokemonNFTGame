@@ -1,5 +1,5 @@
-import fs from "fs"
-import { getPokemonData } from "./getPokeApiData";
+import { writeFile } from "./writeFile"
+import { getPokemonData } from "./PokeApiData/getPokemonsData";
 
 const createPokemonData = async (limit: number) => {
   const {
@@ -22,17 +22,3 @@ const createPokemonData = async (limit: number) => {
 }
 
 createPokemonData(150)
-
-
-const writeFile = (outputFile: string, content: string) => {
-  fs.writeFile(outputFile, content , (err) => {
-    if (err) {
-      console.error(err)
-      return
-    }
-  })
-}
-
-const getPokemonJsonData = () => {
-
-}

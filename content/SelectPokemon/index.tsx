@@ -1,15 +1,18 @@
 import { StarterCard } from "components/PokemonCards/StarterCard"
 import { usePokemon } from "hooks/usePokemon"
-import { useContract } from "hooks/useContract"
 import { transformPokemonData } from "lib/getNftMetadata"
 import toast from "react-hot-toast"
 import { useContractEvent } from "hooks/useContractEvent"
-import { PokemonGame } from "hardhat/typechain"
 import { FC, useState } from "react"
 import Popup from "reactjs-popup"
 import { BiLoaderAlt } from "react-icons/bi"
 import { v4 as uuidv4 } from "uuid"
 import type { Contract } from "ethers"
+
+import { POKEMON_GAME_ADDRESS } from "config"
+import PokemonGameContract from "hardhat/artifacts/contracts/PokemonGame.sol/PokemonGame.json"
+import { PokemonGame } from "hardhat/typechain/PokemonGame"
+import { useContract } from "hooks/useContract"
 
 interface ISelectPokemon {
   setPokemonSelected: any
@@ -18,7 +21,10 @@ interface ISelectPokemon {
 export const SelectPokemon: FC<ISelectPokemon> = ({ setPokemonSelected }) => {
   const pokemonStarter = ["bulbasaur", "charmander", "squirtle"]
   const [isLoading, setIsLoading] = useState(false)
-  const { gameContract } = useContract()
+  const { contract: gameContract } = useContract<PokemonGame>({
+    contractAddress: POKEMON_GAME_ADDRESS,
+    contractJson: PokemonGameContract
+  })
 
   const mintCharacterNFTAction = async (pokemonId: number | undefined) => {
     try {

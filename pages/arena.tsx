@@ -3,13 +3,16 @@ import { useBoss } from "hooks/useBoss"
 import { useContractEvent } from "hooks/useContractEvent"
 import type { BigNumber, Contract } from "ethers"
 import { useHasPokemon } from "hooks/useHasPokemon"
-import { useContract } from "hooks/useContract"
 import { BattleCard } from "components/PokemonCards/BattleCard"
 import { useState } from "react"
-import { PokemonGame } from "hardhat/typechain"
 import Popup from "reactjs-popup"
 import { LevelUp } from "components/LevelUp"
 import toast from "react-hot-toast"
+
+import { POKEMON_GAME_ADDRESS } from "config"
+import PokemonGameContract from "hardhat/artifacts/contracts/PokemonGame.sol/PokemonGame.json"
+import { PokemonGame } from "hardhat/typechain/PokemonGame"
+import { useContract } from "hooks/useContract"
 
 interface IAtributtes {
   level: number,
@@ -28,7 +31,10 @@ const bosses = {
 }
 
 const Arena: NextPage = () => {
-  const { gameContract } = useContract()
+  const { contract: gameContract } = useContract<PokemonGame>({
+    contractAddress: POKEMON_GAME_ADDRESS,
+    contractJson: PokemonGameContract
+  })
   const { boss, setBoss, runAttackAction, attackState } = useBoss(bosses.mewtwo)
   const { pokemonSelected, setPokemonSelected } = useHasPokemon()
   const [isLevelUp, setIsLevelUp] = useState<boolean>(false)

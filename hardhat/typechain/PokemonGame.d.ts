@@ -25,6 +25,7 @@ interface PokemonGameInterface extends ethers.utils.Interface {
     "attackBoss(uint256,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
     "bosses(uint256)": FunctionFragment;
+    "changeHpOf(uint256,address,uint256,bool)": FunctionFragment;
     "getAllPokemons()": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
     "getBoss(uint256)": FunctionFragment;
@@ -63,6 +64,10 @@ interface PokemonGameInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "bosses",
     values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "changeHpOf",
+    values: [BigNumberish, string, BigNumberish, boolean]
   ): string;
   encodeFunctionData(
     functionFragment: "getAllPokemons",
@@ -153,6 +158,7 @@ interface PokemonGameInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "attackBoss", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "bosses", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "changeHpOf", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getAllPokemons",
     data: BytesLike
@@ -353,6 +359,14 @@ export class PokemonGame extends BaseContract {
     balanceOf(owner: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     bosses(arg0: BigNumberish, overrides?: CallOverrides): Promise<[string]>;
+
+    changeHpOf(
+      pokemonIndex: BigNumberish,
+      account: string,
+      hp: BigNumberish,
+      isIncrement: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
     getAllPokemons(overrides?: CallOverrides): Promise<[string[]]>;
 
@@ -611,6 +625,14 @@ export class PokemonGame extends BaseContract {
 
   bosses(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
+  changeHpOf(
+    pokemonIndex: BigNumberish,
+    account: string,
+    hp: BigNumberish,
+    isIncrement: boolean,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   getAllPokemons(overrides?: CallOverrides): Promise<string[]>;
 
   getApproved(
@@ -853,6 +875,14 @@ export class PokemonGame extends BaseContract {
     balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     bosses(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
+    changeHpOf(
+      pokemonIndex: BigNumberish,
+      account: string,
+      hp: BigNumberish,
+      isIncrement: boolean,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     getAllPokemons(overrides?: CallOverrides): Promise<string[]>;
 
@@ -1240,6 +1270,14 @@ export class PokemonGame extends BaseContract {
 
     bosses(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
+    changeHpOf(
+      pokemonIndex: BigNumberish,
+      account: string,
+      hp: BigNumberish,
+      isIncrement: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     getAllPokemons(overrides?: CallOverrides): Promise<BigNumber>;
 
     getApproved(
@@ -1372,6 +1410,14 @@ export class PokemonGame extends BaseContract {
     bosses(
       arg0: BigNumberish,
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    changeHpOf(
+      pokemonIndex: BigNumberish,
+      account: string,
+      hp: BigNumberish,
+      isIncrement: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     getAllPokemons(overrides?: CallOverrides): Promise<PopulatedTransaction>;

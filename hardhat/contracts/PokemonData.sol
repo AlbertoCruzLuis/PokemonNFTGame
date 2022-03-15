@@ -97,6 +97,14 @@ contract PokemonData {
         data.stats.hp = hp;
     }
 
+    function changeHpIncrement(uint256 hp) public {
+        if (data.stats.hp + hp > data.stats.maxHp) {
+            data.stats.hp = data.stats.maxHp;
+        } else {
+            data.stats.hp += hp;
+        }
+    }
+
     function changeMaxHp(uint256 maxHp) public {
         data.stats.maxHp = maxHp;
     }

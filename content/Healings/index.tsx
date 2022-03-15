@@ -1,19 +1,21 @@
-import { HealingCard } from "components/HealingCard"
-import { useAllHealing } from "hooks/useHealing"
-import { v4 as uuidv4 } from "uuid"
+import { HealingCard } from "components/ItemsCard"
+import { useContractEvent } from "hooks/useContractEvent"
+import { useItemMarket } from "hooks/useItemMarket"
 
 export const Healings = () => {
-  const { healings, isLoading } = useAllHealing()
+  const { items, buyItem } = useItemMarket()
   return (
     <div className="flex flex-col gap-4">
       <h2 className="text-xl font-bold text-white">Healings</h2>
-      { healings?.map(({ id, name, description, sprite, cost }) => (
+      { items?.map(({ id, name, description, imageURI, cost }) => (
         <HealingCard
           key={id}
+          id={id}
           name={name}
           description={description}
-          imageURI={sprite}
-          cost={cost} />
+          imageURI={imageURI}
+          cost={cost}
+          buyItem={buyItem} />
       )) }
     </div>
   )

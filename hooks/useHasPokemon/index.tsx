@@ -1,6 +1,10 @@
-import { useContract } from "hooks/useContract"
 import { IPokemonData, transformPokemonData } from "lib/getNftMetadata"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
+
+import { POKEMON_GAME_ADDRESS } from "config"
+import PokemonGameContract from "hardhat/artifacts/contracts/PokemonGame.sol/PokemonGame.json"
+import { PokemonGame } from "hardhat/typechain/PokemonGame"
+import { useContract } from "hooks/useContract"
 
 interface IuseHasPokemon {
   pokemonSelected: IPokemonData | null,
@@ -8,7 +12,10 @@ interface IuseHasPokemon {
 }
 
 export const useHasPokemon = (): IuseHasPokemon => {
-  const { gameContract } = useContract()
+  const { contract: gameContract } = useContract<PokemonGame>({
+    contractAddress: POKEMON_GAME_ADDRESS,
+    contractJson: PokemonGameContract
+  })
   const [pokemonSelected, setPokemonSelected] = useState<IPokemonData | null>(null)
 
   const hasPokemon = async () => {

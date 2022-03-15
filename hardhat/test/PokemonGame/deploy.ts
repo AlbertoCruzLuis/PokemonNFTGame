@@ -2,9 +2,9 @@ import { expect } from 'chai'
 import { Signer } from 'ethers'
 import { ethers } from 'hardhat'
 import { before } from 'mocha'
-import { PokemonGame } from '../typechain'
-import { getPokemonData } from "../scripts/getPokeApiData"
-import { pokemons } from "../data/pokemon"
+import { PokemonGame } from '../../typechain'
+import { getPokemonData } from "../../scripts/PokeApiData/getPokemonsData"
+import { pokemons } from "../../data/pokemon"
 
 describe('PokemonGame - Deploy', function () {
   let gameContract: PokemonGame

@@ -21,6 +21,34 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Pausable__factory>;
     getContractFactory(
+      name: "ERC1155",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC1155__factory>;
+    getContractFactory(
+      name: "ERC1155Burnable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC1155Burnable__factory>;
+    getContractFactory(
+      name: "IERC1155MetadataURI",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC1155MetadataURI__factory>;
+    getContractFactory(
+      name: "IERC1155",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC1155__factory>;
+    getContractFactory(
+      name: "IERC1155Receiver",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC1155Receiver__factory>;
+    getContractFactory(
+      name: "ERC1155Holder",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC1155Holder__factory>;
+    getContractFactory(
+      name: "ERC1155Receiver",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC1155Receiver__factory>;
+    getContractFactory(
       name: "ERC20",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ERC20__factory>;
@@ -65,6 +93,22 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IERC165__factory>;
     getContractFactory(
+      name: "IPokemonGame",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IPokemonGame__factory>;
+    getContractFactory(
+      name: "Item",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.Item__factory>;
+    getContractFactory(
+      name: "ItemData",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ItemData__factory>;
+    getContractFactory(
+      name: "ItemMarket",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ItemMarket__factory>;
+    getContractFactory(
       name: "Metallic",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Metallic__factory>;
@@ -87,6 +131,41 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.Pausable>;
+    getContractAt(
+      name: "ERC1155",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ERC1155>;
+    getContractAt(
+      name: "ERC1155Burnable",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ERC1155Burnable>;
+    getContractAt(
+      name: "IERC1155MetadataURI",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IERC1155MetadataURI>;
+    getContractAt(
+      name: "IERC1155",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IERC1155>;
+    getContractAt(
+      name: "IERC1155Receiver",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IERC1155Receiver>;
+    getContractAt(
+      name: "ERC1155Holder",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ERC1155Holder>;
+    getContractAt(
+      name: "ERC1155Receiver",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ERC1155Receiver>;
     getContractAt(
       name: "ERC20",
       address: string,
@@ -142,6 +221,26 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.IERC165>;
+    getContractAt(
+      name: "IPokemonGame",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IPokemonGame>;
+    getContractAt(
+      name: "Item",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.Item>;
+    getContractAt(
+      name: "ItemData",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ItemData>;
+    getContractAt(
+      name: "ItemMarket",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ItemMarket>;
     getContractAt(
       name: "Metallic",
       address: string,

@@ -24,6 +24,7 @@ interface PokemonDataInterface extends ethers.utils.Interface {
     "changeAttack(uint256)": FunctionFragment;
     "changeExperience(uint256)": FunctionFragment;
     "changeHp(uint256)": FunctionFragment;
+    "changeHpIncrement(uint256)": FunctionFragment;
     "changeLevel(uint256)": FunctionFragment;
     "changeMaxHp(uint256)": FunctionFragment;
     "changeStats((uint256,uint256,uint256))": FunctionFragment;
@@ -54,6 +55,10 @@ interface PokemonDataInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "changeHp",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "changeHpIncrement",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
@@ -113,6 +118,10 @@ interface PokemonDataInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "changeHp", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "changeHpIncrement",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "changeLevel",
     data: BytesLike
@@ -214,6 +223,11 @@ export class PokemonData extends BaseContract {
     ): Promise<ContractTransaction>;
 
     changeHp(
+      hp: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    changeHpIncrement(
       hp: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -374,6 +388,11 @@ export class PokemonData extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  changeHpIncrement(
+    hp: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   changeLevel(
     level: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -520,6 +539,11 @@ export class PokemonData extends BaseContract {
     ): Promise<void>;
 
     changeHp(hp: BigNumberish, overrides?: CallOverrides): Promise<void>;
+
+    changeHpIncrement(
+      hp: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     changeLevel(level: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
@@ -668,6 +692,11 @@ export class PokemonData extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    changeHpIncrement(
+      hp: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     changeLevel(
       level: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -735,6 +764,11 @@ export class PokemonData extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     changeHp(
+      hp: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    changeHpIncrement(
       hp: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;

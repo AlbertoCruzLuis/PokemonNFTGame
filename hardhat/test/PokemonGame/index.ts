@@ -2,9 +2,9 @@ import { expect } from 'chai'
 import { Signer } from 'ethers'
 import { ethers } from 'hardhat'
 import { before } from 'mocha'
-import { isValidateOpenseaMetadata } from '../scripts/getValidateOpenseaMetadata'
-import { PokemonGame } from '../typechain'
-import { getPokemonData } from "../scripts/getPokeApiData"
+import { isValidateOpenseaMetadata } from '../../scripts/getValidateOpenseaMetadata'
+import { PokemonGame } from '../../typechain'
+import { pokemons } from "../../data/pokemon"
 
 describe('PokemonGame', function () {
   let gameContract: PokemonGame
@@ -13,10 +13,9 @@ describe('PokemonGame', function () {
   let bossesLevels: number[]
   let mewtwoId = 150
   before(async function () {
-    const limit = 7
-    const pokemonList = await getPokemonData(limit)
+    const pokemonList = pokemons
 
-    bossesIds = [7]
+    bossesIds = [mewtwoId]
     bossesLevels = [10]
 
     // We get the contract to deploy
@@ -56,7 +55,7 @@ describe('PokemonGame', function () {
 
   it("Should return total of pokemons", async function () {
     const totalPokemons = await gameContract.getTotalPokemons()
-    expect(totalPokemons).to.equal(7)
+    expect(totalPokemons).to.equal(150)
   })
 
   it("Should return that has token minted", async function () {

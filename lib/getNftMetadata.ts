@@ -8,6 +8,17 @@ export interface IPokemonData {
   experience: number
 }
 
+export interface IItemData {
+  id: number,
+  name: string,
+  description: string,
+  imageURI: string,
+  category: string,
+  cost: number,
+  amount: number,
+  effect: number
+}
+
 export const transformPokemonData = (pokemonData: any): IPokemonData => {
   return {
     name: pokemonData.info.name,
@@ -17,5 +28,18 @@ export const transformPokemonData = (pokemonData: any): IPokemonData => {
     attack: pokemonData.stats.attack.toNumber(),
     level: pokemonData.level.toNumber(),
     experience: pokemonData.experience.toNumber()
+  }
+}
+
+export const transformItemData = (itemData: any): IItemData => {
+  return {
+    id: itemData.info.id.toNumber(),
+    name: itemData.info.name,
+    description: itemData.info.description,
+    imageURI: itemData.info.imageURI,
+    category: itemData.info.category,
+    cost: itemData.cost.toNumber(),
+    amount: itemData.amount.toNumber(),
+    effect: itemData.info.effect.toNumber()
   }
 }

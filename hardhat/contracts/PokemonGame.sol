@@ -213,6 +213,16 @@ contract PokemonGame is ERC721 {
         }
     }
 
+    // TODO: create onlyContract modifier for security
+    function changeHpOf(uint pokemonIndex, address account, uint256 hp, bool isIncrement) public {
+        PokemonData pokemon = getPokemonByIndexOf(pokemonIndex, account);
+        if (isIncrement) {
+            pokemon.changeHpIncrement(hp);
+        } else {
+            pokemon.changeHp(hp);
+        }
+    }
+
     function getAllPokemons() public view returns(PokemonData[] memory) {
         uint256 totalPokemons = getTotalPokemons();
         PokemonData[] memory pokemons = new PokemonData[](totalPokemons);

@@ -1,9 +1,16 @@
-import { useContract } from "hooks/useContract"
-import { IPokemonData, transformPokemonData } from "lib/getNftMetadata"
 import { useEffect, useState } from "react"
+import { IPokemonData, transformPokemonData } from "lib/getNftMetadata"
+
+import { POKEMON_GAME_ADDRESS } from "config"
+import PokemonGameContract from "hardhat/artifacts/contracts/PokemonGame.sol/PokemonGame.json"
+import { PokemonGame } from "hardhat/typechain/PokemonGame"
+import { useContract } from "hooks/useContract"
 
 export const usePokemonListNFT = (address: string | undefined) => {
-  const { gameContract } = useContract()
+  const { contract: gameContract } = useContract<PokemonGame>({
+    contractAddress: POKEMON_GAME_ADDRESS,
+    contractJson: PokemonGameContract
+  })
   const [pokemons, setPokemons] = useState<IPokemonData[]>()
 
   const getPokemons = async () => {

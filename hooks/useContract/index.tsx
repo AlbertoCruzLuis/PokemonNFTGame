@@ -1,36 +1,32 @@
-import { POKEMON_GAME_ADDRESS } from "config"
-import PokemonGameContract from "hardhat/artifacts/contracts/PokemonGame.sol/PokemonGame.json"
 import { useWeb3 } from "@3rdweb/hooks"
-import { PokemonGame } from "hardhat/typechain/PokemonGame"
 import { useEffect, useState } from "react"
 import { ethers } from "ethers"
 import type { Contract } from "ethers"
 
-interface IContract {
-  gameContract: PokemonGame | Contract | undefined
+interface IuseContract {
+  contractAddress: string | undefined,
+  contractJson: any
 }
 
-export const useContract = (): IContract => {
+interface IContract<T> {
+  contract: T | Contract | undefined,
+}
+
+export const useContract = <T extends Contract>({ contractAddress, contractJson }: IuseContract): IContract<T> => {
   const { provider } = useWeb3()
   const signer = provider?.getSigner()
-  const [gameContract, setGameContract] = useState<PokemonGame | Contract>()
+  const [contract, setContract] = useState<T | Contract>()
 
   useEffect(() => {
-    if (provider && POKEMON_GAME_ADDRESS) {
+    if (provider && contractAddress) {
       const contract = new ethers.Contract(
-        POKEMON_GAME_ADDRESS,
-        PokemonGameContract.abi,
+        contractAddress,
+        contractJson.abi,
         signer
       )
-      setGameContract(contract)
+      setContract(contract)
     }
   }, [provider])
 
-  /* const gameContract = useContractWagmi<PokemonGame>({
-    addressOrName: POKEMON_GAME_ADDRESS,
-    contractInterface: PokemonGameContract.abi,
-    signerOrProvider: signer
-  }) */
-
-  return { gameContract }
+  return { contract }
 }
