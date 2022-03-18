@@ -6,7 +6,7 @@ type BackgroundProps = {
 
 export const Background: FC<BackgroundProps> = ({ children }) => {
   return (
-    <div className="bg-black">
+    <div className="bg-neutral-900">
       {children}
     </div>
   )

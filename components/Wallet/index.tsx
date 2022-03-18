@@ -62,7 +62,7 @@ export const Wallet = () => {
     <CopyToClipboard
       text={address}
       onCopy={() => toast.success("wallet copied")}>
-      <button className="p-2 border-2 border-yellow-400 border-solid bg-gradient-to-t from-black to-yellow-500">
+      <button className="p-2 border-2 border-yellow-400 border-solid bg-gradient-to-t from-neutral-900 to-yellow-500">
         <span className='font-semibold text-white'>
           {middleStringTruncate(address, 6, 6)}
         </span>

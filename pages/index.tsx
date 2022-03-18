@@ -45,7 +45,7 @@ const Home: NextPage = () => {
       </div>
       <div className='flex flex-col items-center justify-center gap-4'>
         <div className="bg-[url('/assets/Space.jpg')]">
-          <div className="relative pt-4 w-80 h-[36rem] bg-gradient-to-t from-black to-sky-800/70">
+          <div className="relative pt-4 w-80 h-[36rem] bg-gradient-to-t from-neutral-900 to-sky-800/70">
             <div className='absolute p-4 px-8 bg-sky-1000 -left-4'>
               <span className='text-xl font-bold text-white'>THE BOSS</span>
             </div>

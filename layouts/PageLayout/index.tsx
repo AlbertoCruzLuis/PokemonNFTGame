@@ -1,3 +1,4 @@
+import { Balance } from "components/Balance"
 import { FC, ReactNode } from "react"
 import { Background } from "../../components/Background"
 import { CustomLink } from "../../components/CustomLink"
@@ -29,7 +30,10 @@ export const PageLayout: FC<PageLayoutProps> = ({ children }) => {
               <Navbar routes={routes} />
             </div>
           </div>
-          <Wallet />
+          <div className="flex items-center gap-4">
+            <Balance />
+            <Wallet />
+          </div>
         </header>
         <main className="flex flex-col p-4 grow xl:px-8">
           {children}
