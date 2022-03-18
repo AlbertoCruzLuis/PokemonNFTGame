@@ -1,7 +1,7 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.4;
 
-import "../library/LPokemonData.sol";
+import "../Pokemon/LPokemonData.sol";
 
 interface IPokemonGame {
     event Approval(
@@ -39,6 +39,19 @@ interface IPokemonGame {
         bool isIncrement
     ) external;
 
+    function createBossesData(
+        uint256[] memory bossesIds,
+        uint256[] memory bossesLevel
+    ) external;
+
+    function createPokemonsData(
+        uint256[] memory pokemonIndexes,
+        string[] memory pokemonNames,
+        string[] memory pokemonImageURIs,
+        uint256[] memory pokemonHp,
+        uint256[] memory pokemonAttack
+    ) external;
+
     function getAllPokemons() external view returns (address[] memory);
 
     function getApproved(uint256 tokenId) external view returns (address);
@@ -71,8 +84,6 @@ interface IPokemonGame {
 
     function getTotalPokemons() external view returns (uint256);
 
-    function getTotalPokemonsMinted() external view returns (uint256);
-
     function hasNft() external view returns (LPokemonData.Data memory);
 
     function holders(uint256) external view returns (address);
@@ -89,6 +100,10 @@ interface IPokemonGame {
     function nftsOfHolder(address, uint256) external view returns (uint256);
 
     function ownerOf(uint256 tokenId) external view returns (address);
+
+    function pokemons(uint256) external view returns (address);
+
+    function pokemonsNft(uint256) external view returns (address);
 
     function safeTransferFrom(
         address from,

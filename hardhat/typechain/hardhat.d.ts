@@ -117,13 +117,25 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Metallic__factory>;
     getContractFactory(
+      name: "PokemonAttack",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.PokemonAttack__factory>;
+    getContractFactory(
       name: "PokemonData",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.PokemonData__factory>;
     getContractFactory(
+      name: "PokemonFactory",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.PokemonFactory__factory>;
+    getContractFactory(
       name: "PokemonGame",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.PokemonGame__factory>;
+    getContractFactory(
+      name: "PokemonHelper",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.PokemonHelper__factory>;
 
     getContractAt(
       name: "Ownable",
@@ -256,15 +268,30 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.Metallic>;
     getContractAt(
+      name: "PokemonAttack",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.PokemonAttack>;
+    getContractAt(
       name: "PokemonData",
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.PokemonData>;
     getContractAt(
+      name: "PokemonFactory",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.PokemonFactory>;
+    getContractAt(
       name: "PokemonGame",
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.PokemonGame>;
+    getContractAt(
+      name: "PokemonHelper",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.PokemonHelper>;
 
     // default types
     getContractFactory(

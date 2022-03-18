@@ -1,7 +1,7 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.4;
 
-import "./library/LItemData.sol";
+import "./LItemData.sol";
 
 /// @title PokemonData
 /// @author Alberto Cruz Luis

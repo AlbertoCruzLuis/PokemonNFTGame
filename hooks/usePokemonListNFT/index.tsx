@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { IPokemonData, transformPokemonData } from "lib/getNftMetadata"
 
 import { POKEMON_GAME_ADDRESS } from "config"
-import PokemonGameContract from "hardhat/artifacts/contracts/PokemonGame.sol/PokemonGame.json"
+import PokemonGameContract from "hardhat/artifacts/contracts/Pokemon/PokemonGame.sol/PokemonGame.json"
 import { PokemonGame } from "hardhat/typechain/PokemonGame"
 import { useContract } from "hooks/useContract"
 import { Contract } from "ethers"

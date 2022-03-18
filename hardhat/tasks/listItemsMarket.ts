@@ -1,4 +1,3 @@
-import { ItemMarket, Item } from "../typechain";
 import { items } from "../data/items"
 import { Contract } from "ethers";
 

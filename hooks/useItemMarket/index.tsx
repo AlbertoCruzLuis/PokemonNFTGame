@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { IItemData, transformItemData } from "lib/getNftMetadata"
 
 import { ITEM_ADDRESS, ITEM_MARKET_ADDRESS, METALLIC_ADDRESS } from "config"
-import ItemContract from "hardhat/artifacts/contracts/Item.sol/Item.json"
+import ItemContract from "hardhat/artifacts/contracts/Item/Item.sol/Item.json"
 import { Item } from "hardhat/typechain/Item"
 import ItemMarketContract from "hardhat/artifacts/contracts/ItemMarket.sol/ItemMarket.json"
 import { ItemMarket } from "hardhat/typechain/ItemMarket"

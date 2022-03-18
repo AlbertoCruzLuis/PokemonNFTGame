@@ -1,7 +1,7 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0;
 
-import "./library/LPokemonData.sol";
+import "./LPokemonData.sol";
 
 /// @title PokemonData
 /// @author Alberto Cruz Luis
@@ -17,15 +17,15 @@ contract PokemonData {
         string memory imageURI,
         LPokemonData.Stats memory stats_
     ) {
-        createPokemonData(id, name, imageURI, stats_);
+        _createPokemonData(id, name, imageURI, stats_);
     }
 
-    function createPokemonData(
+    function _createPokemonData(
         uint256 id,
         string memory name,
         string memory imageURI,
         LPokemonData.Stats memory stats_
-    ) public {
+    ) internal {
         data.info.id = id;
         data.info.name = name;
         data.info.imageURI = imageURI;

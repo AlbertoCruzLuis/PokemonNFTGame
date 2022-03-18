@@ -278,6 +278,57 @@ const _abi = [
     type: "function",
   },
   {
+    inputs: [
+      {
+        internalType: "uint256[]",
+        name: "bossesIds",
+        type: "uint256[]",
+      },
+      {
+        internalType: "uint256[]",
+        name: "bossesLevel",
+        type: "uint256[]",
+      },
+    ],
+    name: "createBossesData",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256[]",
+        name: "pokemonIndexes",
+        type: "uint256[]",
+      },
+      {
+        internalType: "string[]",
+        name: "pokemonNames",
+        type: "string[]",
+      },
+      {
+        internalType: "string[]",
+        name: "pokemonImageURIs",
+        type: "string[]",
+      },
+      {
+        internalType: "uint256[]",
+        name: "pokemonHp",
+        type: "uint256[]",
+      },
+      {
+        internalType: "uint256[]",
+        name: "pokemonAttack",
+        type: "uint256[]",
+      },
+    ],
+    name: "createPokemonsData",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
     inputs: [],
     name: "getAllPokemons",
     outputs: [
@@ -650,19 +701,6 @@ const _abi = [
   },
   {
     inputs: [],
-    name: "getTotalPokemonsMinted",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
     name: "hasNft",
     outputs: [
       {
@@ -837,6 +875,44 @@ const _abi = [
       },
     ],
     name: "ownerOf",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "pokemons",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "pokemonsNft",
     outputs: [
       {
         internalType: "address",

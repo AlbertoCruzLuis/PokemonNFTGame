@@ -29,7 +29,6 @@ interface PokemonDataInterface extends ethers.utils.Interface {
     "changeMaxHp(uint256)": FunctionFragment;
     "changeStats((uint256,uint256,uint256))": FunctionFragment;
     "changeTotalExperience(uint256)": FunctionFragment;
-    "createPokemonData(uint256,string,string,(uint256,uint256,uint256))": FunctionFragment;
     "data()": FunctionFragment;
     "getAttack()": FunctionFragment;
     "getData()": FunctionFragment;
@@ -76,15 +75,6 @@ interface PokemonDataInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "changeTotalExperience",
     values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "createPokemonData",
-    values: [
-      BigNumberish,
-      string,
-      string,
-      { hp: BigNumberish; maxHp: BigNumberish; attack: BigNumberish }
-    ]
   ): string;
   encodeFunctionData(functionFragment: "data", values?: undefined): string;
   encodeFunctionData(functionFragment: "getAttack", values?: undefined): string;
@@ -136,10 +126,6 @@ interface PokemonDataInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "changeTotalExperience",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "createPokemonData",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "data", data: BytesLike): Result;
@@ -249,14 +235,6 @@ export class PokemonData extends BaseContract {
 
     changeTotalExperience(
       totalExperience: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    createPokemonData(
-      id: BigNumberish,
-      name: string,
-      imageURI: string,
-      stats_: { hp: BigNumberish; maxHp: BigNumberish; attack: BigNumberish },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -413,14 +391,6 @@ export class PokemonData extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  createPokemonData(
-    id: BigNumberish,
-    name: string,
-    imageURI: string,
-    stats_: { hp: BigNumberish; maxHp: BigNumberish; attack: BigNumberish },
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
   data(
     overrides?: CallOverrides
   ): Promise<
@@ -556,14 +526,6 @@ export class PokemonData extends BaseContract {
 
     changeTotalExperience(
       totalExperience: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    createPokemonData(
-      id: BigNumberish,
-      name: string,
-      imageURI: string,
-      stats_: { hp: BigNumberish; maxHp: BigNumberish; attack: BigNumberish },
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -717,14 +679,6 @@ export class PokemonData extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    createPokemonData(
-      id: BigNumberish,
-      name: string,
-      imageURI: string,
-      stats_: { hp: BigNumberish; maxHp: BigNumberish; attack: BigNumberish },
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     data(overrides?: CallOverrides): Promise<BigNumber>;
 
     getAttack(overrides?: CallOverrides): Promise<BigNumber>;
@@ -790,14 +744,6 @@ export class PokemonData extends BaseContract {
 
     changeTotalExperience(
       totalExperience: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    createPokemonData(
-      id: BigNumberish,
-      name: string,
-      imageURI: string,
-      stats_: { hp: BigNumberish; maxHp: BigNumberish; attack: BigNumberish },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

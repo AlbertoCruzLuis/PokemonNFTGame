@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { IItemData, transformItemData, transformPokemonData } from "lib/getNftMetadata"
 
 import { ITEM_ADDRESS, POKEMON_GAME_ADDRESS } from "config"
-import ItemContract from "hardhat/artifacts/contracts/Item.sol/Item.json"
+import ItemContract from "hardhat/artifacts/contracts/Item/Item.sol/Item.json"
 import { Item } from "hardhat/typechain"
 import { useContract } from "hooks/useContract"
 import { useWeb3 } from "@3rdweb/hooks"

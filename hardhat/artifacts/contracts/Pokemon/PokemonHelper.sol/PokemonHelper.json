@@ -1,0 +1,47 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "PokemonHelper",
+  "sourceName": "contracts/Pokemon/PokemonHelper.sol",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "level",
+          "type": "uint256"
+        },
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "hp",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "maxHp",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "attack",
+              "type": "uint256"
+            }
+          ],
+          "indexed": false,
+          "internalType": "struct LPokemonData.Stats",
+          "name": "stats",
+          "type": "tuple"
+        }
+      ],
+      "name": "LevelUp",
+      "type": "event"
+    }
+  ],
+  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea26469706673582212205409bb7876bf381210c0bfdccb4947b3addf00b0ba0b5d972af10b4e4f84051f64736f6c63430008040033",
+  "deployedBytecode": "0x6080604052600080fdfea26469706673582212205409bb7876bf381210c0bfdccb4947b3addf00b0ba0b5d972af10b4e4f84051f64736f6c63430008040033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

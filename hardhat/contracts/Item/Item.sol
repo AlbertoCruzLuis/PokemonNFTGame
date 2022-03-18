@@ -8,10 +8,10 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/Base64.sol";
 
-import "./library/LItemData.sol";
-import "./library/LPokemonData.sol";
+import "./LItemData.sol";
+import "../Pokemon/LPokemonData.sol";
 import "./ItemData.sol";
-import "./interfaces/IPokemonGame.sol";
+import "../interfaces/IPokemonGame.sol";
 
 import "hardhat/console.sol";
 

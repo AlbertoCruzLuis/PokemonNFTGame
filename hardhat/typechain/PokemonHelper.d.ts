@@ -11,26 +11,41 @@ import {
   PopulatedTransaction,
   BaseContract,
   ContractTransaction,
-  CallOverrides,
 } from "ethers";
 import { BytesLike } from "@ethersproject/bytes";
 import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
 import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
-interface IntegersInterface extends ethers.utils.Interface {
-  functions: {
-    "parseInt(string)": FunctionFragment;
+interface PokemonHelperInterface extends ethers.utils.Interface {
+  functions: {};
+
+  events: {
+    "LevelUp(uint256,tuple)": EventFragment;
   };
 
-  encodeFunctionData(functionFragment: "parseInt", values: [string]): string;
-
-  decodeFunctionResult(functionFragment: "parseInt", data: BytesLike): Result;
-
-  events: {};
+  getEvent(nameOrSignatureOrTopic: "LevelUp"): EventFragment;
 }
 
-export class Integers extends BaseContract {
+export type LevelUpEvent = TypedEvent<
+  [
+    BigNumber,
+    [BigNumber, BigNumber, BigNumber] & {
+      hp: BigNumber;
+      maxHp: BigNumber;
+      attack: BigNumber;
+    }
+  ] & {
+    level: BigNumber;
+    stats: [BigNumber, BigNumber, BigNumber] & {
+      hp: BigNumber;
+      maxHp: BigNumber;
+      attack: BigNumber;
+    };
+  }
+>;
+
+export class PokemonHelper extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
@@ -71,31 +86,59 @@ export class Integers extends BaseContract {
     toBlock?: string | number | undefined
   ): Promise<Array<TypedEvent<EventArgsArray & EventArgsObject>>>;
 
-  interface: IntegersInterface;
+  interface: PokemonHelperInterface;
 
-  functions: {
-    parseInt(
-      _value: string,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber] & { _ret: BigNumber }>;
+  functions: {};
+
+  callStatic: {};
+
+  filters: {
+    "LevelUp(uint256,tuple)"(
+      level?: null,
+      stats?: null
+    ): TypedEventFilter<
+      [
+        BigNumber,
+        [BigNumber, BigNumber, BigNumber] & {
+          hp: BigNumber;
+          maxHp: BigNumber;
+          attack: BigNumber;
+        }
+      ],
+      {
+        level: BigNumber;
+        stats: [BigNumber, BigNumber, BigNumber] & {
+          hp: BigNumber;
+          maxHp: BigNumber;
+          attack: BigNumber;
+        };
+      }
+    >;
+
+    LevelUp(
+      level?: null,
+      stats?: null
+    ): TypedEventFilter<
+      [
+        BigNumber,
+        [BigNumber, BigNumber, BigNumber] & {
+          hp: BigNumber;
+          maxHp: BigNumber;
+          attack: BigNumber;
+        }
+      ],
+      {
+        level: BigNumber;
+        stats: [BigNumber, BigNumber, BigNumber] & {
+          hp: BigNumber;
+          maxHp: BigNumber;
+          attack: BigNumber;
+        };
+      }
+    >;
   };
 
-  parseInt(_value: string, overrides?: CallOverrides): Promise<BigNumber>;
+  estimateGas: {};
 
-  callStatic: {
-    parseInt(_value: string, overrides?: CallOverrides): Promise<BigNumber>;
-  };
-
-  filters: {};
-
-  estimateGas: {
-    parseInt(_value: string, overrides?: CallOverrides): Promise<BigNumber>;
-  };
-
-  populateTransaction: {
-    parseInt(
-      _value: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-  };
+  populateTransaction: {};
 }

@@ -26,6 +26,8 @@ interface PokemonGameInterface extends ethers.utils.Interface {
     "balanceOf(address)": FunctionFragment;
     "bosses(uint256)": FunctionFragment;
     "changeHpOf(uint256,address,uint256,bool)": FunctionFragment;
+    "createBossesData(uint256[],uint256[])": FunctionFragment;
+    "createPokemonsData(uint256[],string[],string[],uint256[],uint256[])": FunctionFragment;
     "getAllPokemons()": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
     "getBoss(uint256)": FunctionFragment;
@@ -36,7 +38,6 @@ interface PokemonGameInterface extends ethers.utils.Interface {
     "getPokemonSelected(address,uint256)": FunctionFragment;
     "getPokemonsOf(address)": FunctionFragment;
     "getTotalPokemons()": FunctionFragment;
-    "getTotalPokemonsMinted()": FunctionFragment;
     "hasNft()": FunctionFragment;
     "holders(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
@@ -44,6 +45,8 @@ interface PokemonGameInterface extends ethers.utils.Interface {
     "name()": FunctionFragment;
     "nftsOfHolder(address,uint256)": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
+    "pokemons(uint256)": FunctionFragment;
+    "pokemonsNft(uint256)": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
@@ -68,6 +71,14 @@ interface PokemonGameInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "changeHpOf",
     values: [BigNumberish, string, BigNumberish, boolean]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "createBossesData",
+    values: [BigNumberish[], BigNumberish[]]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "createPokemonsData",
+    values: [BigNumberish[], string[], string[], BigNumberish[], BigNumberish[]]
   ): string;
   encodeFunctionData(
     functionFragment: "getAllPokemons",
@@ -109,10 +120,6 @@ interface PokemonGameInterface extends ethers.utils.Interface {
     functionFragment: "getTotalPokemons",
     values?: undefined
   ): string;
-  encodeFunctionData(
-    functionFragment: "getTotalPokemonsMinted",
-    values?: undefined
-  ): string;
   encodeFunctionData(functionFragment: "hasNft", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "holders",
@@ -130,6 +137,14 @@ interface PokemonGameInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "ownerOf",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "pokemons",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "pokemonsNft",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
@@ -159,6 +174,14 @@ interface PokemonGameInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "bosses", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "changeHpOf", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "createBossesData",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "createPokemonsData",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "getAllPokemons",
     data: BytesLike
@@ -193,10 +216,6 @@ interface PokemonGameInterface extends ethers.utils.Interface {
     functionFragment: "getTotalPokemons",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "getTotalPokemonsMinted",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "hasNft", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "holders", data: BytesLike): Result;
   decodeFunctionResult(
@@ -210,6 +229,11 @@ interface PokemonGameInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "pokemons", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "pokemonsNft",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "safeTransferFrom",
     data: BytesLike
@@ -368,6 +392,21 @@ export class PokemonGame extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    createBossesData(
+      bossesIds: BigNumberish[],
+      bossesLevel: BigNumberish[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    createPokemonsData(
+      pokemonIndexes: BigNumberish[],
+      pokemonNames: string[],
+      pokemonImageURIs: string[],
+      pokemonHp: BigNumberish[],
+      pokemonAttack: BigNumberish[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     getAllPokemons(overrides?: CallOverrides): Promise<[string[]]>;
 
     getApproved(
@@ -504,8 +543,6 @@ export class PokemonGame extends BaseContract {
 
     getTotalPokemons(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    getTotalPokemonsMinted(overrides?: CallOverrides): Promise<[BigNumber]>;
-
     hasNft(
       overrides?: CallOverrides
     ): Promise<
@@ -565,6 +602,13 @@ export class PokemonGame extends BaseContract {
 
     ownerOf(
       tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
+    pokemons(arg0: BigNumberish, overrides?: CallOverrides): Promise<[string]>;
+
+    pokemonsNft(
+      arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[string]>;
 
@@ -630,6 +674,21 @@ export class PokemonGame extends BaseContract {
     account: string,
     hp: BigNumberish,
     isIncrement: boolean,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  createBossesData(
+    bossesIds: BigNumberish[],
+    bossesLevel: BigNumberish[],
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  createPokemonsData(
+    pokemonIndexes: BigNumberish[],
+    pokemonNames: string[],
+    pokemonImageURIs: string[],
+    pokemonHp: BigNumberish[],
+    pokemonAttack: BigNumberish[],
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -763,8 +822,6 @@ export class PokemonGame extends BaseContract {
 
   getTotalPokemons(overrides?: CallOverrides): Promise<BigNumber>;
 
-  getTotalPokemonsMinted(overrides?: CallOverrides): Promise<BigNumber>;
-
   hasNft(
     overrides?: CallOverrides
   ): Promise<
@@ -821,6 +878,10 @@ export class PokemonGame extends BaseContract {
   ): Promise<BigNumber>;
 
   ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
+  pokemons(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
+  pokemonsNft(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
   "safeTransferFrom(address,address,uint256)"(
     from: string,
@@ -881,6 +942,21 @@ export class PokemonGame extends BaseContract {
       account: string,
       hp: BigNumberish,
       isIncrement: boolean,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    createBossesData(
+      bossesIds: BigNumberish[],
+      bossesLevel: BigNumberish[],
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    createPokemonsData(
+      pokemonIndexes: BigNumberish[],
+      pokemonNames: string[],
+      pokemonImageURIs: string[],
+      pokemonHp: BigNumberish[],
+      pokemonAttack: BigNumberish[],
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1014,8 +1090,6 @@ export class PokemonGame extends BaseContract {
 
     getTotalPokemons(overrides?: CallOverrides): Promise<BigNumber>;
 
-    getTotalPokemonsMinted(overrides?: CallOverrides): Promise<BigNumber>;
-
     hasNft(
       overrides?: CallOverrides
     ): Promise<
@@ -1069,6 +1143,10 @@ export class PokemonGame extends BaseContract {
     ): Promise<BigNumber>;
 
     ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
+    pokemons(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
+    pokemonsNft(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
     "safeTransferFrom(address,address,uint256)"(
       from: string,
@@ -1278,6 +1356,21 @@ export class PokemonGame extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    createBossesData(
+      bossesIds: BigNumberish[],
+      bossesLevel: BigNumberish[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    createPokemonsData(
+      pokemonIndexes: BigNumberish[],
+      pokemonNames: string[],
+      pokemonImageURIs: string[],
+      pokemonHp: BigNumberish[],
+      pokemonAttack: BigNumberish[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     getAllPokemons(overrides?: CallOverrides): Promise<BigNumber>;
 
     getApproved(
@@ -1318,8 +1411,6 @@ export class PokemonGame extends BaseContract {
 
     getTotalPokemons(overrides?: CallOverrides): Promise<BigNumber>;
 
-    getTotalPokemonsMinted(overrides?: CallOverrides): Promise<BigNumber>;
-
     hasNft(overrides?: CallOverrides): Promise<BigNumber>;
 
     holders(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
@@ -1345,6 +1436,13 @@ export class PokemonGame extends BaseContract {
 
     ownerOf(
       tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    pokemons(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+    pokemonsNft(
+      arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1420,6 +1518,21 @@ export class PokemonGame extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    createBossesData(
+      bossesIds: BigNumberish[],
+      bossesLevel: BigNumberish[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    createPokemonsData(
+      pokemonIndexes: BigNumberish[],
+      pokemonNames: string[],
+      pokemonImageURIs: string[],
+      pokemonHp: BigNumberish[],
+      pokemonAttack: BigNumberish[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     getAllPokemons(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getApproved(
@@ -1466,10 +1579,6 @@ export class PokemonGame extends BaseContract {
 
     getTotalPokemons(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    getTotalPokemonsMinted(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
     hasNft(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     holders(
@@ -1498,6 +1607,16 @@ export class PokemonGame extends BaseContract {
 
     ownerOf(
       tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    pokemons(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    pokemonsNft(
+      arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

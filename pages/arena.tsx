@@ -10,7 +10,7 @@ import { LevelUp } from "components/LevelUp"
 import toast from "react-hot-toast"
 
 import { POKEMON_GAME_ADDRESS } from "config"
-import PokemonGameContract from "hardhat/artifacts/contracts/PokemonGame.sol/PokemonGame.json"
+import PokemonGameContract from "hardhat/artifacts/contracts/Pokemon/PokemonGame.sol/PokemonGame.json"
 import { PokemonGame } from "hardhat/typechain/PokemonGame"
 import { useContract } from "hooks/useContract"
 
