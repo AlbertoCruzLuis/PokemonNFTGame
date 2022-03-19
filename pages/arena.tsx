@@ -9,8 +9,7 @@ import Popup from "reactjs-popup"
 import { LevelUp } from "components/LevelUp"
 import toast from "react-hot-toast"
 
-import { POKEMON_ATTACK_ADDRESS, POKEMON_GAME_ADDRESS } from "config"
-import PokemonGameContract from "hardhat/artifacts/contracts/Pokemon/PokemonGame.sol/PokemonGame.json"
+import { POKEMON_ATTACK_ADDRESS } from "config"
 import PokemonAttackContract from "hardhat/artifacts/contracts/Pokemon/PokemonAttack.sol/PokemonAttack.json"
 import { PokemonGame } from "hardhat/typechain/PokemonGame"
 import { useContract } from "hooks/useContract"
@@ -35,10 +34,6 @@ const bosses = {
 
 const Arena: NextPage = () => {
   const { address } = useWeb3()
-  const { contract: gameContract } = useContract<PokemonGame & Contract>({
-    contractAddress: POKEMON_GAME_ADDRESS,
-    contractJson: PokemonGameContract
-  })
 
   const { contract: pokemonAttackContract } = useContract<PokemonGame & Contract>({
     contractAddress: POKEMON_ATTACK_ADDRESS,

@@ -3,7 +3,7 @@ import { Contract, Signer } from 'ethers'
 import { ethers } from 'hardhat'
 import { deployMetallicContract } from '../../tasks/deploy/metallic'
 import { deployGameRewardsContract } from '../../tasks/deploy/gameRewards'
-import { GameRewards, Metallic } from 'typechain'
+import { GameRewards, Metallic } from '../../typechain'
 
 const GAME_REWARDS_AMOUNT = 126_000_000 // 30% of total Supply
 

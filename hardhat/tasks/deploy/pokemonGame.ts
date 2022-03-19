@@ -2,7 +2,7 @@ import { HardhatEthersHelpers } from "@nomiclabs/hardhat-ethers/types";
 import { Contract, ethers } from "ethers";
 import { splitDataInChunks } from "../../utils";
 import { pokemons } from "../../data/pokemon"
-import { PokemonGame } from "typechain";
+import { PokemonGame } from "../../typechain";
 
 type Ethers = typeof ethers & HardhatEthersHelpers;
 

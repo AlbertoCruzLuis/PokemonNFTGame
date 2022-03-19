@@ -1,8 +1,6 @@
-import { FC, useState } from "react"
+import { FC } from "react"
 import { imageLoader } from "lib/imageLoader"
 import Image from "next/image"
-import { QuantityPicker } from "components/QuantityPicker"
-import { IbuyItem } from "hooks/useItemMarket"
 
 type HealingCardProps = {
   id: number,
