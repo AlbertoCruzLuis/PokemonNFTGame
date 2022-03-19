@@ -23,15 +23,21 @@ contract PokemonGame is PokemonFactory, ERC721 {
 
     event PokemonNFTMinted(address sender, uint256 tokenId, uint256 pokemonId);
 
-    constructor(address gameRewardsAddress_) ERC721("Pokemon", "PKM") {
-        gameRewardsAddress = gameRewardsAddress_;
+    constructor(address _gameRewardsAddress)
+        ERC721("Pokemon", "PKM") {
+        gameRewardsAddress = _gameRewardsAddress;
         // I increment _tokenIds here so that my first NFT has an ID of 1.
         _tokenIds.increment();
     }
 
+    modifier onlyOneMint() {
+        require(nftsOfHolder[msg.sender].length < 1, "PokemonGame: Only can execute one mint by wallet");
+        _;
+    }
+
     // Users would be able to hit this function and get their NFT based on the
     // pokemonId they send in!
-    function mint(uint _pokemonId) external {
+    function mint(uint _pokemonId) external onlyOneMint {
         // Get current tokenId (starts at 1 since we incremented in the constructor).
         uint256 newTokenId = _tokenIds.current();
 

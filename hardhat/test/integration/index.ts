@@ -9,6 +9,7 @@ import { deployPokemonGameContract } from '../../tasks/deploy/pokemonGame'
 import { deployMetallicContract } from '../../tasks/deploy/metallic'
 import { deployGameRewardsContract } from '../../tasks/deploy/gameRewards'
 import { deployPokemonAttackContract } from '../../tasks/deploy/pokemonAttack'
+import { deployItemContract } from '../../tasks/deploy/item'
 
 const GAME_REWARDS_AMOUNT = 126_000_000 // 30% of total Supply
 
@@ -24,7 +25,10 @@ describe('Integration', function () {
     const { gameRewardsContract } = await deployGameRewardsContract(ethers, metallicContract.address)
     await metallicContract.transfer(gameRewardsContract.address, ethers.utils.parseEther(`${GAME_REWARDS_AMOUNT}`))
 
+    const { itemContract } = await deployItemContract(ethers)
+
     const { pokemonGameContract } = await deployPokemonGameContract(ethers, gameRewardsContract.address)
+    pokemonGameContract.updateItemAddress(itemContract.address)
     gameContract = pokemonGameContract
     gameRewardsContract.updatePokemonGameAddress(pokemonGameContract.address)
 
@@ -37,23 +41,6 @@ describe('Integration', function () {
 
     await pokemonAttackContract.attackBoss(pokemomSelected, mewtwoId)
 
-    const itemsList = items
-
-    // --- Deploy itemContract ---
-    const itemContractFactory = await ethers.getContractFactory('Item')
-    deployer = itemContractFactory.signer
-    itemContract = await itemContractFactory.deploy(
-      itemsList.itemsIndexes,
-      itemsList.itemsNames,
-      itemsList.itemsDescription,
-      itemsList.itemsImageURIs,
-      itemsList.itemsCategory,
-      itemsList.itemsCost,
-      itemsList.itemsEffect
-    )
-
-    await itemContract.deployed()
-    console.log('Item deployed to:', itemContract.address)
 
     console.log("Before useItem");
     console.log("hp: ", (await gameContract.getPokemonSelected(deployerAddress, 0)).stats.hp);

@@ -36,9 +36,14 @@ interface PokemonFactoryInterface extends ethers.utils.Interface {
     "getTotalPokemons()": FunctionFragment;
     "hasNft()": FunctionFragment;
     "holders(uint256)": FunctionFragment;
+    "itemAddress()": FunctionFragment;
     "nftsOfHolder(address,uint256)": FunctionFragment;
+    "owner()": FunctionFragment;
     "pokemons(uint256)": FunctionFragment;
     "pokemonsNft(uint256)": FunctionFragment;
+    "renounceOwnership()": FunctionFragment;
+    "transferOwnership(address)": FunctionFragment;
+    "updateItemAddress(address)": FunctionFragment;
   };
 
   encodeFunctionData(
@@ -99,9 +104,14 @@ interface PokemonFactoryInterface extends ethers.utils.Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
+    functionFragment: "itemAddress",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "nftsOfHolder",
     values: [string, BigNumberish]
   ): string;
+  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "pokemons",
     values: [BigNumberish]
@@ -109,6 +119,18 @@ interface PokemonFactoryInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "pokemonsNft",
     values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "renounceOwnership",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "transferOwnership",
+    values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "updateItemAddress",
+    values: [string]
   ): string;
 
   decodeFunctionResult(functionFragment: "bosses", data: BytesLike): Result;
@@ -154,20 +176,39 @@ interface PokemonFactoryInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "hasNft", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "holders", data: BytesLike): Result;
   decodeFunctionResult(
+    functionFragment: "itemAddress",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "nftsOfHolder",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "pokemons", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "pokemonsNft",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "renounceOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "transferOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "updateItemAddress",
+    data: BytesLike
+  ): Result;
 
   events: {
     "LevelUp(uint256,tuple,address,uint256)": EventFragment;
+    "OwnershipTransferred(address,address)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "LevelUp"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
 }
 
 export type LevelUpEvent = TypedEvent<
@@ -190,6 +231,10 @@ export type LevelUpEvent = TypedEvent<
     sender: string;
     timestamp: BigNumber;
   }
+>;
+
+export type OwnershipTransferredEvent = TypedEvent<
+  [string, string] & { previousOwner: string; newOwner: string }
 >;
 
 export class PokemonFactory extends BaseContract {
@@ -430,11 +475,15 @@ export class PokemonFactory extends BaseContract {
 
     holders(arg0: BigNumberish, overrides?: CallOverrides): Promise<[string]>;
 
+    itemAddress(overrides?: CallOverrides): Promise<[string]>;
+
     nftsOfHolder(
       arg0: string,
       arg1: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
+
+    owner(overrides?: CallOverrides): Promise<[string]>;
 
     pokemons(arg0: BigNumberish, overrides?: CallOverrides): Promise<[string]>;
 
@@ -442,6 +491,20 @@ export class PokemonFactory extends BaseContract {
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[string]>;
+
+    renounceOwnership(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    updateItemAddress(
+      _itemAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
   };
 
   bosses(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
@@ -630,15 +693,33 @@ export class PokemonFactory extends BaseContract {
 
   holders(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
+  itemAddress(overrides?: CallOverrides): Promise<string>;
+
   nftsOfHolder(
     arg0: string,
     arg1: BigNumberish,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
+  owner(overrides?: CallOverrides): Promise<string>;
+
   pokemons(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
   pokemonsNft(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
+  renounceOwnership(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  transferOwnership(
+    newOwner: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  updateItemAddress(
+    _itemAddress: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   callStatic: {
     bosses(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
@@ -827,15 +908,31 @@ export class PokemonFactory extends BaseContract {
 
     holders(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
+    itemAddress(overrides?: CallOverrides): Promise<string>;
+
     nftsOfHolder(
       arg0: string,
       arg1: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    owner(overrides?: CallOverrides): Promise<string>;
+
     pokemons(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
     pokemonsNft(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
+    renounceOwnership(overrides?: CallOverrides): Promise<void>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    updateItemAddress(
+      _itemAddress: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
   };
 
   filters: {
@@ -893,6 +990,22 @@ export class PokemonFactory extends BaseContract {
         sender: string;
         timestamp: BigNumber;
       }
+    >;
+
+    "OwnershipTransferred(address,address)"(
+      previousOwner?: string | null,
+      newOwner?: string | null
+    ): TypedEventFilter<
+      [string, string],
+      { previousOwner: string; newOwner: string }
+    >;
+
+    OwnershipTransferred(
+      previousOwner?: string | null,
+      newOwner?: string | null
+    ): TypedEventFilter<
+      [string, string],
+      { previousOwner: string; newOwner: string }
     >;
   };
 
@@ -961,17 +1074,35 @@ export class PokemonFactory extends BaseContract {
 
     holders(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
+    itemAddress(overrides?: CallOverrides): Promise<BigNumber>;
+
     nftsOfHolder(
       arg0: string,
       arg1: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    owner(overrides?: CallOverrides): Promise<BigNumber>;
+
     pokemons(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     pokemonsNft(
       arg0: BigNumberish,
       overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    renounceOwnership(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    updateItemAddress(
+      _itemAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
   };
 
@@ -1052,11 +1183,15 @@ export class PokemonFactory extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    itemAddress(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     nftsOfHolder(
       arg0: string,
       arg1: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
+
+    owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     pokemons(
       arg0: BigNumberish,
@@ -1066,6 +1201,20 @@ export class PokemonFactory extends BaseContract {
     pokemonsNft(
       arg0: BigNumberish,
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    renounceOwnership(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    updateItemAddress(
+      _itemAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };
 }

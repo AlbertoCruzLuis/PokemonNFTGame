@@ -1,15 +1,19 @@
 import { expect } from 'chai'
 import { before } from 'mocha'
-import { Signer } from 'ethers'
+import { Contract, Signer } from 'ethers'
 import { ethers } from 'hardhat'
 import { Metallic, ItemMarket, Item } from '../../typechain'
 import { items } from "../../data/items"
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers'
+import { deployMetallicContract } from '../../tasks/deploy/metallic'
+import { deployItemMarketContract } from '../../tasks/deploy/itemMarket'
+import { deployItemContract } from '../../tasks/deploy/item'
+import { listItemMarket } from '../../tasks/listItemsMarket'
 
 describe('ItemMarket', function () {
-  let metallicContract: Metallic
-  let itemMarketContract: ItemMarket
-  let itemContract: Item
+  let metallicContract: Metallic | Contract
+  let itemMarketContract: ItemMarket | Contract
+  let itemContract: Item | Contract
   let owner: SignerWithAddress
   let userOne: SignerWithAddress
 
@@ -19,46 +23,22 @@ describe('ItemMarket', function () {
     userOne = addr1
 
     // --- Deploy Metallic ----
-    const metallicContractFactory = await ethers.getContractFactory('Metallic')
-    metallicContract = await metallicContractFactory.deploy()
-
-    await metallicContract.deployed()
-    console.log('Metallic deployed to:', metallicContract.address)
+    const { metallicContract: metallicContract_ } = await deployMetallicContract(ethers)
+    metallicContract = metallicContract_
 
     const metallicAmount = ethers.utils.parseUnits("200000", 'ether')
     await metallicContract.transfer(addr1.address, metallicAmount);
     console.log(await metallicContract.balanceOf(userOne.address))
     // --- Deploy ItemMarket ---
-    const itemMarketContractFactory = await ethers.getContractFactory('ItemMarket')
-    itemMarketContract = await itemMarketContractFactory.deploy()
-
-    await itemMarketContract.deployed()
-    console.log('ItemMarket deployed to:', itemMarketContract.address)
+    const { itemMarketContract: itemMarketContract_ } = await deployItemMarketContract(ethers)
+    itemMarketContract = itemMarketContract_
 
     // --- Deploy Item ---
-    const itemsList = items
-
-    const itemContractFactory = await ethers.getContractFactory('Item')
-    itemContract = await itemContractFactory.deploy(
-      itemsList.itemsIndexes,
-      itemsList.itemsNames,
-      itemsList.itemsDescription,
-      itemsList.itemsImageURIs,
-      itemsList.itemsCategory,
-      itemsList.itemsCost,
-      itemsList.itemsEffect
-    )
-
-    await itemContract.deployed()
-    console.log('Item deployed to:', itemContract.address)
+    const { itemContract: itemContract_ } = await deployItemContract(ethers)
+    itemContract = itemContract_
 
     // --- List All Items to Market
-    for (let index = 0; index < itemsList.itemsIndexes.length; index++) {
-      const itemId = itemsList.itemsIndexes[index]
-      const itemCost = itemsList.itemsCost[index]
-      await itemContract.setApprovalForAll(itemMarketContract.address, true);
-      await itemMarketContract.listItem(itemContract.address, itemId, 5, itemCost)
-    }
+    await listItemMarket({ itemContract, itemMarketContract })
 
     // Aprove Metallic coin
     await metallicContract.connect(userOne).approve(itemMarketContract.address, metallicAmount)
@@ -72,7 +52,7 @@ describe('ItemMarket', function () {
     }
 
     const itemsRaw = await itemContract.getItemsOf(userOne.address)
-    itemsRaw.map(item => {
+    itemsRaw.map((item: any) => {
       console.log("Id: ", item.info.id.toNumber(), "Amount: ", item.amount.toNumber());
       // expect(item.amount.toNumber()).to.equal(2)
     })
@@ -96,7 +76,7 @@ describe('ItemMarket', function () {
 
   it("Should get All Items of Market", async function () {
     const listItemsRaw = await itemMarketContract.getAllItems()
-    const listItems = listItemsRaw.map(item => {
+    const listItems = listItemsRaw.map((item: any) => {
       return item.id.toNumber()
     })
     expect(listItems).to.eql(items.itemsIndexes)

@@ -19,10 +19,10 @@ task("deploy", "Deploy all contracts").setAction(
     await deployPokemonAttackContract(hre.ethers, pokemonGameContract.address)
     gameRewardsContract.updatePokemonGameAddress(pokemonGameContract.address)
 
-
     const { itemContract } = await deployItemContract(hre.ethers)
     const { itemMarketContract } = await deployItemMarketContract(hre.ethers)
 
+    pokemonGameContract.updateItemAddress(itemContract.address)
     await listItemMarket({ itemContract, itemMarketContract })
   }
 )

@@ -41,18 +41,23 @@ interface PokemonGameInterface extends ethers.utils.Interface {
     "hasNft()": FunctionFragment;
     "holders(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
+    "itemAddress()": FunctionFragment;
     "mint(uint256)": FunctionFragment;
     "name()": FunctionFragment;
     "nftsOfHolder(address,uint256)": FunctionFragment;
+    "owner()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
     "pokemons(uint256)": FunctionFragment;
     "pokemonsNft(uint256)": FunctionFragment;
+    "renounceOwnership()": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "symbol()": FunctionFragment;
     "tokenURI(uint256)": FunctionFragment;
     "transferFrom(address,address,uint256)": FunctionFragment;
+    "transferOwnership(address)": FunctionFragment;
+    "updateItemAddress(address)": FunctionFragment;
   };
 
   encodeFunctionData(
@@ -129,12 +134,17 @@ interface PokemonGameInterface extends ethers.utils.Interface {
     functionFragment: "isApprovedForAll",
     values: [string, string]
   ): string;
+  encodeFunctionData(
+    functionFragment: "itemAddress",
+    values?: undefined
+  ): string;
   encodeFunctionData(functionFragment: "mint", values: [BigNumberish]): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "nftsOfHolder",
     values: [string, BigNumberish]
   ): string;
+  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "ownerOf",
     values: [BigNumberish]
@@ -146,6 +156,10 @@ interface PokemonGameInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "pokemonsNft",
     values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "renounceOwnership",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "safeTransferFrom",
@@ -167,6 +181,14 @@ interface PokemonGameInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "transferFrom",
     values: [string, string, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "transferOwnership",
+    values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "updateItemAddress",
+    values: [string]
   ): string;
 
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
@@ -225,16 +247,25 @@ interface PokemonGameInterface extends ethers.utils.Interface {
     functionFragment: "isApprovedForAll",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "itemAddress",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "nftsOfHolder",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "pokemons", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "pokemonsNft",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "renounceOwnership",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -255,11 +286,20 @@ interface PokemonGameInterface extends ethers.utils.Interface {
     functionFragment: "transferFrom",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "transferOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "updateItemAddress",
+    data: BytesLike
+  ): Result;
 
   events: {
     "Approval(address,address,uint256)": EventFragment;
     "ApprovalForAll(address,address,bool)": EventFragment;
     "LevelUp(uint256,tuple,address,uint256)": EventFragment;
+    "OwnershipTransferred(address,address)": EventFragment;
     "PokemonNFTMinted(address,uint256,uint256)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
   };
@@ -267,6 +307,7 @@ interface PokemonGameInterface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "LevelUp"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "PokemonNFTMinted"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
 }
@@ -307,6 +348,10 @@ export type LevelUpEvent = TypedEvent<
     sender: string;
     timestamp: BigNumber;
   }
+>;
+
+export type OwnershipTransferredEvent = TypedEvent<
+  [string, string] & { previousOwner: string; newOwner: string }
 >;
 
 export type PokemonNFTMintedEvent = TypedEvent<
@@ -580,6 +625,8 @@ export class PokemonGame extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
+    itemAddress(overrides?: CallOverrides): Promise<[string]>;
+
     mint(
       _pokemonId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -593,6 +640,8 @@ export class PokemonGame extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
+    owner(overrides?: CallOverrides): Promise<[string]>;
+
     ownerOf(
       tokenId: BigNumberish,
       overrides?: CallOverrides
@@ -604,6 +653,10 @@ export class PokemonGame extends BaseContract {
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[string]>;
+
+    renounceOwnership(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
     "safeTransferFrom(address,address,uint256)"(
       from: string,
@@ -642,6 +695,16 @@ export class PokemonGame extends BaseContract {
       from: string,
       to: string,
       tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    updateItemAddress(
+      _itemAddress: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
@@ -853,6 +916,8 @@ export class PokemonGame extends BaseContract {
     overrides?: CallOverrides
   ): Promise<boolean>;
 
+  itemAddress(overrides?: CallOverrides): Promise<string>;
+
   mint(
     _pokemonId: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -866,11 +931,17 @@ export class PokemonGame extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
+  owner(overrides?: CallOverrides): Promise<string>;
+
   ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
   pokemons(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
   pokemonsNft(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
+  renounceOwnership(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   "safeTransferFrom(address,address,uint256)"(
     from: string,
@@ -906,6 +977,16 @@ export class PokemonGame extends BaseContract {
     from: string,
     to: string,
     tokenId: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  transferOwnership(
+    newOwner: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  updateItemAddress(
+    _itemAddress: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -1117,6 +1198,8 @@ export class PokemonGame extends BaseContract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
+    itemAddress(overrides?: CallOverrides): Promise<string>;
+
     mint(_pokemonId: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
     name(overrides?: CallOverrides): Promise<string>;
@@ -1127,11 +1210,15 @@ export class PokemonGame extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    owner(overrides?: CallOverrides): Promise<string>;
+
     ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
     pokemons(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
     pokemonsNft(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
+    renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
     "safeTransferFrom(address,address,uint256)"(
       from: string,
@@ -1170,6 +1257,16 @@ export class PokemonGame extends BaseContract {
       from: string,
       to: string,
       tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    updateItemAddress(
+      _itemAddress: string,
       overrides?: CallOverrides
     ): Promise<void>;
   };
@@ -1265,6 +1362,22 @@ export class PokemonGame extends BaseContract {
         sender: string;
         timestamp: BigNumber;
       }
+    >;
+
+    "OwnershipTransferred(address,address)"(
+      previousOwner?: string | null,
+      newOwner?: string | null
+    ): TypedEventFilter<
+      [string, string],
+      { previousOwner: string; newOwner: string }
+    >;
+
+    OwnershipTransferred(
+      previousOwner?: string | null,
+      newOwner?: string | null
+    ): TypedEventFilter<
+      [string, string],
+      { previousOwner: string; newOwner: string }
     >;
 
     "PokemonNFTMinted(address,uint256,uint256)"(
@@ -1390,6 +1503,8 @@ export class PokemonGame extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    itemAddress(overrides?: CallOverrides): Promise<BigNumber>;
+
     mint(
       _pokemonId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -1403,6 +1518,8 @@ export class PokemonGame extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    owner(overrides?: CallOverrides): Promise<BigNumber>;
+
     ownerOf(
       tokenId: BigNumberish,
       overrides?: CallOverrides
@@ -1413,6 +1530,10 @@ export class PokemonGame extends BaseContract {
     pokemonsNft(
       arg0: BigNumberish,
       overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    renounceOwnership(
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     "safeTransferFrom(address,address,uint256)"(
@@ -1452,6 +1573,16 @@ export class PokemonGame extends BaseContract {
       from: string,
       to: string,
       tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    updateItemAddress(
+      _itemAddress: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
   };
@@ -1559,6 +1690,8 @@ export class PokemonGame extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    itemAddress(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     mint(
       _pokemonId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -1571,6 +1704,8 @@ export class PokemonGame extends BaseContract {
       arg1: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
+
+    owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     ownerOf(
       tokenId: BigNumberish,
@@ -1585,6 +1720,10 @@ export class PokemonGame extends BaseContract {
     pokemonsNft(
       arg0: BigNumberish,
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    renounceOwnership(
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     "safeTransferFrom(address,address,uint256)"(
@@ -1624,6 +1763,16 @@ export class PokemonGame extends BaseContract {
       from: string,
       to: string,
       tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    updateItemAddress(
+      _itemAddress: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };

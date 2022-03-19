@@ -1,13 +1,17 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0;
 
+import "@openzeppelin/contracts/access/Ownable.sol";
+
 import "./LPokemonData.sol";
 import "./PokemonData.sol";
 import "./PokemonHelper.sol";
 
-contract PokemonFactory is PokemonHelper {
+contract PokemonFactory is PokemonHelper, Ownable {
     using LPokemonData for LPokemonData.Stats;
     using LPokemonData for LPokemonData.Info;
+
+    address public itemAddress;
 
     uint256 private _totalPokemons;
 
@@ -25,13 +29,22 @@ contract PokemonFactory is PokemonHelper {
     // BossId => PokemonData
     mapping(uint256 => PokemonData) public bosses;
 
+    modifier onlyItem() {
+        require(itemAddress == msg.sender, "PokemonFactory: caller is not the itemAddress");
+        _;
+    }
+
+    function updateItemAddress(address _itemAddress) public onlyOwner {
+        itemAddress = _itemAddress;
+    }
+
     function createPokemonsData(
         uint[] memory pokemonIndexes,
         string[] memory pokemonNames,
         string[] memory pokemonImageURIs,
         uint[] memory pokemonHp,
         uint[] memory pokemonAttack
-    ) external {
+    ) external onlyOwner {
         // Create All Pokemons Data
         for(uint i = 0; i < pokemonIndexes.length; i++) {
             uint256 index = pokemonIndexes[i];
@@ -53,7 +66,7 @@ contract PokemonFactory is PokemonHelper {
     function createBossesData(
         uint[] memory bossesIds,
         uint[] memory bossesLevel
-    ) external {
+    ) external onlyOwner {
         // Create All Bosses
         for(uint i = 0; i < bossesIds.length; i++) {
             _createBoss(bossesIds[i], bossesLevel[i]);
@@ -83,8 +96,7 @@ contract PokemonFactory is PokemonHelper {
         }
     }
 
-    // TODO: create onlyContract modifier for security
-    function changeHpOf(uint pokemonIndex, address account, uint256 hp, bool isIncrement) public {
+    function changeHpOf(uint pokemonIndex, address account, uint256 hp, bool isIncrement) public onlyItem {
         PokemonData pokemon = getPokemonByIndexOf(pokemonIndex, account);
         if (isIncrement) {
             pokemon.changeHpIncrement(hp);

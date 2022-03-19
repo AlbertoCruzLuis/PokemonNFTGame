@@ -1,46 +1,34 @@
 import { expect } from 'chai'
 import { before, it } from 'mocha'
-import { Signer } from 'ethers'
+import { Contract, Signer } from 'ethers'
 import { ethers } from 'hardhat'
 import { Item } from '../../typechain'
 import { items } from "../../data/items"
+import { deployItemContract } from '../../tasks/deploy/item'
+import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers'
 
 describe('Item', function () {
-  let itemContract: Item
-  let deployer: Signer
+  let itemContract: Item | Contract
+  let deployer: SignerWithAddress
 
   before(async function () {
-    const itemsList = items
-
-    // We get the contract to deploy
-    const itemContractFactory = await ethers.getContractFactory('Item')
-    deployer = itemContractFactory.signer
-    itemContract = await itemContractFactory.deploy(
-      itemsList.itemsIndexes,
-      itemsList.itemsNames,
-      itemsList.itemsDescription,
-      itemsList.itemsImageURIs,
-      itemsList.itemsCategory,
-      itemsList.itemsCost,
-      itemsList.itemsEffect
-    )
-
-    await itemContract.deployed()
-    console.log('Item deployed to:', itemContract.address)
+    const [owner] = await ethers.getSigners()
+    deployer = owner
+    const { itemContract: itemContract_ } = await deployItemContract(ethers)
+    itemContract = itemContract_
   })
 
   it("Should get All Items", async function () {
     const listItemsRaw = await itemContract.getAllItems()
-    const listItems = listItemsRaw.map(item => {
+    const listItems = listItemsRaw.map((item: any) => {
       return item.info.id.toNumber()
     })
     expect(listItems).to.eql(items.itemsIndexes)
   })
 
   it("Should get items of Deployer", async function () {
-    const deployerAddress = await deployer.getAddress()
-    const itemsRaw = await itemContract.getItemsOf(deployerAddress)
-    itemsRaw.map(item => {
+    const itemsRaw = await itemContract.getItemsOf(deployer.address)
+    itemsRaw.map((item: any) => {
       expect(item.amount.toNumber()).to.equal(100)
     })
   })
@@ -48,7 +36,7 @@ describe('Item', function () {
   it("Should get items of User Wallet", async function () {
     const [owner, addr1, addr2] = await ethers.getSigners();
     const itemsRaw = await itemContract.getItemsOf(addr1.address)
-    itemsRaw.map(item => {
+    itemsRaw.map((item: any) => {
       expect(item.amount.toNumber()).to.equal(0)
     })
   })
@@ -59,16 +47,15 @@ describe('Item', function () {
   })
 
   it("Should mint an item", async function () {
-    const deployerAddress = await deployer.getAddress()
     const itemId = items.itemsIndexes[0]
     console.log(itemId);
     const amount = 2
-    await itemContract.mint(deployerAddress, itemId, amount);
+    await itemContract.mint(deployer.address, itemId, amount);
   })
 
   it("Should get effect of item", async function () {
     const listItemsRaw = await itemContract.getAllItems()
-    const listItems = listItemsRaw.map(item => {
+    const listItems = listItemsRaw.map((item: any) => {
       return item.info.effect.toNumber()
     })
     expect(listItems).to.eql(items.itemsEffect)

@@ -33,10 +33,15 @@ describe('PokemonGame', function () {
     expect(nft.info.id).to.equal(0)
   })
 
-  it("Should return metadata of token", async function () {
+  it("Should return that has token minted", async function () {
     const pokemonId = 2
     await gameContract.mint(pokemonId)
 
+    const nft = await gameContract.hasNft()
+    expect(nft.info.id).to.not.equal(0)
+  })
+
+  it("Should return metadata of token", async function () {
     const tokenId = 1
     const encodedAppJson = await gameContract.tokenURI(tokenId)
     const encodedMetadata = encodedAppJson.replace("data:application/json;base64,", "")
@@ -49,14 +54,6 @@ describe('PokemonGame', function () {
   it("Should return total of pokemons", async function () {
     const totalPokemons = await gameContract.getTotalPokemons()
     expect(totalPokemons).to.equal(150)
-  })
-
-  it("Should return that has token minted", async function () {
-    const pokemonId = 3
-    await gameContract.mint(pokemonId)
-
-    const nft = await gameContract.hasNft()
-    expect(nft.info.id).to.not.equal(0)
   })
 
   it("Should return pokemons of user", async function () {
