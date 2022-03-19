@@ -65,7 +65,9 @@ export const useItemMarket = () => {
       if (!itemContract || !itemMarketContract || !metallicContract) return
 
       const balance = await metallicContract.balanceOf(address)
-      if (balance < priceItem) {
+      const balanceInt = parseInt(ethers.utils.formatEther(balance))
+      const priceItemInt = parseInt(ethers.utils.formatEther(priceItem))
+      if (balanceInt < priceItemInt) {
         toast.error("You don't have money for buy this item")
         return
       }

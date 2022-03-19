@@ -20,7 +20,7 @@ interface ISelectPokemon {
 
 export const SelectPokemon: FC<ISelectPokemon> = ({ setPokemonSelected }) => {
   const pokemonStarter = ["bulbasaur", "charmander", "squirtle"]
-  const [isLoading, setIsLoading] = useState(false)
+  const [isMinted, setIsMinted] = useState(false)
   const { contract: gameContract } = useContract<PokemonGame & Contract>({
     contractAddress: POKEMON_GAME_ADDRESS,
     contractJson: PokemonGameContract
@@ -30,14 +30,14 @@ export const SelectPokemon: FC<ISelectPokemon> = ({ setPokemonSelected }) => {
     try {
       if (!gameContract) return
 
-      setIsLoading(true)
+      setIsMinted(true)
       const mintTxn = await gameContract.mint(pokemonId)
       await mintTxn.wait()
       toast.success("pokemon minted")
-      setIsLoading(false)
+      setIsMinted(false)
     } catch (error) {
       toast.error("Mint Failed")
-      setIsLoading(false)
+      setIsMinted(false)
     }
   }
 
@@ -82,7 +82,7 @@ export const SelectPokemon: FC<ISelectPokemon> = ({ setPokemonSelected }) => {
           )
         })}
       </div>
-      <Popup open={isLoading} overlayStyle={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
+      <Popup open={isMinted} overlayStyle={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
         <div className="flex flex-col p-4 bg-white rounded-md">
           <div className="flex items-center justify-center gap-2">
             <BiLoaderAlt className="animate-spin" color="black" />

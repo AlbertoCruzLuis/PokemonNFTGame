@@ -26,6 +26,7 @@ interface ItemInterface extends ethers.utils.Interface {
     "balanceOfBatch(address[],uint256[])": FunctionFragment;
     "burn(address,uint256,uint256)": FunctionFragment;
     "burnBatch(address,uint256[],uint256[])": FunctionFragment;
+    "createItemsData(uint256[],string[],string[],string[],string[],uint256[],uint256[])": FunctionFragment;
     "getAllItems()": FunctionFragment;
     "getItem(uint256)": FunctionFragment;
     "getItemNft(uint256)": FunctionFragment;
@@ -66,6 +67,18 @@ interface ItemInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "burnBatch",
     values: [string, BigNumberish[], BigNumberish[]]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "createItemsData",
+    values: [
+      BigNumberish[],
+      string[],
+      string[],
+      string[],
+      string[],
+      BigNumberish[],
+      BigNumberish[]
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: "getAllItems",
@@ -143,6 +156,10 @@ interface ItemInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "burn", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "burnBatch", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "createItemsData",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "getAllItems",
     data: BytesLike
@@ -436,6 +453,17 @@ export class Item extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    createItemsData(
+      itemsIndexes: BigNumberish[],
+      itemsNames: string[],
+      itemsDescription: string[],
+      itemsImageURIs: string[],
+      itemsCategory: string[],
+      itemsCost: BigNumberish[],
+      itemsEffect: BigNumberish[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     getAllItems(
       overrides?: CallOverrides
     ): Promise<
@@ -644,6 +672,17 @@ export class Item extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  createItemsData(
+    itemsIndexes: BigNumberish[],
+    itemsNames: string[],
+    itemsDescription: string[],
+    itemsImageURIs: string[],
+    itemsCategory: string[],
+    itemsCost: BigNumberish[],
+    itemsEffect: BigNumberish[],
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   getAllItems(
     overrides?: CallOverrides
   ): Promise<
@@ -840,6 +879,17 @@ export class Item extends BaseContract {
       account: string,
       ids: BigNumberish[],
       values: BigNumberish[],
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    createItemsData(
+      itemsIndexes: BigNumberish[],
+      itemsNames: string[],
+      itemsDescription: string[],
+      itemsImageURIs: string[],
+      itemsCategory: string[],
+      itemsCost: BigNumberish[],
+      itemsEffect: BigNumberish[],
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1395,6 +1445,17 @@ export class Item extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    createItemsData(
+      itemsIndexes: BigNumberish[],
+      itemsNames: string[],
+      itemsDescription: string[],
+      itemsImageURIs: string[],
+      itemsCategory: string[],
+      itemsCost: BigNumberish[],
+      itemsEffect: BigNumberish[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     getAllItems(overrides?: CallOverrides): Promise<BigNumber>;
 
     getItem(id: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
@@ -1518,6 +1579,17 @@ export class Item extends BaseContract {
       account: string,
       ids: BigNumberish[],
       values: BigNumberish[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    createItemsData(
+      itemsIndexes: BigNumberish[],
+      itemsNames: string[],
+      itemsDescription: string[],
+      itemsImageURIs: string[],
+      itemsCategory: string[],
+      itemsCost: BigNumberish[],
+      itemsEffect: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

@@ -37,7 +37,9 @@ contract Item is ERC1155, Ownable, ERC1155Burnable {
     mapping(address => mapping(uint256 => InfoItem)) public _itemsOfHolder;
 
     event UseItem(LPokemonData.Data pokemon, LItemData.Data item, address sender, uint256 timestamp);
-    constructor(
+    constructor() ERC1155("") {}
+
+    function createItemsData(
         uint[] memory itemsIndexes,
         string[] memory itemsNames,
         string[] memory itemsDescription,
@@ -45,7 +47,7 @@ contract Item is ERC1155, Ownable, ERC1155Burnable {
         string[] memory itemsCategory,
         uint[] memory itemsCost,
         uint[] memory itemsEffect
-    ) ERC1155("") {
+    ) external onlyOwner {
         // Create All Items Data
         for(uint i = 0; i < itemsIndexes.length; i++) {
             _items[itemsIndexes[i]] = new ItemData(

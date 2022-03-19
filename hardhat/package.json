@@ -15,12 +15,12 @@
     "test:metallic": "hardhat test --grep Metallic",
     "test:gameRewards": "hardhat test --grep GameRewards",
     "createPoke": "hardhat run scripts/createPokemonData.ts",
-    "deploy": "hardhat deploy --network localhost",
+    "deploy": "hardhat deploy --network hardhat",
     "deploy:rinkeby": "hardhat deploy --network rinkeby",
-    "deploy:pokemonGame": "hardhat deploy:pokemonGame --network localhost",
-    "deploy:pokemonGame:rinkeby": "hardhat deploy:pokemonGame --network rinkeby",
-    "deploy:metallic": "hardhat deploy:metallic --network localhost",
-    "deploy:metallic:rinkeby": "hardhat deploy:metallic --network rinkeby"
+    "deploy:ropsten": "hardhat deploy --network ropsten",
+    "deploy:mumbai": "hardhat deploy --network mumbai",
+    "deploy:velas_tesnet": "hardhat deploy --network velas_tesnet",
+    "deploy:emerald_testnet": "hardhat deploy --network emerald_testnet"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.5",

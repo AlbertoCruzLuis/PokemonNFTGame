@@ -9,7 +9,7 @@ import "react-loading-skeleton/dist/skeleton.css"
 export const Healings = () => {
   const { items, buyItem, isBuying } = useItemMarket()
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-6">
       <h2 className="text-xl font-bold text-white">Healings</h2>
       { items?.map(({ id, name, description, imageURI, cost }) => (
         <HealingCard

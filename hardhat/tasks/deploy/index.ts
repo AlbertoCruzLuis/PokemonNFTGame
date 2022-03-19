@@ -11,19 +11,22 @@ const GAME_REWARDS_AMOUNT = 126_000_000 // 30% of total Supply
 
 task("deploy", "Deploy all contracts").setAction(
   async (taskArgs, hre) => {
+    console.log("Deployment...")
     const { metallicContract } = await deployMetallicContract(hre.ethers)
     const { gameRewardsContract } = await deployGameRewardsContract(hre.ethers, metallicContract.address)
-    await metallicContract.transfer(gameRewardsContract.address, hre.ethers.utils.parseEther(`${GAME_REWARDS_AMOUNT}`))
+    const txGameRewards = await metallicContract.transfer(gameRewardsContract.address, hre.ethers.utils.parseEther(`${GAME_REWARDS_AMOUNT}`))
+    await txGameRewards.wait()
 
     const { pokemonGameContract } = await deployPokemonGameContract(hre.ethers, gameRewardsContract.address)
     await deployPokemonAttackContract(hre.ethers, pokemonGameContract.address)
-    gameRewardsContract.updatePokemonGameAddress(pokemonGameContract.address)
 
     const { itemContract } = await deployItemContract(hre.ethers)
     const { itemMarketContract } = await deployItemMarketContract(hre.ethers)
 
-    pokemonGameContract.updateItemAddress(itemContract.address)
     await listItemMarket({ itemContract, itemMarketContract })
+
+    await gameRewardsContract.updatePokemonGameAddress(pokemonGameContract.address)
+    await pokemonGameContract.updateItemAddress(itemContract.address)
   }
 )
 

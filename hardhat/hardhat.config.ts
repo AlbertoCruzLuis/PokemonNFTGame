@@ -37,19 +37,39 @@ const config: HardhatUserConfig = {
   },
   networks: {
     hardhat: {
-      chainId: 1337
+      chainId: 1337,
     },
     rinkeby: {
       url: process.env.RINKEBY_URL || '',
       accounts:
         process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : []
-    }
+    },
+    ropsten: {
+      url: process.env.ROPSTEN_URL || '',
+      accounts:
+        process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : []
+    },
+    mumbai: {
+      url: process.env.MUMBAI_URL || '',
+      accounts:
+        process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+    },
+    velas_tesnet: {
+      url: process.env.VELAS_TESNET_URL || '',
+      accounts:
+        process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+    },
+    emerald_testnet: {
+      url: process.env.EMERALD_TESNET || '',
+      accounts:
+        process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+    },
   },
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,
-    currency: 'USD',
-    token: 'MATIC',
-    gasPrice: 30,
+    currency: 'ETH',
+    token: 'ETH',
+    gasPrice: 6, // By Default is format Gwei
     coinmarketcap: process.env.COINMARKETCAP_KEY
   },
   etherscan: {

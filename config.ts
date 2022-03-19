@@ -1,4 +1,9 @@
-export const RINKEBY_CHAIN_ID = 1337
+export const RINKEBY_CHAIN_ID = 4
+export const ROPSTEN_CHAIN_ID = 3
+export const MUMBAI_CHAIN_ID = 80001
+export const VELAS_TESNET_CHAIN_ID = 111
+export const EMERALD_TESNET_CHAIN_ID = 42261
+export const LOCALHOST_CHAIN_ID = 1337
 export const POKEAPI_URL = "https://pokeapi.co/api/v2/"
 export const POKEMON_GAME_ADDRESS = process.env.NEXT_PUBLIC_POKEMON_GAME_ADDRESS
 export const METALLIC_ADDRESS = process.env.NEXT_PUBLIC_METALLIC_ADDRESS

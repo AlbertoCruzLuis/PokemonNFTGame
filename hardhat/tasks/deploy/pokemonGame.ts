@@ -21,7 +21,7 @@ export const deployPokemonGameContract = async (ethers: Ethers, gameRewardsAddre
   await pokemonGameContract.deployed();
   console.log("PokemonGame deployed to:", pokemonGameContract.address);
 
-  const amountChunks = 5
+  const amountChunks = 20
   const characterIndexes = splitDataInChunks(pokemons.characterIndexes, amountChunks)
   const characterNames = splitDataInChunks(pokemons.characterNames, amountChunks)
   const characterImageURIs = splitDataInChunks(pokemons.characterImageURIs, amountChunks)
@@ -29,18 +29,21 @@ export const deployPokemonGameContract = async (ethers: Ethers, gameRewardsAddre
   const characterAttack = splitDataInChunks(pokemons.characterAttack, amountChunks)
 
   for (let i = 0; i < characterIndexes.length; i++) {
-    await pokemonGameContract.createPokemonsData(
+    console.log("PokemonData: ", i);
+    const tx = await pokemonGameContract.createPokemonsData(
       characterIndexes[i],
       characterNames[i],
       characterImageURIs[i],
       characterHp[i],
-      characterAttack[i]
+      characterAttack[i],
     )
+    console.log(tx.gasLimit);
   }
 
+  console.log("BossesData");
   await pokemonGameContract.createBossesData(
     bossesIds,
-    bossesLevels
+    bossesLevels,
   )
 
   return {
