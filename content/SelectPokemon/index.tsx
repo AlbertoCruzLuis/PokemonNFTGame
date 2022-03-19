@@ -63,9 +63,9 @@ export const SelectPokemon: FC<ISelectPokemon> = ({ setPokemonSelected }) => {
   })
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 xs:items-center">
       <h4 className="text-xl font-bold text-white">Select Character</h4>
-      <div className="flex flex-wrap gap-4">
+      <div className="flex flex-wrap gap-4 xs:justify-center">
         {pokemonStarter && pokemonStarter.map((name) => {
           const { id, stats, sprites, types, isLoading, isSuccess } = usePokemon({ name: name })
 
