@@ -1,37 +1,45 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0;
 
-import "./PokemonFactory.sol";
+import "./PokemonHelper.sol";
+import "../interfaces/IPokemonGame.sol";
 
-contract PokemonAttack is PokemonFactory {
+contract PokemonAttack is PokemonHelper {
     enum BattleStatus { WIN, LOSE }
 
-    event AttackComplete(uint256 newBossHp, uint256 newPokemonHp);
-    event BattleComplete(BattleStatus status);
+    address public pokemonGameAddress;
+
+    event AttackComplete(uint256 newBossHp, uint256 newPokemonHp, address sender, uint256 timestamp);
+    event BattleComplete(BattleStatus status, address sender, uint256 timestamp);
+
+    constructor(address pokemonGameAddress_) {
+        pokemonGameAddress = pokemonGameAddress_;
+    }
 
     function attackBoss(uint256 pokemonIndex, uint256 bossId) public {
-        PokemonData player = getPokemonByIndexOf(pokemonIndex, msg.sender);
+        PokemonData player = PokemonData(IPokemonGame(pokemonGameAddress).getPokemonByIndexOf(pokemonIndex, msg.sender));
+        PokemonData boss = PokemonData(IPokemonGame(pokemonGameAddress).getBoss(bossId));
+
+        require (player.getHp() > 0, "Error. Player don't have Hp");
+        require (boss.getHp() > 0, "Error. Boss don't have Hp");
 
         // Allow player to attack boss.
         bool isUpExperience = true;
-        attack(player, bosses[bossId], BattleStatus.WIN, isUpExperience);
+        attack(player, boss, BattleStatus.WIN, isUpExperience);
 
         // Allow boss to attack player.
         isUpExperience = false;
-        attack(bosses[bossId], player, BattleStatus.LOSE, isUpExperience);
+        attack(boss, player, BattleStatus.LOSE, isUpExperience);
 
         checkLevelUp(player);
 
-        emit AttackComplete(bosses[bossId].getHp(), player.getHp());
+        emit AttackComplete(boss.getHp(), player.getHp(), msg.sender, block.timestamp);
     }
 
     function attack(PokemonData pokemonOne, PokemonData pokemonTwo, BattleStatus status, bool isUpExperience) internal {
-        require (pokemonOne.getHp() > 0, "Error. PokemonOne don't have Hp");
-        require (pokemonTwo.getHp() > 0, "Error. PokemonTwo don't have Hp");
-
         if (pokemonTwo.getHp() <= pokemonOne.getAttack()) {
             pokemonTwo.changeHp(0);
-            emit BattleComplete(status);
+            emit BattleComplete(status, msg.sender, block.timestamp);
         } else {
             pokemonTwo.changeHp(pokemonTwo.getHp() - pokemonOne.getAttack());
         }

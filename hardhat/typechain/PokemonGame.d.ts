@@ -22,12 +22,12 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 interface PokemonGameInterface extends ethers.utils.Interface {
   functions: {
     "approve(address,uint256)": FunctionFragment;
-    "attackBoss(uint256,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
     "bosses(uint256)": FunctionFragment;
     "changeHpOf(uint256,address,uint256,bool)": FunctionFragment;
     "createBossesData(uint256[],uint256[])": FunctionFragment;
     "createPokemonsData(uint256[],string[],string[],uint256[],uint256[])": FunctionFragment;
+    "gameRewardsAddress()": FunctionFragment;
     "getAllPokemons()": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
     "getBoss(uint256)": FunctionFragment;
@@ -59,10 +59,6 @@ interface PokemonGameInterface extends ethers.utils.Interface {
     functionFragment: "approve",
     values: [string, BigNumberish]
   ): string;
-  encodeFunctionData(
-    functionFragment: "attackBoss",
-    values: [BigNumberish, BigNumberish]
-  ): string;
   encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
   encodeFunctionData(
     functionFragment: "bosses",
@@ -79,6 +75,10 @@ interface PokemonGameInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "createPokemonsData",
     values: [BigNumberish[], string[], string[], BigNumberish[], BigNumberish[]]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "gameRewardsAddress",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "getAllPokemons",
@@ -170,7 +170,6 @@ interface PokemonGameInterface extends ethers.utils.Interface {
   ): string;
 
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "attackBoss", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "bosses", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "changeHpOf", data: BytesLike): Result;
@@ -180,6 +179,10 @@ interface PokemonGameInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "createPokemonsData",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "gameRewardsAddress",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -256,17 +259,13 @@ interface PokemonGameInterface extends ethers.utils.Interface {
   events: {
     "Approval(address,address,uint256)": EventFragment;
     "ApprovalForAll(address,address,bool)": EventFragment;
-    "AttackComplete(uint256,uint256)": EventFragment;
-    "BattleComplete(uint8)": EventFragment;
-    "LevelUp(uint256,tuple)": EventFragment;
+    "LevelUp(uint256,tuple,address,uint256)": EventFragment;
     "PokemonNFTMinted(address,uint256,uint256)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "AttackComplete"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "BattleComplete"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "LevelUp"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "PokemonNFTMinted"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
@@ -288,12 +287,6 @@ export type ApprovalForAllEvent = TypedEvent<
   }
 >;
 
-export type AttackCompleteEvent = TypedEvent<
-  [BigNumber, BigNumber] & { newBossHp: BigNumber; newPokemonHp: BigNumber }
->;
-
-export type BattleCompleteEvent = TypedEvent<[number] & { status: number }>;
-
 export type LevelUpEvent = TypedEvent<
   [
     BigNumber,
@@ -301,7 +294,9 @@ export type LevelUpEvent = TypedEvent<
       hp: BigNumber;
       maxHp: BigNumber;
       attack: BigNumber;
-    }
+    },
+    string,
+    BigNumber
   ] & {
     level: BigNumber;
     stats: [BigNumber, BigNumber, BigNumber] & {
@@ -309,6 +304,8 @@ export type LevelUpEvent = TypedEvent<
       maxHp: BigNumber;
       attack: BigNumber;
     };
+    sender: string;
+    timestamp: BigNumber;
   }
 >;
 
@@ -374,12 +371,6 @@ export class PokemonGame extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    attackBoss(
-      pokemonIndex: BigNumberish,
-      bossId: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
     balanceOf(owner: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     bosses(arg0: BigNumberish, overrides?: CallOverrides): Promise<[string]>;
@@ -406,6 +397,8 @@ export class PokemonGame extends BaseContract {
       pokemonAttack: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    gameRewardsAddress(overrides?: CallOverrides): Promise<[string]>;
 
     getAllPokemons(overrides?: CallOverrides): Promise<[string[]]>;
 
@@ -659,12 +652,6 @@ export class PokemonGame extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  attackBoss(
-    pokemonIndex: BigNumberish,
-    bossId: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
   balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
   bosses(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
@@ -691,6 +678,8 @@ export class PokemonGame extends BaseContract {
     pokemonAttack: BigNumberish[],
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  gameRewardsAddress(overrides?: CallOverrides): Promise<string>;
 
   getAllPokemons(overrides?: CallOverrides): Promise<string[]>;
 
@@ -927,12 +916,6 @@ export class PokemonGame extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    attackBoss(
-      pokemonIndex: BigNumberish,
-      bossId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     bosses(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
@@ -959,6 +942,8 @@ export class PokemonGame extends BaseContract {
       pokemonAttack: BigNumberish[],
       overrides?: CallOverrides
     ): Promise<void>;
+
+    gameRewardsAddress(overrides?: CallOverrides): Promise<string>;
 
     getAllPokemons(overrides?: CallOverrides): Promise<string[]>;
 
@@ -1226,33 +1211,11 @@ export class PokemonGame extends BaseContract {
       { owner: string; operator: string; approved: boolean }
     >;
 
-    "AttackComplete(uint256,uint256)"(
-      newBossHp?: null,
-      newPokemonHp?: null
-    ): TypedEventFilter<
-      [BigNumber, BigNumber],
-      { newBossHp: BigNumber; newPokemonHp: BigNumber }
-    >;
-
-    AttackComplete(
-      newBossHp?: null,
-      newPokemonHp?: null
-    ): TypedEventFilter<
-      [BigNumber, BigNumber],
-      { newBossHp: BigNumber; newPokemonHp: BigNumber }
-    >;
-
-    "BattleComplete(uint8)"(
-      status?: null
-    ): TypedEventFilter<[number], { status: number }>;
-
-    BattleComplete(
-      status?: null
-    ): TypedEventFilter<[number], { status: number }>;
-
-    "LevelUp(uint256,tuple)"(
+    "LevelUp(uint256,tuple,address,uint256)"(
       level?: null,
-      stats?: null
+      stats?: null,
+      sender?: null,
+      timestamp?: null
     ): TypedEventFilter<
       [
         BigNumber,
@@ -1260,7 +1223,9 @@ export class PokemonGame extends BaseContract {
           hp: BigNumber;
           maxHp: BigNumber;
           attack: BigNumber;
-        }
+        },
+        string,
+        BigNumber
       ],
       {
         level: BigNumber;
@@ -1269,12 +1234,16 @@ export class PokemonGame extends BaseContract {
           maxHp: BigNumber;
           attack: BigNumber;
         };
+        sender: string;
+        timestamp: BigNumber;
       }
     >;
 
     LevelUp(
       level?: null,
-      stats?: null
+      stats?: null,
+      sender?: null,
+      timestamp?: null
     ): TypedEventFilter<
       [
         BigNumber,
@@ -1282,7 +1251,9 @@ export class PokemonGame extends BaseContract {
           hp: BigNumber;
           maxHp: BigNumber;
           attack: BigNumber;
-        }
+        },
+        string,
+        BigNumber
       ],
       {
         level: BigNumber;
@@ -1291,6 +1262,8 @@ export class PokemonGame extends BaseContract {
           maxHp: BigNumber;
           attack: BigNumber;
         };
+        sender: string;
+        timestamp: BigNumber;
       }
     >;
 
@@ -1338,12 +1311,6 @@ export class PokemonGame extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    attackBoss(
-      pokemonIndex: BigNumberish,
-      bossId: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     bosses(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
@@ -1370,6 +1337,8 @@ export class PokemonGame extends BaseContract {
       pokemonAttack: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    gameRewardsAddress(overrides?: CallOverrides): Promise<BigNumber>;
 
     getAllPokemons(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1494,12 +1463,6 @@ export class PokemonGame extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    attackBoss(
-      pokemonIndex: BigNumberish,
-      bossId: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
     balanceOf(
       owner: string,
       overrides?: CallOverrides
@@ -1531,6 +1494,10 @@ export class PokemonGame extends BaseContract {
       pokemonHp: BigNumberish[],
       pokemonAttack: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    gameRewardsAddress(
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     getAllPokemons(overrides?: CallOverrides): Promise<PopulatedTransaction>;

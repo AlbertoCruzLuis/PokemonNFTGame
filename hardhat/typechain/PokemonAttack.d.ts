@@ -22,24 +22,7 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 interface PokemonAttackInterface extends ethers.utils.Interface {
   functions: {
     "attackBoss(uint256,uint256)": FunctionFragment;
-    "bosses(uint256)": FunctionFragment;
-    "changeHpOf(uint256,address,uint256,bool)": FunctionFragment;
-    "createBossesData(uint256[],uint256[])": FunctionFragment;
-    "createPokemonsData(uint256[],string[],string[],uint256[],uint256[])": FunctionFragment;
-    "getAllPokemons()": FunctionFragment;
-    "getBoss(uint256)": FunctionFragment;
-    "getPokemon(uint256)": FunctionFragment;
-    "getPokemonByIndexOf(uint256,address)": FunctionFragment;
-    "getPokemonNft(uint256)": FunctionFragment;
-    "getPokemonReadable(address)": FunctionFragment;
-    "getPokemonSelected(address,uint256)": FunctionFragment;
-    "getPokemonsOf(address)": FunctionFragment;
-    "getTotalPokemons()": FunctionFragment;
-    "hasNft()": FunctionFragment;
-    "holders(uint256)": FunctionFragment;
-    "nftsOfHolder(address,uint256)": FunctionFragment;
-    "pokemons(uint256)": FunctionFragment;
-    "pokemonsNft(uint256)": FunctionFragment;
+    "pokemonGameAddress()": FunctionFragment;
   };
 
   encodeFunctionData(
@@ -47,132 +30,20 @@ interface PokemonAttackInterface extends ethers.utils.Interface {
     values: [BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "bosses",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "changeHpOf",
-    values: [BigNumberish, string, BigNumberish, boolean]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "createBossesData",
-    values: [BigNumberish[], BigNumberish[]]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "createPokemonsData",
-    values: [BigNumberish[], string[], string[], BigNumberish[], BigNumberish[]]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getAllPokemons",
+    functionFragment: "pokemonGameAddress",
     values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getBoss",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getPokemon",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getPokemonByIndexOf",
-    values: [BigNumberish, string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getPokemonNft",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getPokemonReadable",
-    values: [string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getPokemonSelected",
-    values: [string, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getPokemonsOf",
-    values: [string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getTotalPokemons",
-    values?: undefined
-  ): string;
-  encodeFunctionData(functionFragment: "hasNft", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "holders",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "nftsOfHolder",
-    values: [string, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "pokemons",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "pokemonsNft",
-    values: [BigNumberish]
   ): string;
 
   decodeFunctionResult(functionFragment: "attackBoss", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "bosses", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "changeHpOf", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "createBossesData",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "createPokemonsData",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getAllPokemons",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "getBoss", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "getPokemon", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "getPokemonByIndexOf",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getPokemonNft",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getPokemonReadable",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getPokemonSelected",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getPokemonsOf",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getTotalPokemons",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "hasNft", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "holders", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "nftsOfHolder",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "pokemons", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "pokemonsNft",
+    functionFragment: "pokemonGameAddress",
     data: BytesLike
   ): Result;
 
   events: {
-    "AttackComplete(uint256,uint256)": EventFragment;
-    "BattleComplete(uint8)": EventFragment;
-    "LevelUp(uint256,tuple)": EventFragment;
+    "AttackComplete(uint256,uint256,address,uint256)": EventFragment;
+    "BattleComplete(uint8,address,uint256)": EventFragment;
+    "LevelUp(uint256,tuple,address,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "AttackComplete"): EventFragment;
@@ -181,10 +52,21 @@ interface PokemonAttackInterface extends ethers.utils.Interface {
 }
 
 export type AttackCompleteEvent = TypedEvent<
-  [BigNumber, BigNumber] & { newBossHp: BigNumber; newPokemonHp: BigNumber }
+  [BigNumber, BigNumber, string, BigNumber] & {
+    newBossHp: BigNumber;
+    newPokemonHp: BigNumber;
+    sender: string;
+    timestamp: BigNumber;
+  }
 >;
 
-export type BattleCompleteEvent = TypedEvent<[number] & { status: number }>;
+export type BattleCompleteEvent = TypedEvent<
+  [number, string, BigNumber] & {
+    status: number;
+    sender: string;
+    timestamp: BigNumber;
+  }
+>;
 
 export type LevelUpEvent = TypedEvent<
   [
@@ -193,7 +75,9 @@ export type LevelUpEvent = TypedEvent<
       hp: BigNumber;
       maxHp: BigNumber;
       attack: BigNumber;
-    }
+    },
+    string,
+    BigNumber
   ] & {
     level: BigNumber;
     stats: [BigNumber, BigNumber, BigNumber] & {
@@ -201,6 +85,8 @@ export type LevelUpEvent = TypedEvent<
       maxHp: BigNumber;
       attack: BigNumber;
     };
+    sender: string;
+    timestamp: BigNumber;
   }
 >;
 
@@ -254,212 +140,7 @@ export class PokemonAttack extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    bosses(arg0: BigNumberish, overrides?: CallOverrides): Promise<[string]>;
-
-    changeHpOf(
-      pokemonIndex: BigNumberish,
-      account: string,
-      hp: BigNumberish,
-      isIncrement: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    createBossesData(
-      bossesIds: BigNumberish[],
-      bossesLevel: BigNumberish[],
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    createPokemonsData(
-      pokemonIndexes: BigNumberish[],
-      pokemonNames: string[],
-      pokemonImageURIs: string[],
-      pokemonHp: BigNumberish[],
-      pokemonAttack: BigNumberish[],
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    getAllPokemons(overrides?: CallOverrides): Promise<[string[]]>;
-
-    getBoss(id: BigNumberish, overrides?: CallOverrides): Promise<[string]>;
-
-    getPokemon(id: BigNumberish, overrides?: CallOverrides): Promise<[string]>;
-
-    getPokemonByIndexOf(
-      pokemonIndex: BigNumberish,
-      sender: string,
-      overrides?: CallOverrides
-    ): Promise<[string]>;
-
-    getPokemonNft(
-      tokenId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[string]>;
-
-    getPokemonReadable(
-      pokemonData: string,
-      overrides?: CallOverrides
-    ): Promise<
-      [
-        [
-          [BigNumber, string, string] & {
-            id: BigNumber;
-            name: string;
-            imageURI: string;
-          },
-          [BigNumber, BigNumber, BigNumber] & {
-            hp: BigNumber;
-            maxHp: BigNumber;
-            attack: BigNumber;
-          },
-          BigNumber,
-          BigNumber,
-          BigNumber
-        ] & {
-          info: [BigNumber, string, string] & {
-            id: BigNumber;
-            name: string;
-            imageURI: string;
-          };
-          stats: [BigNumber, BigNumber, BigNumber] & {
-            hp: BigNumber;
-            maxHp: BigNumber;
-            attack: BigNumber;
-          };
-          level: BigNumber;
-          experience: BigNumber;
-          totalExperience: BigNumber;
-        }
-      ]
-    >;
-
-    getPokemonSelected(
-      sender: string,
-      pokemonIndex: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<
-      [
-        [
-          [BigNumber, string, string] & {
-            id: BigNumber;
-            name: string;
-            imageURI: string;
-          },
-          [BigNumber, BigNumber, BigNumber] & {
-            hp: BigNumber;
-            maxHp: BigNumber;
-            attack: BigNumber;
-          },
-          BigNumber,
-          BigNumber,
-          BigNumber
-        ] & {
-          info: [BigNumber, string, string] & {
-            id: BigNumber;
-            name: string;
-            imageURI: string;
-          };
-          stats: [BigNumber, BigNumber, BigNumber] & {
-            hp: BigNumber;
-            maxHp: BigNumber;
-            attack: BigNumber;
-          };
-          level: BigNumber;
-          experience: BigNumber;
-          totalExperience: BigNumber;
-        }
-      ]
-    >;
-
-    getPokemonsOf(
-      sender: string,
-      overrides?: CallOverrides
-    ): Promise<
-      [
-        ([
-          [BigNumber, string, string] & {
-            id: BigNumber;
-            name: string;
-            imageURI: string;
-          },
-          [BigNumber, BigNumber, BigNumber] & {
-            hp: BigNumber;
-            maxHp: BigNumber;
-            attack: BigNumber;
-          },
-          BigNumber,
-          BigNumber,
-          BigNumber
-        ] & {
-          info: [BigNumber, string, string] & {
-            id: BigNumber;
-            name: string;
-            imageURI: string;
-          };
-          stats: [BigNumber, BigNumber, BigNumber] & {
-            hp: BigNumber;
-            maxHp: BigNumber;
-            attack: BigNumber;
-          };
-          level: BigNumber;
-          experience: BigNumber;
-          totalExperience: BigNumber;
-        })[]
-      ]
-    >;
-
-    getTotalPokemons(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    hasNft(
-      overrides?: CallOverrides
-    ): Promise<
-      [
-        [
-          [BigNumber, string, string] & {
-            id: BigNumber;
-            name: string;
-            imageURI: string;
-          },
-          [BigNumber, BigNumber, BigNumber] & {
-            hp: BigNumber;
-            maxHp: BigNumber;
-            attack: BigNumber;
-          },
-          BigNumber,
-          BigNumber,
-          BigNumber
-        ] & {
-          info: [BigNumber, string, string] & {
-            id: BigNumber;
-            name: string;
-            imageURI: string;
-          };
-          stats: [BigNumber, BigNumber, BigNumber] & {
-            hp: BigNumber;
-            maxHp: BigNumber;
-            attack: BigNumber;
-          };
-          level: BigNumber;
-          experience: BigNumber;
-          totalExperience: BigNumber;
-        }
-      ]
-    >;
-
-    holders(arg0: BigNumberish, overrides?: CallOverrides): Promise<[string]>;
-
-    nftsOfHolder(
-      arg0: string,
-      arg1: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
-
-    pokemons(arg0: BigNumberish, overrides?: CallOverrides): Promise<[string]>;
-
-    pokemonsNft(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[string]>;
+    pokemonGameAddress(overrides?: CallOverrides): Promise<[string]>;
   };
 
   attackBoss(
@@ -468,201 +149,7 @@ export class PokemonAttack extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  bosses(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
-
-  changeHpOf(
-    pokemonIndex: BigNumberish,
-    account: string,
-    hp: BigNumberish,
-    isIncrement: boolean,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  createBossesData(
-    bossesIds: BigNumberish[],
-    bossesLevel: BigNumberish[],
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  createPokemonsData(
-    pokemonIndexes: BigNumberish[],
-    pokemonNames: string[],
-    pokemonImageURIs: string[],
-    pokemonHp: BigNumberish[],
-    pokemonAttack: BigNumberish[],
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  getAllPokemons(overrides?: CallOverrides): Promise<string[]>;
-
-  getBoss(id: BigNumberish, overrides?: CallOverrides): Promise<string>;
-
-  getPokemon(id: BigNumberish, overrides?: CallOverrides): Promise<string>;
-
-  getPokemonByIndexOf(
-    pokemonIndex: BigNumberish,
-    sender: string,
-    overrides?: CallOverrides
-  ): Promise<string>;
-
-  getPokemonNft(
-    tokenId: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<string>;
-
-  getPokemonReadable(
-    pokemonData: string,
-    overrides?: CallOverrides
-  ): Promise<
-    [
-      [BigNumber, string, string] & {
-        id: BigNumber;
-        name: string;
-        imageURI: string;
-      },
-      [BigNumber, BigNumber, BigNumber] & {
-        hp: BigNumber;
-        maxHp: BigNumber;
-        attack: BigNumber;
-      },
-      BigNumber,
-      BigNumber,
-      BigNumber
-    ] & {
-      info: [BigNumber, string, string] & {
-        id: BigNumber;
-        name: string;
-        imageURI: string;
-      };
-      stats: [BigNumber, BigNumber, BigNumber] & {
-        hp: BigNumber;
-        maxHp: BigNumber;
-        attack: BigNumber;
-      };
-      level: BigNumber;
-      experience: BigNumber;
-      totalExperience: BigNumber;
-    }
-  >;
-
-  getPokemonSelected(
-    sender: string,
-    pokemonIndex: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<
-    [
-      [BigNumber, string, string] & {
-        id: BigNumber;
-        name: string;
-        imageURI: string;
-      },
-      [BigNumber, BigNumber, BigNumber] & {
-        hp: BigNumber;
-        maxHp: BigNumber;
-        attack: BigNumber;
-      },
-      BigNumber,
-      BigNumber,
-      BigNumber
-    ] & {
-      info: [BigNumber, string, string] & {
-        id: BigNumber;
-        name: string;
-        imageURI: string;
-      };
-      stats: [BigNumber, BigNumber, BigNumber] & {
-        hp: BigNumber;
-        maxHp: BigNumber;
-        attack: BigNumber;
-      };
-      level: BigNumber;
-      experience: BigNumber;
-      totalExperience: BigNumber;
-    }
-  >;
-
-  getPokemonsOf(
-    sender: string,
-    overrides?: CallOverrides
-  ): Promise<
-    ([
-      [BigNumber, string, string] & {
-        id: BigNumber;
-        name: string;
-        imageURI: string;
-      },
-      [BigNumber, BigNumber, BigNumber] & {
-        hp: BigNumber;
-        maxHp: BigNumber;
-        attack: BigNumber;
-      },
-      BigNumber,
-      BigNumber,
-      BigNumber
-    ] & {
-      info: [BigNumber, string, string] & {
-        id: BigNumber;
-        name: string;
-        imageURI: string;
-      };
-      stats: [BigNumber, BigNumber, BigNumber] & {
-        hp: BigNumber;
-        maxHp: BigNumber;
-        attack: BigNumber;
-      };
-      level: BigNumber;
-      experience: BigNumber;
-      totalExperience: BigNumber;
-    })[]
-  >;
-
-  getTotalPokemons(overrides?: CallOverrides): Promise<BigNumber>;
-
-  hasNft(
-    overrides?: CallOverrides
-  ): Promise<
-    [
-      [BigNumber, string, string] & {
-        id: BigNumber;
-        name: string;
-        imageURI: string;
-      },
-      [BigNumber, BigNumber, BigNumber] & {
-        hp: BigNumber;
-        maxHp: BigNumber;
-        attack: BigNumber;
-      },
-      BigNumber,
-      BigNumber,
-      BigNumber
-    ] & {
-      info: [BigNumber, string, string] & {
-        id: BigNumber;
-        name: string;
-        imageURI: string;
-      };
-      stats: [BigNumber, BigNumber, BigNumber] & {
-        hp: BigNumber;
-        maxHp: BigNumber;
-        attack: BigNumber;
-      };
-      level: BigNumber;
-      experience: BigNumber;
-      totalExperience: BigNumber;
-    }
-  >;
-
-  holders(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
-
-  nftsOfHolder(
-    arg0: string,
-    arg1: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
-  pokemons(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
-
-  pokemonsNft(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
+  pokemonGameAddress(overrides?: CallOverrides): Promise<string>;
 
   callStatic: {
     attackBoss(
@@ -671,231 +158,63 @@ export class PokemonAttack extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    bosses(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
-
-    changeHpOf(
-      pokemonIndex: BigNumberish,
-      account: string,
-      hp: BigNumberish,
-      isIncrement: boolean,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    createBossesData(
-      bossesIds: BigNumberish[],
-      bossesLevel: BigNumberish[],
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    createPokemonsData(
-      pokemonIndexes: BigNumberish[],
-      pokemonNames: string[],
-      pokemonImageURIs: string[],
-      pokemonHp: BigNumberish[],
-      pokemonAttack: BigNumberish[],
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    getAllPokemons(overrides?: CallOverrides): Promise<string[]>;
-
-    getBoss(id: BigNumberish, overrides?: CallOverrides): Promise<string>;
-
-    getPokemon(id: BigNumberish, overrides?: CallOverrides): Promise<string>;
-
-    getPokemonByIndexOf(
-      pokemonIndex: BigNumberish,
-      sender: string,
-      overrides?: CallOverrides
-    ): Promise<string>;
-
-    getPokemonNft(
-      tokenId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<string>;
-
-    getPokemonReadable(
-      pokemonData: string,
-      overrides?: CallOverrides
-    ): Promise<
-      [
-        [BigNumber, string, string] & {
-          id: BigNumber;
-          name: string;
-          imageURI: string;
-        },
-        [BigNumber, BigNumber, BigNumber] & {
-          hp: BigNumber;
-          maxHp: BigNumber;
-          attack: BigNumber;
-        },
-        BigNumber,
-        BigNumber,
-        BigNumber
-      ] & {
-        info: [BigNumber, string, string] & {
-          id: BigNumber;
-          name: string;
-          imageURI: string;
-        };
-        stats: [BigNumber, BigNumber, BigNumber] & {
-          hp: BigNumber;
-          maxHp: BigNumber;
-          attack: BigNumber;
-        };
-        level: BigNumber;
-        experience: BigNumber;
-        totalExperience: BigNumber;
-      }
-    >;
-
-    getPokemonSelected(
-      sender: string,
-      pokemonIndex: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<
-      [
-        [BigNumber, string, string] & {
-          id: BigNumber;
-          name: string;
-          imageURI: string;
-        },
-        [BigNumber, BigNumber, BigNumber] & {
-          hp: BigNumber;
-          maxHp: BigNumber;
-          attack: BigNumber;
-        },
-        BigNumber,
-        BigNumber,
-        BigNumber
-      ] & {
-        info: [BigNumber, string, string] & {
-          id: BigNumber;
-          name: string;
-          imageURI: string;
-        };
-        stats: [BigNumber, BigNumber, BigNumber] & {
-          hp: BigNumber;
-          maxHp: BigNumber;
-          attack: BigNumber;
-        };
-        level: BigNumber;
-        experience: BigNumber;
-        totalExperience: BigNumber;
-      }
-    >;
-
-    getPokemonsOf(
-      sender: string,
-      overrides?: CallOverrides
-    ): Promise<
-      ([
-        [BigNumber, string, string] & {
-          id: BigNumber;
-          name: string;
-          imageURI: string;
-        },
-        [BigNumber, BigNumber, BigNumber] & {
-          hp: BigNumber;
-          maxHp: BigNumber;
-          attack: BigNumber;
-        },
-        BigNumber,
-        BigNumber,
-        BigNumber
-      ] & {
-        info: [BigNumber, string, string] & {
-          id: BigNumber;
-          name: string;
-          imageURI: string;
-        };
-        stats: [BigNumber, BigNumber, BigNumber] & {
-          hp: BigNumber;
-          maxHp: BigNumber;
-          attack: BigNumber;
-        };
-        level: BigNumber;
-        experience: BigNumber;
-        totalExperience: BigNumber;
-      })[]
-    >;
-
-    getTotalPokemons(overrides?: CallOverrides): Promise<BigNumber>;
-
-    hasNft(
-      overrides?: CallOverrides
-    ): Promise<
-      [
-        [BigNumber, string, string] & {
-          id: BigNumber;
-          name: string;
-          imageURI: string;
-        },
-        [BigNumber, BigNumber, BigNumber] & {
-          hp: BigNumber;
-          maxHp: BigNumber;
-          attack: BigNumber;
-        },
-        BigNumber,
-        BigNumber,
-        BigNumber
-      ] & {
-        info: [BigNumber, string, string] & {
-          id: BigNumber;
-          name: string;
-          imageURI: string;
-        };
-        stats: [BigNumber, BigNumber, BigNumber] & {
-          hp: BigNumber;
-          maxHp: BigNumber;
-          attack: BigNumber;
-        };
-        level: BigNumber;
-        experience: BigNumber;
-        totalExperience: BigNumber;
-      }
-    >;
-
-    holders(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
-
-    nftsOfHolder(
-      arg0: string,
-      arg1: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    pokemons(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
-
-    pokemonsNft(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
+    pokemonGameAddress(overrides?: CallOverrides): Promise<string>;
   };
 
   filters: {
-    "AttackComplete(uint256,uint256)"(
+    "AttackComplete(uint256,uint256,address,uint256)"(
       newBossHp?: null,
-      newPokemonHp?: null
+      newPokemonHp?: null,
+      sender?: null,
+      timestamp?: null
     ): TypedEventFilter<
-      [BigNumber, BigNumber],
-      { newBossHp: BigNumber; newPokemonHp: BigNumber }
+      [BigNumber, BigNumber, string, BigNumber],
+      {
+        newBossHp: BigNumber;
+        newPokemonHp: BigNumber;
+        sender: string;
+        timestamp: BigNumber;
+      }
     >;
 
     AttackComplete(
       newBossHp?: null,
-      newPokemonHp?: null
+      newPokemonHp?: null,
+      sender?: null,
+      timestamp?: null
     ): TypedEventFilter<
-      [BigNumber, BigNumber],
-      { newBossHp: BigNumber; newPokemonHp: BigNumber }
+      [BigNumber, BigNumber, string, BigNumber],
+      {
+        newBossHp: BigNumber;
+        newPokemonHp: BigNumber;
+        sender: string;
+        timestamp: BigNumber;
+      }
     >;
 
-    "BattleComplete(uint8)"(
-      status?: null
-    ): TypedEventFilter<[number], { status: number }>;
+    "BattleComplete(uint8,address,uint256)"(
+      status?: null,
+      sender?: null,
+      timestamp?: null
+    ): TypedEventFilter<
+      [number, string, BigNumber],
+      { status: number; sender: string; timestamp: BigNumber }
+    >;
 
     BattleComplete(
-      status?: null
-    ): TypedEventFilter<[number], { status: number }>;
+      status?: null,
+      sender?: null,
+      timestamp?: null
+    ): TypedEventFilter<
+      [number, string, BigNumber],
+      { status: number; sender: string; timestamp: BigNumber }
+    >;
 
-    "LevelUp(uint256,tuple)"(
+    "LevelUp(uint256,tuple,address,uint256)"(
       level?: null,
-      stats?: null
+      stats?: null,
+      sender?: null,
+      timestamp?: null
     ): TypedEventFilter<
       [
         BigNumber,
@@ -903,7 +222,9 @@ export class PokemonAttack extends BaseContract {
           hp: BigNumber;
           maxHp: BigNumber;
           attack: BigNumber;
-        }
+        },
+        string,
+        BigNumber
       ],
       {
         level: BigNumber;
@@ -912,12 +233,16 @@ export class PokemonAttack extends BaseContract {
           maxHp: BigNumber;
           attack: BigNumber;
         };
+        sender: string;
+        timestamp: BigNumber;
       }
     >;
 
     LevelUp(
       level?: null,
-      stats?: null
+      stats?: null,
+      sender?: null,
+      timestamp?: null
     ): TypedEventFilter<
       [
         BigNumber,
@@ -925,7 +250,9 @@ export class PokemonAttack extends BaseContract {
           hp: BigNumber;
           maxHp: BigNumber;
           attack: BigNumber;
-        }
+        },
+        string,
+        BigNumber
       ],
       {
         level: BigNumber;
@@ -934,6 +261,8 @@ export class PokemonAttack extends BaseContract {
           maxHp: BigNumber;
           attack: BigNumber;
         };
+        sender: string;
+        timestamp: BigNumber;
       }
     >;
   };
@@ -945,82 +274,7 @@ export class PokemonAttack extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    bosses(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
-
-    changeHpOf(
-      pokemonIndex: BigNumberish,
-      account: string,
-      hp: BigNumberish,
-      isIncrement: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    createBossesData(
-      bossesIds: BigNumberish[],
-      bossesLevel: BigNumberish[],
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    createPokemonsData(
-      pokemonIndexes: BigNumberish[],
-      pokemonNames: string[],
-      pokemonImageURIs: string[],
-      pokemonHp: BigNumberish[],
-      pokemonAttack: BigNumberish[],
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    getAllPokemons(overrides?: CallOverrides): Promise<BigNumber>;
-
-    getBoss(id: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
-
-    getPokemon(id: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
-
-    getPokemonByIndexOf(
-      pokemonIndex: BigNumberish,
-      sender: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getPokemonNft(
-      tokenId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getPokemonReadable(
-      pokemonData: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getPokemonSelected(
-      sender: string,
-      pokemonIndex: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getPokemonsOf(
-      sender: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getTotalPokemons(overrides?: CallOverrides): Promise<BigNumber>;
-
-    hasNft(overrides?: CallOverrides): Promise<BigNumber>;
-
-    holders(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
-
-    nftsOfHolder(
-      arg0: string,
-      arg1: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    pokemons(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
-
-    pokemonsNft(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    pokemonGameAddress(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -1030,95 +284,7 @@ export class PokemonAttack extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    bosses(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    changeHpOf(
-      pokemonIndex: BigNumberish,
-      account: string,
-      hp: BigNumberish,
-      isIncrement: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    createBossesData(
-      bossesIds: BigNumberish[],
-      bossesLevel: BigNumberish[],
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    createPokemonsData(
-      pokemonIndexes: BigNumberish[],
-      pokemonNames: string[],
-      pokemonImageURIs: string[],
-      pokemonHp: BigNumberish[],
-      pokemonAttack: BigNumberish[],
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    getAllPokemons(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    getBoss(
-      id: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getPokemon(
-      id: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getPokemonByIndexOf(
-      pokemonIndex: BigNumberish,
-      sender: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getPokemonNft(
-      tokenId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getPokemonReadable(
-      pokemonData: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getPokemonSelected(
-      sender: string,
-      pokemonIndex: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getPokemonsOf(
-      sender: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getTotalPokemons(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    hasNft(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    holders(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    nftsOfHolder(
-      arg0: string,
-      arg1: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    pokemons(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    pokemonsNft(
-      arg0: BigNumberish,
+    pokemonGameAddress(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
   };

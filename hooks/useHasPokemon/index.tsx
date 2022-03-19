@@ -23,6 +23,7 @@ export const useHasPokemon = (): IuseHasPokemon => {
     if (!gameContract) return
 
     const pokemonNft = await gameContract.hasNft()
+    console.log(pokemonNft, pokemonSelected)
 
     if (!pokemonNft.info.id.toNumber()) return
 

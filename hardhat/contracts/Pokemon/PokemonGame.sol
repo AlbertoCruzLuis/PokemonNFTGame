@@ -6,7 +6,8 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/Base64.sol";
 
-import "./PokemonAttack.sol";
+import "../interfaces/IGameRewards.sol";
+import "./PokemonFactory.sol";
 
 import "hardhat/console.sol";
 
@@ -14,13 +15,16 @@ import "hardhat/console.sol";
 /// @author Alberto Cruz Luis
 /// @notice Contract for get Pokemon NFT
 /// @dev Contract for get Pokemon NFT
-contract PokemonGame is PokemonAttack, ERC721 {
+contract PokemonGame is PokemonFactory, ERC721 {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
 
+    address public gameRewardsAddress;
+
     event PokemonNFTMinted(address sender, uint256 tokenId, uint256 pokemonId);
 
-    constructor() ERC721("Pokemon", "PKM") {
+    constructor(address gameRewardsAddress_) ERC721("Pokemon", "PKM") {
+        gameRewardsAddress = gameRewardsAddress_;
         // I increment _tokenIds here so that my first NFT has an ID of 1.
         _tokenIds.increment();
     }
@@ -33,6 +37,11 @@ contract PokemonGame is PokemonAttack, ERC721 {
 
         // Assigns the tokenId to the caller's wallet address.
         _safeMint(msg.sender, newTokenId);
+        address[] memory _recipients = new address[](1);
+        _recipients[0] = msg.sender;
+        uint256[] memory _amount = new uint256[](1);
+        _amount[0] = (600) * (1 ether);
+        IGameRewards(gameRewardsAddress).dropTokens(_recipients, _amount);
 
         // We map the tokenId => pokemon.
         pokemonsNft[newTokenId] = getPokemon(_pokemonId);

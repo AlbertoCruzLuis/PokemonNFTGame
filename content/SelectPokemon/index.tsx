@@ -28,13 +28,13 @@ export const SelectPokemon: FC<ISelectPokemon> = ({ setPokemonSelected }) => {
 
   const mintCharacterNFTAction = async (pokemonId: number | undefined) => {
     try {
-      if (gameContract) {
-        setIsLoading(true)
-        const mintTxn = await gameContract.mint(pokemonId)
-        await mintTxn.wait()
-        toast.success("pokemon minted")
-        setIsLoading(false)
-      }
+      if (!gameContract) return
+
+      setIsLoading(true)
+      const mintTxn = await gameContract.mint(pokemonId)
+      await mintTxn.wait()
+      toast.success("pokemon minted")
+      setIsLoading(false)
     } catch (error) {
       toast.error("Mint Failed")
       setIsLoading(false)
@@ -44,6 +44,9 @@ export const SelectPokemon: FC<ISelectPokemon> = ({ setPokemonSelected }) => {
   const getPokemonMint = async () => {
     if (gameContract) {
       const characterNFT = await gameContract.hasNft()
+
+      if (!characterNFT.info.id.toNumber()) return
+
       const pokemonNFT = transformPokemonData(characterNFT)
       setPokemonSelected(pokemonNFT)
     }

@@ -39,6 +39,18 @@ const _abi = [
         name: "stats",
         type: "tuple",
       },
+      {
+        indexed: false,
+        internalType: "address",
+        name: "sender",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "timestamp",
+        type: "uint256",
+      },
     ],
     name: "LevelUp",
     type: "event",
@@ -46,7 +58,7 @@ const _abi = [
 ];
 
 const _bytecode =
-  "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea26469706673582212205409bb7876bf381210c0bfdccb4947b3addf00b0ba0b5d972af10b4e4f84051f64736f6c63430008040033";
+  "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea2646970667358221220c80408e5f1d20b728faee35c74e5ddaff0ce0349e974b57c67d7a75aa11a1dc164736f6c63430008040033";
 
 export class PokemonHelper__factory extends ContractFactory {
   constructor(

@@ -6,7 +6,7 @@ import "./PokemonData.sol";
 
 contract PokemonHelper {
     using LPokemonData for LPokemonData.Stats;
-    event LevelUp(uint256 level, LPokemonData.Stats stats);
+    event LevelUp(uint256 level, LPokemonData.Stats stats, address sender, uint256 timestamp);
     function getTotalExperienceByLevel(uint256 level) internal pure returns (uint256) {
         uint256 totalExperience;
         for (uint256 index = 1; index < level; index++) {
@@ -32,7 +32,7 @@ contract PokemonHelper {
             player.changeMaxHp(player.getMaxHp() + 1);
             player.changeAttack(player.getAttack() + 1);
             player.changeLevel(level + 1);
-            emit LevelUp(player.getLevel(), player.getStats());
+            emit LevelUp(player.getLevel(), player.getStats(), msg.sender, block.timestamp);
         }
     }
 }

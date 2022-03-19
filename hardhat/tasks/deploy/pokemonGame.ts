@@ -1,17 +1,25 @@
-import { task } from "hardhat/config"
+import { HardhatEthersHelpers } from "@nomiclabs/hardhat-ethers/types";
+import { Contract, ethers } from "ethers";
 import { splitDataInChunks } from "../../utils";
 import { pokemons } from "../../data/pokemon"
+import { PokemonGame } from "typechain";
 
-task("deploy:pokemonGame", "Deploy contract of Pokemon Game", async (taskArgs, hre) => {
+type Ethers = typeof ethers & HardhatEthersHelpers;
+
+interface IdeployPokemonGameContract {
+  pokemonGameContract: PokemonGame | Contract
+}
+
+export const deployPokemonGameContract = async (ethers: Ethers, gameRewardsAddress: string): Promise<IdeployPokemonGameContract> => {
   // Pokemon: Mewtwo - Level: 10
   const bossesIds = [150]
   const bossesLevels = [10]
 
-  const pokemonGameFactory = await hre.ethers.getContractFactory("PokemonGame");
-  const pokemonGame = await pokemonGameFactory.deploy();
+  const pokemonGameFactory = await ethers.getContractFactory("PokemonGame");
+  const pokemonGameContract: PokemonGame | Contract = await pokemonGameFactory.deploy(gameRewardsAddress);
 
-  await pokemonGame.deployed();
-  console.log("PokemonGame deployed to:", pokemonGame.address);
+  await pokemonGameContract.deployed();
+  console.log("PokemonGame deployed to:", pokemonGameContract.address);
 
   const amountChunks = 5
   const characterIndexes = splitDataInChunks(pokemons.characterIndexes, amountChunks)
@@ -21,7 +29,7 @@ task("deploy:pokemonGame", "Deploy contract of Pokemon Game", async (taskArgs, h
   const characterAttack = splitDataInChunks(pokemons.characterAttack, amountChunks)
 
   for (let i = 0; i < characterIndexes.length; i++) {
-    await pokemonGame.createPokemonsData(
+    await pokemonGameContract.createPokemonsData(
       characterIndexes[i],
       characterNames[i],
       characterImageURIs[i],
@@ -30,8 +38,13 @@ task("deploy:pokemonGame", "Deploy contract of Pokemon Game", async (taskArgs, h
     )
   }
 
-  await pokemonGame.createBossesData(
+  await pokemonGameContract.createBossesData(
     bossesIds,
     bossesLevels
   )
-});
+
+  return {
+    pokemonGameContract
+  }
+}
+

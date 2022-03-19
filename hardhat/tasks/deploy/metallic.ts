@@ -1,10 +1,17 @@
-import { task } from "hardhat/config"
+import { HardhatEthersHelpers } from "@nomiclabs/hardhat-ethers/types";
+import { ethers } from "ethers";
 
-task("deploy:metallic", "Deploy contract of Metallic coin", async (taskArgs, hre) => {
-  const Metallic = await hre.ethers.getContractFactory("Metallic");
-  const metallic = await Metallic.deploy();
+type Ethers = typeof ethers & HardhatEthersHelpers;
 
-  await metallic.deployed();
+export const deployMetallicContract = async (ethers: Ethers) => {
+  const metallicContractFactory = await ethers.getContractFactory("Metallic");
+  const metallicContract = await metallicContractFactory.deploy();
 
-  console.log("Metallic deployed to:", metallic.address);
-});
+  await metallicContract.deployed();
+
+  console.log("Metallic deployed to:", metallicContract.address);
+
+  return {
+    metallicContract
+  }
+}

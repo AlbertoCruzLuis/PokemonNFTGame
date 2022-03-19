@@ -36,7 +36,7 @@ contract Item is ERC1155, Ownable, ERC1155Burnable {
     // Wallet => mapping of itemId => InfoItem
     mapping(address => mapping(uint256 => InfoItem)) public _itemsOfHolder;
 
-    event UseItem(LPokemonData.Data pokemon, LItemData.Data item);
+    event UseItem(LPokemonData.Data pokemon, LItemData.Data item, address sender, uint256 timestamp);
     constructor(
         uint[] memory itemsIndexes,
         string[] memory itemsNames,
@@ -134,7 +134,12 @@ contract Item is ERC1155, Ownable, ERC1155Burnable {
         }
 
         _burn(msg.sender, itemId, 1);
-        emit UseItem(IPokemonGame(_contractAddress).getPokemonSelected(msg.sender, pokemonIndex), getItemReadable(item));
+        emit UseItem(
+            IPokemonGame(_contractAddress).getPokemonSelected(msg.sender, pokemonIndex),
+            getItemReadable(item),
+            msg.sender,
+            block.timestamp
+        );
     }
 
     function getAllItems() public view returns (LItemData.Data[] memory) {

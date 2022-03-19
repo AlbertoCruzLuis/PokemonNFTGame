@@ -9,10 +9,13 @@ import Popup from "reactjs-popup"
 import { LevelUp } from "components/LevelUp"
 import toast from "react-hot-toast"
 
-import { POKEMON_GAME_ADDRESS } from "config"
+import { POKEMON_ATTACK_ADDRESS, POKEMON_GAME_ADDRESS } from "config"
 import PokemonGameContract from "hardhat/artifacts/contracts/Pokemon/PokemonGame.sol/PokemonGame.json"
+import PokemonAttackContract from "hardhat/artifacts/contracts/Pokemon/PokemonAttack.sol/PokemonAttack.json"
 import { PokemonGame } from "hardhat/typechain/PokemonGame"
 import { useContract } from "hooks/useContract"
+import { useWeb3 } from "@3rdweb/hooks"
+import dayjs from "dayjs"
 
 interface IAtributtes {
   level: number,
@@ -31,16 +34,29 @@ const bosses = {
 }
 
 const Arena: NextPage = () => {
+  const { address } = useWeb3()
   const { contract: gameContract } = useContract<PokemonGame & Contract>({
     contractAddress: POKEMON_GAME_ADDRESS,
     contractJson: PokemonGameContract
+  })
+
+  const { contract: pokemonAttackContract } = useContract<PokemonGame & Contract>({
+    contractAddress: POKEMON_ATTACK_ADDRESS,
+    contractJson: PokemonAttackContract
   })
   const { boss, setBoss, runAttackAction, attackState } = useBoss(bosses.mewtwo)
   const { pokemonSelected, setPokemonSelected } = useHasPokemon()
   const [isLevelUp, setIsLevelUp] = useState<boolean>(false)
   const [attributes, setAtributes] = useState<IAtributtes>()
 
-  const onAttackComplete = (newBossHp: BigNumber, newPlayerHp: BigNumber) => {
+  const onAttackComplete = (newBossHp: BigNumber, newPlayerHp: BigNumber, sender: string, timestamp: BigNumber) => {
+    if (sender !== address) return
+
+    const eventDate = timestamp.toNumber()
+    const diffTime = dayjs().unix() - eventDate
+
+    if (diffTime > 5) return
+
     const bossHp = newBossHp.toNumber()
     const playerHp = newPlayerHp.toNumber()
 
@@ -55,7 +71,14 @@ const Arena: NextPage = () => {
     })
   }
 
-  const onLevelUp = (levels: BigNumber, stats: any) => {
+  const onLevelUp = (levels: BigNumber, stats: any, sender: string, timestamp: BigNumber) => {
+    if (sender !== address) return
+
+    const eventDate = timestamp.toNumber()
+    const diffTime = dayjs().unix() - eventDate
+
+    if (diffTime > 5) return
+
     const hp = stats.hp.toNumber()
     const maxHp = stats.maxHp.toNumber()
     const attack = stats.attack.toNumber()
@@ -84,7 +107,14 @@ const Arena: NextPage = () => {
     }, 4000)
   }
 
-  const onBattleComplete = (status: number) => {
+  const onBattleComplete = (status: number, sender: string, timestamp: BigNumber) => {
+    if (sender !== address) return
+
+    const eventDate = timestamp.toNumber()
+    const diffTime = dayjs().unix() - eventDate
+
+    if (diffTime > 5) return
+
     if (status === BattleStatus.WIN) {
       toast.success("You are Winner")
     } else {
@@ -93,19 +123,19 @@ const Arena: NextPage = () => {
   }
 
   useContractEvent<Contract>({
-    contract: gameContract,
+    contract: pokemonAttackContract,
     eventName: "AttackComplete",
     listener: onAttackComplete
   })
 
   useContractEvent<Contract>({
-    contract: gameContract,
+    contract: pokemonAttackContract,
     eventName: "LevelUp",
     listener: onLevelUp
   })
 
   useContractEvent<Contract>({
-    contract: gameContract,
+    contract: pokemonAttackContract,
     eventName: "BattleComplete",
     listener: onBattleComplete
   })

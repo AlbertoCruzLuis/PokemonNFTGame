@@ -1,64 +1,41 @@
 import { expect } from 'chai'
 import { before } from 'mocha'
-import { Signer } from 'ethers'
+import { Contract, Signer } from 'ethers'
 import { ethers } from 'hardhat'
 import { Item } from '../../typechain'
 import { items } from "../../data/items"
 import { PokemonGame } from '../../typechain'
-import { pokemons } from "../../data/pokemon"
-import { splitDataInChunks } from '../../utils'
+import { deployPokemonGameContract } from '../../tasks/deploy/pokemonGame'
+import { deployMetallicContract } from '../../tasks/deploy/metallic'
+import { deployGameRewardsContract } from '../../tasks/deploy/gameRewards'
+import { deployPokemonAttackContract } from '../../tasks/deploy/pokemonAttack'
+
+const GAME_REWARDS_AMOUNT = 126_000_000 // 30% of total Supply
 
 describe('Integration', function () {
   let itemContract: Item
-  let gameContract: PokemonGame
+  let gameContract: PokemonGame | Contract
   let deployer: Signer
-  let bossesIds: number[]
-  let bossesLevels: number[]
   let pokemomSelected = 0;
   let mewtwoId = 150;
 
   it("Should use Item with an pokemon", async function () {
-    const pokemonList = pokemons
+    const { metallicContract } = await deployMetallicContract(ethers)
+    const { gameRewardsContract } = await deployGameRewardsContract(ethers, metallicContract.address)
+    await metallicContract.transfer(gameRewardsContract.address, ethers.utils.parseEther(`${GAME_REWARDS_AMOUNT}`))
 
-    bossesIds = [mewtwoId]
-    bossesLevels = [10]
+    const { pokemonGameContract } = await deployPokemonGameContract(ethers, gameRewardsContract.address)
+    gameContract = pokemonGameContract
+    gameRewardsContract.updatePokemonGameAddress(pokemonGameContract.address)
 
-    const gameContractFactory = await ethers.getContractFactory('PokemonGame')
-    deployer = gameContractFactory.signer
-    gameContract = await gameContractFactory.deploy()
+    const { pokemonAttackContract } = await deployPokemonAttackContract(ethers, pokemonGameContract.address)
 
-    const deployerAddress = await deployer.getAddress()
-
-    await gameContract.deployed()
-    console.log('Pokemon deployed to:', gameContract.address)
-
-    const amountChunks = 5
-
-    const characterIndexes = splitDataInChunks(pokemons.characterIndexes, amountChunks)
-    const characterNames = splitDataInChunks(pokemons.characterNames, amountChunks)
-    const characterImageURIs = splitDataInChunks(pokemons.characterImageURIs, amountChunks)
-    const characterHp = splitDataInChunks(pokemons.characterHp, amountChunks)
-    const characterAttack = splitDataInChunks(pokemons.characterAttack, amountChunks)
-
-    for (let i = 0; i < characterIndexes.length; i++) {
-      await gameContract.createPokemonsData(
-        characterIndexes[i],
-        characterNames[i],
-        characterImageURIs[i],
-        characterHp[i],
-        characterAttack[i]
-      )
-    }
-
-    await gameContract.createBossesData(
-      bossesIds,
-      bossesLevels
-    )
+    let deployerAddress = await pokemonGameContract.signer.getAddress()
 
     const pokemonId = 4
     await gameContract.mint(pokemonId)
 
-    await gameContract.attackBoss(pokemomSelected, mewtwoId)
+    await pokemonAttackContract.attackBoss(pokemomSelected, mewtwoId)
 
     const itemsList = items
 

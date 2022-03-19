@@ -32,7 +32,6 @@ export const useAllHealing = (): IuseAllHealing => {
         }
       })
       setHealings(newHealings)
-      console.log(healings)
     }
   }, [data])
 

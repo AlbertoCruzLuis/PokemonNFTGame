@@ -199,7 +199,7 @@ interface ItemInterface extends ethers.utils.Interface {
     "TransferBatch(address,address,address,uint256[],uint256[])": EventFragment;
     "TransferSingle(address,address,address,uint256,uint256)": EventFragment;
     "URI(string,uint256)": EventFragment;
-    "UseItem(tuple,tuple)": EventFragment;
+    "UseItem(tuple,tuple,address,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
@@ -299,7 +299,9 @@ export type UseItemEvent = TypedEvent<
       };
       cost: BigNumber;
       amount: BigNumber;
-    }
+    },
+    string,
+    BigNumber
   ] & {
     pokemon: [
       [BigNumber, string, string] & {
@@ -353,6 +355,8 @@ export type UseItemEvent = TypedEvent<
       cost: BigNumber;
       amount: BigNumber;
     };
+    sender: string;
+    timestamp: BigNumber;
   }
 >;
 
@@ -1117,9 +1121,11 @@ export class Item extends BaseContract {
       id?: BigNumberish | null
     ): TypedEventFilter<[string, BigNumber], { value: string; id: BigNumber }>;
 
-    "UseItem(tuple,tuple)"(
+    "UseItem(tuple,tuple,address,uint256)"(
       pokemon?: null,
-      item?: null
+      item?: null,
+      sender?: null,
+      timestamp?: null
     ): TypedEventFilter<
       [
         [
@@ -1173,7 +1179,9 @@ export class Item extends BaseContract {
           };
           cost: BigNumber;
           amount: BigNumber;
-        }
+        },
+        string,
+        BigNumber
       ],
       {
         pokemon: [
@@ -1228,12 +1236,16 @@ export class Item extends BaseContract {
           cost: BigNumber;
           amount: BigNumber;
         };
+        sender: string;
+        timestamp: BigNumber;
       }
     >;
 
     UseItem(
       pokemon?: null,
-      item?: null
+      item?: null,
+      sender?: null,
+      timestamp?: null
     ): TypedEventFilter<
       [
         [
@@ -1287,7 +1299,9 @@ export class Item extends BaseContract {
           };
           cost: BigNumber;
           amount: BigNumber;
-        }
+        },
+        string,
+        BigNumber
       ],
       {
         pokemon: [
@@ -1342,6 +1356,8 @@ export class Item extends BaseContract {
           cost: BigNumber;
           amount: BigNumber;
         };
+        sender: string;
+        timestamp: BigNumber;
       }
     >;
   };

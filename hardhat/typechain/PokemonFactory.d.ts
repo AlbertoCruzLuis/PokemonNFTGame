@@ -164,7 +164,7 @@ interface PokemonFactoryInterface extends ethers.utils.Interface {
   ): Result;
 
   events: {
-    "LevelUp(uint256,tuple)": EventFragment;
+    "LevelUp(uint256,tuple,address,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "LevelUp"): EventFragment;
@@ -177,7 +177,9 @@ export type LevelUpEvent = TypedEvent<
       hp: BigNumber;
       maxHp: BigNumber;
       attack: BigNumber;
-    }
+    },
+    string,
+    BigNumber
   ] & {
     level: BigNumber;
     stats: [BigNumber, BigNumber, BigNumber] & {
@@ -185,6 +187,8 @@ export type LevelUpEvent = TypedEvent<
       maxHp: BigNumber;
       attack: BigNumber;
     };
+    sender: string;
+    timestamp: BigNumber;
   }
 >;
 
@@ -835,9 +839,11 @@ export class PokemonFactory extends BaseContract {
   };
 
   filters: {
-    "LevelUp(uint256,tuple)"(
+    "LevelUp(uint256,tuple,address,uint256)"(
       level?: null,
-      stats?: null
+      stats?: null,
+      sender?: null,
+      timestamp?: null
     ): TypedEventFilter<
       [
         BigNumber,
@@ -845,7 +851,9 @@ export class PokemonFactory extends BaseContract {
           hp: BigNumber;
           maxHp: BigNumber;
           attack: BigNumber;
-        }
+        },
+        string,
+        BigNumber
       ],
       {
         level: BigNumber;
@@ -854,12 +862,16 @@ export class PokemonFactory extends BaseContract {
           maxHp: BigNumber;
           attack: BigNumber;
         };
+        sender: string;
+        timestamp: BigNumber;
       }
     >;
 
     LevelUp(
       level?: null,
-      stats?: null
+      stats?: null,
+      sender?: null,
+      timestamp?: null
     ): TypedEventFilter<
       [
         BigNumber,
@@ -867,7 +879,9 @@ export class PokemonFactory extends BaseContract {
           hp: BigNumber;
           maxHp: BigNumber;
           attack: BigNumber;
-        }
+        },
+        string,
+        BigNumber
       ],
       {
         level: BigNumber;
@@ -876,6 +890,8 @@ export class PokemonFactory extends BaseContract {
           maxHp: BigNumber;
           attack: BigNumber;
         };
+        sender: string;
+        timestamp: BigNumber;
       }
     >;
   };

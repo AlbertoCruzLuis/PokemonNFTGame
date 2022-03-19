@@ -1,8 +1,10 @@
 import { IPokemonData, transformPokemonData } from "lib/getNftMetadata"
 import { useEffect, useState } from "react"
 
-import { POKEMON_GAME_ADDRESS } from "config"
+import { POKEMON_GAME_ADDRESS, POKEMON_ATTACK_ADDRESS } from "config"
 import PokemonGameContract from "hardhat/artifacts/contracts/Pokemon/PokemonGame.sol/PokemonGame.json"
+import PokemonAttackContract from "hardhat/artifacts/contracts/Pokemon/PokemonAttack.sol/PokemonAttack.json"
+
 import { PokemonGame } from "hardhat/typechain/PokemonGame"
 import { useContract } from "hooks/useContract"
 import { Contract } from "ethers"
@@ -14,6 +16,11 @@ enum ATTACK_STATE {
 }
 
 export const useBoss = (id: number) => {
+  const { contract: pokemonAttackContract } = useContract<PokemonGame & Contract>({
+    contractAddress: POKEMON_ATTACK_ADDRESS,
+    contractJson: PokemonAttackContract
+  })
+
   const { contract: gameContract } = useContract<Contract>({
     contractAddress: POKEMON_GAME_ADDRESS,
     contractJson: PokemonGameContract
@@ -31,16 +38,15 @@ export const useBoss = (id: number) => {
 
   const runAttackAction = async (pokemonIndex: number, bossId: number) => {
     try {
-      if (gameContract) {
-        setAttackState(ATTACK_STATE.attacking)
-        console.log("Attacking boss...")
-        const attackTxn = await gameContract.attackBoss(pokemonIndex, bossId)
-        await attackTxn.wait()
-        console.log("attackTxn:", attackTxn)
-        setAttackState(ATTACK_STATE.hit)
-      }
+      if (!gameContract || !pokemonAttackContract) return
+
+      setAttackState(ATTACK_STATE.attacking)
+
+      const attackTxn = await pokemonAttackContract.attackBoss(pokemonIndex, bossId)
+      await attackTxn.wait()
+
+      setAttackState(ATTACK_STATE.hit)
     } catch (error) {
-      console.error("Error attacking boss:", error)
       setAttackState(ATTACK_STATE.none)
     }
   }

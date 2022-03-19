@@ -9,11 +9,11 @@
     "typechain": "hardhat typechain",
     "test": "hardhat test",
     "test:integration": "hardhat test --grep Integration",
-    "test:battle": "hardhat test --grep Battle",
     "test:pokemon": "hardhat test --grep PokemonGame",
     "test:item": "hardhat test --grep 'Item'",
     "test:deploy": "hardhat test --grep Deploy",
     "test:metallic": "hardhat test --grep Metallic",
+    "test:gameRewards": "hardhat test --grep GameRewards",
     "createPoke": "hardhat run scripts/createPokemonData.ts",
     "deploy": "hardhat deploy --network localhost",
     "deploy:rinkeby": "hardhat deploy --network rinkeby",
@@ -57,6 +57,7 @@
   },
   "dependencies": {
     "@openzeppelin/contracts": "^4.5.0",
+    "abi-to-sol": "^0.5.2",
     "node-fetch": "^2.6.6"
   }
 }

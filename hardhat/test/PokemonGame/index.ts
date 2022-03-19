@@ -1,54 +1,31 @@
 import { expect } from 'chai'
-import { Signer } from 'ethers'
+import { Contract, Signer } from 'ethers'
 import { ethers } from 'hardhat'
 import { before } from 'mocha'
-import { isValidateOpenseaMetadata } from '../../scripts/getValidateOpenseaMetadata'
 import { PokemonGame } from '../../typechain'
-import { pokemons } from "../../data/pokemon"
-import { splitDataInChunks } from "../../utils"
+import { deployMetallicContract } from '../../tasks/deploy/metallic'
+import { deployGameRewardsContract } from '../../tasks/deploy/gameRewards'
+import { deployPokemonGameContract } from '../../tasks/deploy/pokemonGame'
+import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers'
+
+const GAME_REWARDS_AMOUNT = 126_000_000 // 30% of total Supply
 
 describe('PokemonGame', function () {
-  let gameContract: PokemonGame
-  let deployer: Signer
-  let bossesIds: number[]
-  let bossesLevels: number[]
+  let gameContract: PokemonGame | Contract
+  let deployer: SignerWithAddress
   let mewtwoId = 150
   before(async function () {
-    const pokemonList = pokemons
+    const [owner] = await ethers.getSigners()
+    deployer = owner
 
-    bossesIds = [mewtwoId]
-    bossesLevels = [10]
+    const { metallicContract } = await deployMetallicContract(ethers)
+    const { gameRewardsContract } = await deployGameRewardsContract(ethers, metallicContract.address)
+    await metallicContract.transfer(gameRewardsContract.address, ethers.utils.parseEther(`${GAME_REWARDS_AMOUNT}`))
 
-    // We get the contract to deploy
-    const gameContractFactory = await ethers.getContractFactory('PokemonGame')
-    deployer = gameContractFactory.signer
-    gameContract = await gameContractFactory.deploy()
 
-    await gameContract.deployed()
-    console.log('Pokemon deployed to:', gameContract.address)
-
-    const amountChunks = 5
-
-    const characterIndexes = splitDataInChunks(pokemons.characterIndexes, amountChunks)
-    const characterNames = splitDataInChunks(pokemons.characterNames, amountChunks)
-    const characterImageURIs = splitDataInChunks(pokemons.characterImageURIs, amountChunks)
-    const characterHp = splitDataInChunks(pokemons.characterHp, amountChunks)
-    const characterAttack = splitDataInChunks(pokemons.characterAttack, amountChunks)
-
-    for (let i = 0; i < characterIndexes.length; i++) {
-      await gameContract.createPokemonsData(
-        characterIndexes[i],
-        characterNames[i],
-        characterImageURIs[i],
-        characterHp[i],
-        characterAttack[i]
-      )
-    }
-
-    await gameContract.createBossesData(
-      bossesIds,
-      bossesLevels
-    )
+    const { pokemonGameContract } = await deployPokemonGameContract(ethers, gameRewardsContract.address)
+    gameContract = pokemonGameContract
+    gameRewardsContract.updatePokemonGameAddress(pokemonGameContract.address)
   })
 
   it("Should return that don't has token minted", async function () {
@@ -83,9 +60,7 @@ describe('PokemonGame', function () {
   })
 
   it("Should return pokemons of user", async function () {
-    const addressDeployer = await deployer.getAddress()
-
-    const pokemons = await gameContract.getPokemonsOf(addressDeployer)
+    const pokemons = await gameContract.getPokemonsOf(deployer.address)
     expect(pokemons[0].info.name).to.equal("ivysaur")
   })
 
@@ -97,7 +72,7 @@ describe('PokemonGame', function () {
 
   it("Should return All Pokemons", async function () {
     const pokemonsRaw = await gameContract.getAllPokemons()
-    const pokemons = await Promise.all(pokemonsRaw.map(async (pokemonRaw) => await gameContract.getPokemonReadable(pokemonRaw)))
+    const pokemons = await Promise.all(pokemonsRaw.map(async (pokemonRaw: any) => await gameContract.getPokemonReadable(pokemonRaw)))
 
     pokemons.map((data, index) => {
       expect(data.info.id).to.equal(index + 1)

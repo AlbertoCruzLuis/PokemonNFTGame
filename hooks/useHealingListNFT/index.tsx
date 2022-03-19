@@ -8,7 +8,8 @@ import { useContract } from "hooks/useContract"
 import { useWeb3 } from "@3rdweb/hooks"
 import toast from "react-hot-toast"
 import { useContractEvent } from "hooks/useContractEvent"
-import { Contract } from "ethers"
+import { BigNumber, Contract } from "ethers"
+import dayjs from "dayjs"
 
 export const useHealingListNFT = () => {
   const { address } = useWeb3()
@@ -48,9 +49,17 @@ export const useHealingListNFT = () => {
 
   const onUseItem = async (
     pokemon: any,
-    item: any
+    item: any,
+    sender: string,
+    timestamp: BigNumber
   ) => {
     setLoadingStatus(false)
+    if (sender !== address) return
+
+    const eventDate = timestamp.toNumber()
+    const diffTime = dayjs().unix() - eventDate
+
+    if (diffTime > 5) return
     const itemData = transformItemData(item)
     const pokemonData = transformPokemonData(pokemon)
     if (itemData.effect === 99999) {

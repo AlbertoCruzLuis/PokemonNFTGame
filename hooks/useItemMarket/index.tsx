@@ -12,6 +12,7 @@ import { useContract } from "hooks/useContract"
 import { Contract, ethers } from "ethers"
 import { useContractEvent } from "hooks/useContractEvent"
 import toast from "react-hot-toast"
+import { useWeb3 } from "@3rdweb/hooks"
 
 export interface IbuyItem {
   itemId: number,
@@ -20,6 +21,7 @@ export interface IbuyItem {
 }
 
 export const useItemMarket = () => {
+  const { address } = useWeb3()
   const { contract: itemContract } = useContract<Item & Contract>({
     contractAddress: ITEM_ADDRESS,
     contractJson: ItemContract
@@ -34,6 +36,7 @@ export const useItemMarket = () => {
     contractJson: MetallicContract
   })
   const [items, setItems] = useState<IItemData[]>()
+  const [isBuying, setBuying] = useState(false)
 
   const getItems = async () => {
     try {
@@ -57,10 +60,22 @@ export const useItemMarket = () => {
   }
 
   const buyItem = async ({ itemId, amount, costItem }: IbuyItem) => {
-    const priceItem = ethers.utils.parseUnits(String(costItem), "ether")
-    if (!itemContract || !itemMarketContract || !metallicContract) return
-    await metallicContract.approve(itemMarketContract.address, priceItem)
-    await itemMarketContract.buyItem(METALLIC_ADDRESS, itemContract.address, itemId, amount)
+    try {
+      const priceItem = ethers.utils.parseUnits(String(costItem), "ether")
+      if (!itemContract || !itemMarketContract || !metallicContract) return
+
+      const balance = await metallicContract.balanceOf(address)
+      if (balance < priceItem) {
+        toast.error("You don't have money for buy this item")
+        return
+      }
+      setBuying(true)
+      await metallicContract.approve(itemMarketContract.address, priceItem)
+      await itemMarketContract.buyItem(METALLIC_ADDRESS, itemContract.address, itemId, amount)
+    } catch (error) {
+      setBuying(false)
+      toast.error("Failed to Buy an Item")
+    }
   }
 
   const onBuyItem = (
@@ -71,7 +86,10 @@ export const useItemMarket = () => {
     amount: number,
     price: number
   ) => {
+    if (buyer !== address) return
+
     console.log(buyer, seller, tokenAddress, id, amount, price)
+    setBuying(false)
     toast.success(`You are Buy ${amount} items`)
   }
 
@@ -87,5 +105,5 @@ export const useItemMarket = () => {
     }
   }, [itemContract])
 
-  return { items, buyItem }
+  return { items, buyItem, isBuying }
 }
