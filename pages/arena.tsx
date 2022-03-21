@@ -136,7 +136,7 @@ const Arena: NextPage = () => {
   })
 
   return (
-    <div className="flex flex-col items-center justify-center gap-8">
+    <div className="flex flex-col items-center justify-center gap-8 my-auto">
       {pokemonSelected && <BattleCard
         name={pokemonSelected.name}
         imageURI={pokemonSelected.imageURI}

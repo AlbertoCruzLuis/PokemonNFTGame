@@ -1,11 +1,13 @@
 import { Balance } from "components/Balance"
-import { FC, ReactNode } from "react"
+import { FC, ReactNode, useState } from "react"
 import { Background } from "../../components/Background"
 import { CustomLink } from "../../components/CustomLink"
 import { Footer } from "../../components/Footer"
 import { Logo } from "../../components/Logo"
 import { Navbar } from "../../components/Navbar"
 import { Wallet } from "../../components/Wallet"
+import { HiMenu } from "react-icons/hi"
+import Popup from "reactjs-popup"
 
 type PageLayoutProps = {
   children: ReactNode
@@ -18,6 +20,12 @@ export const PageLayout: FC<PageLayoutProps> = ({ children }) => {
     { name: "Shop", url: "/shop" }
   ]
 
+  const [isOpen, setOpen] = useState(false)
+
+  const closeModal = () => {
+    setOpen(false)
+  }
+
   return (
     <Background>
       <div className="flex flex-col min-h-screen xl:container xl:mx-auto">
@@ -27,13 +35,32 @@ export const PageLayout: FC<PageLayoutProps> = ({ children }) => {
               <Logo />
             </CustomLink>
             <div className="pl-5 xs:hidden">
-              <Navbar routes={routes} />
+              <Navbar
+                routes={routes} />
             </div>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 xs:hidden">
             <Balance />
             <Wallet />
           </div>
+          <Popup
+            open={isOpen}
+            onClose={closeModal}
+            trigger={
+              <button className="hidden xs:flex">
+                <HiMenu color="gray" size={24} />
+              </button>
+            }
+            modal
+            overlayStyle={{ marginTop: "60px", backgroundColor: "rgba(23,23,23,0.95)" }} >
+            <div className="flex flex-col w-screen h-screen gap-8 place-content-center">
+              <div className="flex justify-center gap-8">
+                <Balance />
+                <Wallet />
+              </div>
+              <Navbar routes={routes} containerStyle="flex flex-col gap-8 items-center" />
+            </div>
+          </Popup>
         </header>
         <main className="flex flex-col p-4 grow xl:px-8">
           {children}
