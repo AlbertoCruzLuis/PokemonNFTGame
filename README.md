@@ -29,6 +29,8 @@ Use [Emerald Paratime Tesnet](https://docs.oasis.dev/general/foundation/testnet/
 
 Web for add anything network -> https://chainlist.org/
 
+Emerald Faucet: https://faucet.testnet.oasis.dev/
+
 
 ## Author
 
