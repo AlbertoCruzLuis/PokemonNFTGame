@@ -25,7 +25,7 @@ npm run dev
 ```
 
 ## Blockchain
-Use [Emerald Paratime Tesnet](https://docs.oasis.dev/general/foundation/testnet/) how network of project
+Use [Emerald Paratime Testnet](https://docs.oasis.dev/general/developer-resources/emerald-paratime/) how network of project
 
 Web for add anything network -> https://chainlist.org/
 
