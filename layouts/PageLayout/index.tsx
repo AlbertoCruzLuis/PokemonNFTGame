@@ -17,7 +17,8 @@ export const PageLayout: FC<PageLayoutProps> = ({ children }) => {
   const routes = [
     { name: "Home", url: "/" },
     { name: "Dashboard", url: "/dashboard" },
-    { name: "Shop", url: "/shop" }
+    { name: "Shop", url: "/shop" },
+    { name: "Emerald Faucet", url: "https://faucet.testnet.oasis.dev/" }
   ]
 
   const [isOpen, setOpen] = useState(false)

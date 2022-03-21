@@ -13,6 +13,7 @@ import { POKEMON_GAME_ADDRESS } from "config"
 import PokemonGameContract from "hardhat/artifacts/contracts/Pokemon/PokemonGame.sol/PokemonGame.json"
 import { PokemonGame } from "hardhat/typechain/PokemonGame"
 import { useContract } from "hooks/useContract"
+import { motion } from "framer-motion"
 
 interface ISelectPokemon {
   setPokemonSelected: any
@@ -62,11 +63,20 @@ export const SelectPokemon: FC<ISelectPokemon> = ({ setPokemonSelected }) => {
     listener: onPokemonMint
   })
 
+  const variants = {
+    visible: (i:any) => ({
+      opacity: 1,
+      transition: {
+        delay: i * 0.3
+      }
+    })
+  }
+
   return (
     <div className="flex flex-col gap-2 xs:items-center">
       <h4 className="text-xl font-bold text-white">Select Character</h4>
       <div className="flex flex-wrap gap-4 xs:justify-center">
-        {pokemonStarter && pokemonStarter.map((name) => {
+        {pokemonStarter && pokemonStarter.map((name, index) => {
           const { id, stats, sprites, types, isLoading, isSuccess } = usePokemon({ name: name })
 
           const specificStats = stats && stats.filter((stat) => (
@@ -74,11 +84,17 @@ export const SelectPokemon: FC<ISelectPokemon> = ({ setPokemonSelected }) => {
           ))
 
           return (
-            <button key={uuidv4()} onClick={() => mintCharacterNFTAction(id)}>
+            <motion.button
+              custom={index}
+              initial={{ opacity: 0 }}
+              animate="visible"
+              variants={variants}
+              key={uuidv4()}
+              onClick={() => mintCharacterNFTAction(id)}>
               {isSuccess &&
                 <StarterCard key={id} id={id} name={name} stats={specificStats} types={types} sprites={sprites} />
               }
-            </button>
+            </motion.button>
           )
         })}
       </div>

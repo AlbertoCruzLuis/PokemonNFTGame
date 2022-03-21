@@ -6,6 +6,7 @@ import { Toaster } from "react-hot-toast"
 import { EMERALD_TESNET_CHAIN_ID } from "config"
 import NextNProgress from "nextjs-progressbar"
 import { QueryClient, QueryClientProvider } from "react-query"
+import { addNetowrkMetadata, networkMetadata } from "utils/constants"
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -29,6 +30,8 @@ function MyApp ({ Component, pageProps }: AppProps) {
     <ThirdwebWeb3Provider
       connectors={connectors}
       supportedChainIds={supportedChainIds}
+      networkMetadata={networkMetadata}
+      chainAddConfig={addNetowrkMetadata}
     >
       <Toaster
         position='bottom-center'

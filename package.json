@@ -13,6 +13,7 @@
     "axios": "^0.26.0",
     "dayjs": "^1.11.0",
     "ethers": "^5.6.0",
+    "framer-motion": "^6.2.8",
     "next": "12.1.0",
     "nextjs-progressbar": "^0.0.14",
     "rc-progress": "^3.2.4",
