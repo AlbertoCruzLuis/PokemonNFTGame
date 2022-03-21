@@ -16,6 +16,7 @@ import { useContract } from "hooks/useContract"
 import { useWeb3 } from "@3rdweb/hooks"
 import dayjs from "dayjs"
 import { motion } from "framer-motion"
+import Head from "next/head"
 
 interface IAtributtes {
   level: number,
@@ -148,44 +149,49 @@ const Arena: NextPage = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center gap-8 my-auto">
-      <motion.div
-        custom={3}
-        initial={{ opacity: 0, x: -200 }}
-        animate="visible"
-        variants={variants}>
-        {pokemonSelected && <BattleCard
-          name={pokemonSelected.name}
-          imageURI={pokemonSelected.imageURI}
-          hp={pokemonSelected.hp}
-          maxHp={pokemonSelected.maxHp}
-          level={pokemonSelected.level}
-          experience={pokemonSelected.experience} />}
-      </motion.div>
+    <>
+      <Head>
+        <title>PokemonNFT - Arena</title>
+      </Head>
+      <div className="flex flex-col items-center justify-center gap-8 my-auto">
+        <motion.div
+          custom={3}
+          initial={{ opacity: 0, x: -200 }}
+          animate="visible"
+          variants={variants}>
+          {pokemonSelected && <BattleCard
+            name={pokemonSelected.name}
+            imageURI={pokemonSelected.imageURI}
+            hp={pokemonSelected.hp}
+            maxHp={pokemonSelected.maxHp}
+            level={pokemonSelected.level}
+            experience={pokemonSelected.experience} />}
+        </motion.div>
 
-      <span className="text-white">{attackState}</span>
+        <span className="text-white">{attackState}</span>
 
-      <motion.div
-        custom={4}
-        initial={{ opacity: 0, x: 200 }}
-        animate="visible"
-        variants={variants}>
-        { boss && <BattleCard
-          name={boss.name}
-          imageURI={boss.imageURI}
-          hp={boss.hp}
-          maxHp={boss.maxHp}
-          level={boss.level}
-          experience={boss.experience} />}
-      </motion.div>
+        <motion.div
+          custom={4}
+          initial={{ opacity: 0, x: 200 }}
+          animate="visible"
+          variants={variants}>
+          { boss && <BattleCard
+            name={boss.name}
+            imageURI={boss.imageURI}
+            hp={boss.hp}
+            maxHp={boss.maxHp}
+            level={boss.level}
+            experience={boss.experience} />}
+        </motion.div>
 
-      <button className="flex items-center gap-2 p-2 px-8 border-2 border-yellow-400 border-solid bg-gradient-to-t from-black to-yellow-500 max-w-max" onClick={() => runAttackAction(0, bosses.mewtwo)}>
-        <span className="font-semibold text-white">Attack</span>
-      </button>
-      <Popup open={isLevelUp} overlayStyle={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
-        <LevelUp attributes={attributes} />
-      </Popup>
-    </div>
+        <button className="flex items-center gap-2 p-2 px-8 border-2 border-yellow-400 border-solid bg-gradient-to-t from-black to-yellow-500 max-w-max" onClick={() => runAttackAction(0, bosses.mewtwo)}>
+          <span className="font-semibold text-white">Attack</span>
+        </button>
+        <Popup open={isLevelUp} overlayStyle={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
+          <LevelUp attributes={attributes} />
+        </Popup>
+      </div>
+    </>
   )
 }
 

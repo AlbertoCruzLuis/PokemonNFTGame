@@ -4,12 +4,16 @@ import { PokemonMain } from "content/PokemonMain"
 import { SelectPokemon } from "content/SelectPokemon"
 import { useHasPokemon } from "hooks/useHasPokemon"
 import type { NextPage } from "next"
+import Head from "next/head"
 
 const Dashboard: NextPage = () => {
   const { pokemonSelected, setPokemonSelected } = useHasPokemon()
 
   return (
     <>
+      <Head>
+        <title>PokemonNFT - Dashboard</title>
+      </Head>
       {!pokemonSelected && <SelectPokemon setPokemonSelected={setPokemonSelected} />}
       {pokemonSelected && (
         <div className="grid grid-cols-3 xs:grid-cols-1 grow">
