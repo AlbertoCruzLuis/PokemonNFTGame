@@ -1,4 +1,4 @@
-import { useWeb3, useSwitchNetwork, useThirdwebContext } from "@3rdweb/hooks"
+import { useWeb3, useSwitchNetwork } from "@3rdweb/hooks"
 import { EMERALD_TESNET_CHAIN_ID } from "config"
 import { useEffect, useState } from "react"
 import { BiWallet, BiWifiOff } from "react-icons/bi"

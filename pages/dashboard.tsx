@@ -1,8 +1,6 @@
 import { CustomLink } from "components/CustomLink"
-import { LeaderBoard } from "components/LeaderBoard"
 import { Bag } from "content/Bag"
 import { PokemonMain } from "content/PokemonMain"
-import { Pokemons } from "content/Pokemons"
 import { SelectPokemon } from "content/SelectPokemon"
 import { useHasPokemon } from "hooks/useHasPokemon"
 import type { NextPage } from "next"
