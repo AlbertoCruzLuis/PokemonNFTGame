@@ -15,10 +15,10 @@ type PageLayoutProps = {
 
 export const PageLayout: FC<PageLayoutProps> = ({ children }) => {
   const routes = [
-    { name: "Home", url: "/" },
-    { name: "Dashboard", url: "/dashboard" },
-    { name: "Shop", url: "/shop" },
-    { name: "Emerald Faucet", url: "https://faucet.testnet.oasis.dev/" }
+    { name: "Home", url: "/", isPrivate: false },
+    { name: "Dashboard", url: "/dashboard", isPrivate: true },
+    { name: "Shop", url: "/shop", isPrivate: true },
+    { name: "Emerald Faucet", url: "https://faucet.testnet.oasis.dev/", isPrivate: false }
   ]
 
   const [isOpen, setOpen] = useState(false)
