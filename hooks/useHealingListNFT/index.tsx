@@ -3,7 +3,6 @@ import { IItemData, transformItemData, transformPokemonData } from "lib/getNftMe
 
 import { ITEM_ADDRESS, POKEMON_GAME_ADDRESS } from "config"
 import ItemContract from "hardhat/artifacts/contracts/Item/Item.sol/Item.json"
-import { Item } from "hardhat/typechain"
 import { useContract } from "hooks/useContract"
 import { useWeb3 } from "@3rdweb/hooks"
 import toast from "react-hot-toast"

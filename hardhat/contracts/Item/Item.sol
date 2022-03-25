@@ -28,6 +28,8 @@ contract Item is ERC1155, Ownable, ERC1155Burnable {
     // tokenId => ItemData
     mapping(uint256 => ItemData) private _itemsNft;
 
+    address public pokemonAttackAddress;
+
     struct InfoItem {
         uint256 id;
         uint256 amount;
@@ -92,9 +94,17 @@ contract Item is ERC1155, Ownable, ERC1155Burnable {
         _setURI(newuri);
     }
 
+    modifier onlyAllowRole() {
+        require
+            (pokemonAttackAddress == msg.sender || owner() == msg.sender,
+            "Item: caller is not a role allow"
+        );
+        _;
+    }
+
     function mint(address account, uint256 id, uint256 amount)
         public
-        onlyOwner
+        onlyAllowRole
     {
         _mint(account, id, amount, "0x");
 
@@ -107,7 +117,7 @@ contract Item is ERC1155, Ownable, ERC1155Burnable {
 
     function mintBatch(address account, uint256[] memory ids, uint256[] memory amounts)
         public
-        onlyOwner
+        onlyAllowRole
     {
         _mintBatch(account, ids, amounts, "0x");
 
@@ -142,6 +152,10 @@ contract Item is ERC1155, Ownable, ERC1155Burnable {
             msg.sender,
             block.timestamp
         );
+    }
+
+    function updatePokemonAttackAddress(address _pokemonAttackAddress) public onlyOwner {
+        pokemonAttackAddress = _pokemonAttackAddress;
     }
 
     function getAllItems() public view returns (LItemData.Data[] memory) {

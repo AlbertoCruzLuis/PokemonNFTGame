@@ -41,7 +41,9 @@ export const PageLayout: FC<PageLayoutProps> = ({ children }) => {
             </div>
           </div>
           <div className="flex items-center gap-4 xs:hidden">
-            <Balance />
+            <div className="sm:hidden md:hidden">
+              <Balance />
+            </div>
             <Wallet />
           </div>
           <Popup

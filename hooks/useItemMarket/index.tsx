@@ -13,6 +13,7 @@ import { Contract, ethers } from "ethers"
 import { useContractEvent } from "hooks/useContractEvent"
 import toast from "react-hot-toast"
 import { useWeb3 } from "@3rdweb/hooks"
+import { useQuery } from "react-query"
 
 export interface IbuyItem {
   itemId: number,
@@ -35,12 +36,11 @@ export const useItemMarket = () => {
     contractAddress: METALLIC_ADDRESS,
     contractJson: MetallicContract
   })
-  const [items, setItems] = useState<IItemData[]>()
   const [isBuying, setBuying] = useState(false)
 
   const getItems = async () => {
     try {
-      if (!itemContract || !itemMarketContract) return
+      if (!itemContract || !itemMarketContract) return []
 
       const itemListRaw = await itemMarketContract.getAllItems()
 
@@ -53,11 +53,13 @@ export const useItemMarket = () => {
         transformItemData(itemData)
       )
 
-      setItems(itemList)
+      return itemList
     } catch (error) {
       console.error("Something went wrong fetching characters:", error)
     }
   }
+
+  const { data: items } = useQuery(["items"], getItems, { enabled: !!(itemContract && itemMarketContract) })
 
   const buyItem = async ({ itemId, amount, costItem }: IbuyItem) => {
     try {

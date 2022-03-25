@@ -1,4 +1,5 @@
 export interface IPokemonData {
+  id: number,
   name: string,
   imageURI: string,
   hp: number,
@@ -21,6 +22,7 @@ export interface IItemData {
 
 export const transformPokemonData = (pokemonData: any): IPokemonData => {
   return {
+    id: pokemonData.info.id.toNumber(),
     name: pokemonData.info.name,
     imageURI: pokemonData.info.imageURI,
     hp: pokemonData.stats.hp.toNumber(),

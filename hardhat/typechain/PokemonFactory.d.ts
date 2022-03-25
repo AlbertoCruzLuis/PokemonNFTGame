@@ -22,9 +22,11 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 interface PokemonFactoryInterface extends ethers.utils.Interface {
   functions: {
     "bosses(uint256)": FunctionFragment;
+    "bossesIds(uint256)": FunctionFragment;
     "changeHpOf(uint256,address,uint256,bool)": FunctionFragment;
     "createBossesData(uint256[],uint256[])": FunctionFragment;
     "createPokemonsData(uint256[],string[],string[],uint256[],uint256[])": FunctionFragment;
+    "getAllBossesIds()": FunctionFragment;
     "getAllPokemons()": FunctionFragment;
     "getBoss(uint256)": FunctionFragment;
     "getPokemon(uint256)": FunctionFragment;
@@ -51,6 +53,10 @@ interface PokemonFactoryInterface extends ethers.utils.Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
+    functionFragment: "bossesIds",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "changeHpOf",
     values: [BigNumberish, string, BigNumberish, boolean]
   ): string;
@@ -61,6 +67,10 @@ interface PokemonFactoryInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "createPokemonsData",
     values: [BigNumberish[], string[], string[], BigNumberish[], BigNumberish[]]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getAllBossesIds",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "getAllPokemons",
@@ -134,6 +144,7 @@ interface PokemonFactoryInterface extends ethers.utils.Interface {
   ): string;
 
   decodeFunctionResult(functionFragment: "bosses", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "bossesIds", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "changeHpOf", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "createBossesData",
@@ -141,6 +152,10 @@ interface PokemonFactoryInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "createPokemonsData",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getAllBossesIds",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -283,6 +298,11 @@ export class PokemonFactory extends BaseContract {
   functions: {
     bosses(arg0: BigNumberish, overrides?: CallOverrides): Promise<[string]>;
 
+    bossesIds(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     changeHpOf(
       pokemonIndex: BigNumberish,
       account: string,
@@ -292,7 +312,7 @@ export class PokemonFactory extends BaseContract {
     ): Promise<ContractTransaction>;
 
     createBossesData(
-      bossesIds: BigNumberish[],
+      _bossesIds: BigNumberish[],
       bossesLevel: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -305,6 +325,8 @@ export class PokemonFactory extends BaseContract {
       pokemonAttack: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    getAllBossesIds(overrides?: CallOverrides): Promise<[BigNumber[]]>;
 
     getAllPokemons(overrides?: CallOverrides): Promise<[string[]]>;
 
@@ -509,6 +531,8 @@ export class PokemonFactory extends BaseContract {
 
   bosses(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
+  bossesIds(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
   changeHpOf(
     pokemonIndex: BigNumberish,
     account: string,
@@ -518,7 +542,7 @@ export class PokemonFactory extends BaseContract {
   ): Promise<ContractTransaction>;
 
   createBossesData(
-    bossesIds: BigNumberish[],
+    _bossesIds: BigNumberish[],
     bossesLevel: BigNumberish[],
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -531,6 +555,8 @@ export class PokemonFactory extends BaseContract {
     pokemonAttack: BigNumberish[],
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  getAllBossesIds(overrides?: CallOverrides): Promise<BigNumber[]>;
 
   getAllPokemons(overrides?: CallOverrides): Promise<string[]>;
 
@@ -724,6 +750,11 @@ export class PokemonFactory extends BaseContract {
   callStatic: {
     bosses(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
+    bossesIds(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     changeHpOf(
       pokemonIndex: BigNumberish,
       account: string,
@@ -733,7 +764,7 @@ export class PokemonFactory extends BaseContract {
     ): Promise<void>;
 
     createBossesData(
-      bossesIds: BigNumberish[],
+      _bossesIds: BigNumberish[],
       bossesLevel: BigNumberish[],
       overrides?: CallOverrides
     ): Promise<void>;
@@ -746,6 +777,8 @@ export class PokemonFactory extends BaseContract {
       pokemonAttack: BigNumberish[],
       overrides?: CallOverrides
     ): Promise<void>;
+
+    getAllBossesIds(overrides?: CallOverrides): Promise<BigNumber[]>;
 
     getAllPokemons(overrides?: CallOverrides): Promise<string[]>;
 
@@ -1012,6 +1045,11 @@ export class PokemonFactory extends BaseContract {
   estimateGas: {
     bosses(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
+    bossesIds(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     changeHpOf(
       pokemonIndex: BigNumberish,
       account: string,
@@ -1021,7 +1059,7 @@ export class PokemonFactory extends BaseContract {
     ): Promise<BigNumber>;
 
     createBossesData(
-      bossesIds: BigNumberish[],
+      _bossesIds: BigNumberish[],
       bossesLevel: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -1034,6 +1072,8 @@ export class PokemonFactory extends BaseContract {
       pokemonAttack: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    getAllBossesIds(overrides?: CallOverrides): Promise<BigNumber>;
 
     getAllPokemons(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1112,6 +1152,11 @@ export class PokemonFactory extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    bossesIds(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     changeHpOf(
       pokemonIndex: BigNumberish,
       account: string,
@@ -1121,7 +1166,7 @@ export class PokemonFactory extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     createBossesData(
-      bossesIds: BigNumberish[],
+      _bossesIds: BigNumberish[],
       bossesLevel: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
@@ -1134,6 +1179,8 @@ export class PokemonFactory extends BaseContract {
       pokemonAttack: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
+
+    getAllBossesIds(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getAllPokemons(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 

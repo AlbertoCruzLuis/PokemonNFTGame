@@ -19,7 +19,7 @@ import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
 import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
-interface ItemInterface extends ethers.utils.Interface {
+interface IItemInterface extends ethers.utils.Interface {
   functions: {
     "_itemsOfHolder(address,uint256)": FunctionFragment;
     "balanceOf(address,uint256)": FunctionFragment;
@@ -37,7 +37,6 @@ interface ItemInterface extends ethers.utils.Interface {
     "mint(address,uint256,uint256)": FunctionFragment;
     "mintBatch(address,uint256[],uint256[])": FunctionFragment;
     "owner()": FunctionFragment;
-    "pokemonAttackAddress()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "safeBatchTransferFrom(address,address,uint256[],uint256[],bytes)": FunctionFragment;
     "safeTransferFrom(address,address,uint256,uint256,bytes)": FunctionFragment;
@@ -45,7 +44,6 @@ interface ItemInterface extends ethers.utils.Interface {
     "setURI(string)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
-    "updatePokemonAttackAddress(address)": FunctionFragment;
     "uri(uint256)": FunctionFragment;
     "useItem(address,uint256,uint256)": FunctionFragment;
   };
@@ -117,10 +115,6 @@ interface ItemInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "pokemonAttackAddress",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
     functionFragment: "renounceOwnership",
     values?: undefined
   ): string;
@@ -143,10 +137,6 @@ interface ItemInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "transferOwnership",
-    values: [string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "updatePokemonAttackAddress",
     values: [string]
   ): string;
   encodeFunctionData(functionFragment: "uri", values: [BigNumberish]): string;
@@ -193,10 +183,6 @@ interface ItemInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "mintBatch", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "pokemonAttackAddress",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "renounceOwnership",
     data: BytesLike
   ): Result;
@@ -219,10 +205,6 @@ interface ItemInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "transferOwnership",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "updatePokemonAttackAddress",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "uri", data: BytesLike): Result;
@@ -395,7 +377,7 @@ export type UseItemEvent = TypedEvent<
   }
 >;
 
-export class Item extends BaseContract {
+export class IItem extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
@@ -436,7 +418,7 @@ export class Item extends BaseContract {
     toBlock?: string | number | undefined
   ): Promise<Array<TypedEvent<EventArgsArray & EventArgsObject>>>;
 
-  interface: ItemInterface;
+  interface: IItemInterface;
 
   functions: {
     _itemsOfHolder(
@@ -605,8 +587,6 @@ export class Item extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
-    pokemonAttackAddress(overrides?: CallOverrides): Promise<[string]>;
-
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -647,11 +627,6 @@ export class Item extends BaseContract {
 
     transferOwnership(
       newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    updatePokemonAttackAddress(
-      _pokemonAttackAddress: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -822,8 +797,6 @@ export class Item extends BaseContract {
 
   owner(overrides?: CallOverrides): Promise<string>;
 
-  pokemonAttackAddress(overrides?: CallOverrides): Promise<string>;
-
   renounceOwnership(
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -864,11 +837,6 @@ export class Item extends BaseContract {
 
   transferOwnership(
     newOwner: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  updatePokemonAttackAddress(
-    _pokemonAttackAddress: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -1042,8 +1010,6 @@ export class Item extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<string>;
 
-    pokemonAttackAddress(overrides?: CallOverrides): Promise<string>;
-
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
     safeBatchTransferFrom(
@@ -1079,11 +1045,6 @@ export class Item extends BaseContract {
 
     transferOwnership(
       newOwner: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    updatePokemonAttackAddress(
-      _pokemonAttackAddress: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1535,8 +1496,6 @@ export class Item extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
-    pokemonAttackAddress(overrides?: CallOverrides): Promise<BigNumber>;
-
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -1577,11 +1536,6 @@ export class Item extends BaseContract {
 
     transferOwnership(
       newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    updatePokemonAttackAddress(
-      _pokemonAttackAddress: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1685,10 +1639,6 @@ export class Item extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    pokemonAttackAddress(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
@@ -1729,11 +1679,6 @@ export class Item extends BaseContract {
 
     transferOwnership(
       newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    updatePokemonAttackAddress(
-      _pokemonAttackAddress: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

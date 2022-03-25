@@ -11,9 +11,9 @@ interface IdeployPokemonGameContract {
 }
 
 export const deployPokemonGameContract = async (ethers: Ethers, gameRewardsAddress: string): Promise<IdeployPokemonGameContract> => {
-  // Pokemon: Mewtwo - Level: 10
-  const bossesIds = [150]
-  const bossesLevels = [10]
+  // Pokemon: Mewtwo - Level: 40
+  const bossesIds = [65, 91, 106, 150]
+  const bossesLevels = [10, 20, 30, 40]
 
   const pokemonGameFactory = await ethers.getContractFactory("PokemonGame");
   const pokemonGameContract: PokemonGame | Contract = await pokemonGameFactory.deploy(gameRewardsAddress);

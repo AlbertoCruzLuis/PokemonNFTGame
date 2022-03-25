@@ -1,17 +1,10 @@
 import { FC, useEffect, useState } from "react"
-import Image from "next/image"
-import type { ImageLoaderProps } from "next/image"
 import { Line } from "rc-progress"
-
-const imageLoader = ({ src, width, quality }: ImageLoaderProps) => {
-  return `https://raw.githubusercontent.com/PokeAPI/${src}?w=${width}&q=${quality || 75}`
-}
 
 type BattleCardProps = {
   name: string,
   hp: number,
   maxHp: number,
-  imageURI: string,
   level: number,
   experience: number
 }
@@ -22,8 +15,7 @@ enum PROGRESS_COLOR {
   orange = "orange"
 }
 
-export const BattleCard: FC<BattleCardProps> = ({ name, hp, maxHp, imageURI, level, experience }) => {
-  const frontSprite = imageURI && imageURI.replace("https://raw.githubusercontent.com/PokeAPI", "")
+export const BattleCard: FC<BattleCardProps> = ({ name, hp, maxHp, level, experience }) => {
   const [healthColor, setHealthColor] = useState<string>()
 
   useEffect(() => {
@@ -41,16 +33,6 @@ export const BattleCard: FC<BattleCardProps> = ({ name, hp, maxHp, imageURI, lev
 
   return (
     <div className="flex gap-2 pl-2 pr-4 bg-white rounded-sm max-w-max">
-      <div>
-        { imageURI &&
-            <Image
-              loader={imageLoader}
-              src={frontSprite}
-              width={50}
-              height={50}
-              quality={100} />
-        }
-      </div>
       <div className="flex flex-col">
         <div className="flex justify-between">
           <span className="font-semibold">{name}</span>

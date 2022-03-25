@@ -10,11 +10,10 @@ export const Pokemons = () => {
   return (
     <div className="flex flex-col gap-4">
       <h2 className="text-xl font-bold text-white">Pokemons</h2>
-      {pokemons && pokemons.map(({ name, imageURI, hp, maxHp, level, experience }) => (
+      {pokemons && pokemons.map(({ name, hp, maxHp, level, experience }) => (
         <BattleCard
           key={uuidv4()}
           name={name}
-          imageURI={imageURI}
           hp={hp}
           maxHp={maxHp}
           level={level}

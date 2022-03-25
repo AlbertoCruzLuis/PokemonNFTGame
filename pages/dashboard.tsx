@@ -25,9 +25,9 @@ const Dashboard: NextPage = () => {
               <PokemonMain />
             </div>
             <div className="flex justify-center">
-              <CustomLink href="/arena">
+              <CustomLink href="/adventure-mode">
                 <div className="flex items-center gap-2 p-2 px-8 border-2 border-yellow-400 border-solid bg-gradient-to-t from-black to-yellow-500 max-w-max">
-                  <span className="font-semibold text-white">Go to Arena</span>
+                  <span className="font-semibold text-white">Adventure Mode</span>
                 </div>
               </CustomLink>
             </div>

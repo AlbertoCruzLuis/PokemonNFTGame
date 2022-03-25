@@ -18,7 +18,7 @@ task("deploy", "Deploy all contracts").setAction(
     await txGameRewards.wait()
 
     const { pokemonGameContract } = await deployPokemonGameContract(hre.ethers, gameRewardsContract.address)
-    await deployPokemonAttackContract(hre.ethers, pokemonGameContract.address)
+    const { pokemonAttackContract } = await deployPokemonAttackContract(hre.ethers, pokemonGameContract.address)
 
     const { itemContract } = await deployItemContract(hre.ethers)
     const { itemMarketContract } = await deployItemMarketContract(hre.ethers)
@@ -27,6 +27,8 @@ task("deploy", "Deploy all contracts").setAction(
 
     await gameRewardsContract.updatePokemonGameAddress(pokemonGameContract.address)
     await pokemonGameContract.updateItemAddress(itemContract.address)
+    await pokemonAttackContract.updateItemAddress(itemContract.address)
+    await itemContract.updatePokemonAttackAddress(pokemonAttackContract.address)
   }
 )
 

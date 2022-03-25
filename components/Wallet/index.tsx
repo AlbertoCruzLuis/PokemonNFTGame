@@ -1,5 +1,5 @@
 import { useWeb3, useSwitchNetwork } from "@3rdweb/hooks"
-import { EMERALD_TESNET_CHAIN_ID } from "config"
+import { CHAIN_ID } from "config"
 import { useEffect, useState } from "react"
 import { BiWallet, BiWifiOff } from "react-icons/bi"
 import Popup from "reactjs-popup"
@@ -54,7 +54,7 @@ export const Wallet = () => {
             <div className="p-3 mb-2 bg-gray-200 rounded-full">
               <BiWifiOff />
             </div>
-            <span>Network: {getNetworkMetadata(EMERALD_TESNET_CHAIN_ID)?.chainName}</span>
+            <span>Network: {getNetworkMetadata(CHAIN_ID)?.chainName}</span>
           </div>
           <span className="text-gray-600">Please ensure your wallet is connected to the following network and try again.</span>
           <span>For more information:</span>
@@ -63,13 +63,13 @@ export const Wallet = () => {
           </CustomLink>
           { switchError &&
             <button className="p-2 mt-2 text-white bg-black rounded-md"
-              onClick={() => switchNetwork(EMERALD_TESNET_CHAIN_ID)}>
+              onClick={() => switchNetwork(CHAIN_ID)}>
                 Change network
             </button>
           }
           { !switchError &&
             <button className="p-2 mt-2 text-white bg-black rounded-md"
-              onClick={() => addNetwork(EMERALD_TESNET_CHAIN_ID)}>
+              onClick={() => addNetwork(CHAIN_ID)}>
                 Add network
             </button>
           }

@@ -3,7 +3,6 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react"
 
 import { POKEMON_GAME_ADDRESS } from "config"
 import PokemonGameContract from "hardhat/artifacts/contracts/Pokemon/PokemonGame.sol/PokemonGame.json"
-import { PokemonGame } from "hardhat/typechain/PokemonGame"
 import { useContract } from "hooks/useContract"
 import { Contract } from "ethers"
 
@@ -23,7 +22,6 @@ export const useHasPokemon = (): IuseHasPokemon => {
     if (!gameContract) return
 
     const pokemonNft = await gameContract.hasNft()
-    console.log(pokemonNft, pokemonSelected)
 
     if (!pokemonNft.info.id.toNumber()) return
 

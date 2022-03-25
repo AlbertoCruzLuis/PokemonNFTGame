@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react"
 import { useQuery } from "react-query"
 import { fetchPokemon } from "services/PokeAPI"
 
@@ -21,31 +20,16 @@ export type Pokemon = {
 }
 
 export const usePokemon = ({ name }: PokemonName): Pokemon => {
-  const [id, setId] = useState()
-  const [types, setTypes] = useState()
-  const [stats, setStats] = useState()
-  const [sprites, setSprites] = useState()
   const { data, isSuccess, isLoading } = useQuery(["pokemon", name], fetchPokemon(name))
 
-  useEffect(() => {
-    if (isSuccess) {
-      setId(data.id)
-      setStats(data.stats.map((stat: any) => (
-        {
-          name: stat.stat.name,
-          value: stat.base_stat
-        }
-      )))
-      setTypes(data.types.map((type: any) => type.type.name))
-      setSprites(data.sprites)
-    }
-  }, [data])
-
   return {
-    id,
-    types,
-    stats,
-    sprites,
+    id: data && data.id,
+    types: data && data.types.map((type: any) => type.type.name),
+    stats: data && data.stats.map((stat: any) => ({
+      name: stat.stat.name,
+      value: stat.base_stat
+    })),
+    sprites: data && data.sprites,
     isLoading,
     isSuccess
   }

@@ -28,6 +28,7 @@ contract PokemonFactory is PokemonHelper, Ownable {
 
     // BossId => PokemonData
     mapping(uint256 => PokemonData) public bosses;
+    uint256[] public bossesIds;
 
     modifier onlyItem() {
         require(itemAddress == msg.sender, "PokemonFactory: caller is not the itemAddress");
@@ -64,12 +65,13 @@ contract PokemonFactory is PokemonHelper, Ownable {
     }
 
     function createBossesData(
-        uint[] memory bossesIds,
+        uint[] memory _bossesIds,
         uint[] memory bossesLevel
     ) external onlyOwner {
         // Create All Bosses
-        for(uint i = 0; i < bossesIds.length; i++) {
-            _createBoss(bossesIds[i], bossesLevel[i]);
+        for(uint i = 0; i < _bossesIds.length; i++) {
+            _createBoss(_bossesIds[i], bossesLevel[i]);
+            bossesIds.push(_bossesIds[i]);
         }
     }
 
@@ -143,6 +145,10 @@ contract PokemonFactory is PokemonHelper, Ownable {
 
     function getBoss(uint256 id) public view returns (PokemonData) {
         return bosses[id];
+    }
+
+    function getAllBossesIds() public view returns (uint256[] memory) {
+        return bossesIds;
     }
 
     function getPokemon(uint256 id) public view returns (PokemonData) {
