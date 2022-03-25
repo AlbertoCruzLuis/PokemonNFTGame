@@ -1,3 +1,4 @@
 hardhat/*
 !hardhat/typechain
 !hardhat/artifacts
+!hardhat/data
